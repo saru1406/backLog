@@ -32,6 +32,10 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Log in" />
+        <h1 class="text-base text-center mb-4">アカウントをお持ちでない方は
+            <Link :href="route('register')" class=" text-blue-500">こちら</Link>
+            から作成できます
+        </h1>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
@@ -39,7 +43,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="メールアドレス" />
 
                 <TextInput
                     id="email"
@@ -55,7 +59,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="パスワード" />
 
                 <TextInput
                     id="password"
