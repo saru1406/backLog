@@ -18,7 +18,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Project/Index');
+        $projectNames = $this->projectService->getProjectNames();
+
+        return Inertia::render('Project/Index', [
+            'projects' => $projectNames
+        ]);
     }
 
     /**
@@ -26,7 +30,7 @@ class ProjectController extends Controller
      */
     public function create(StoreProjectRequest $request)
     {
-        return Inertia::render('Project/Create');
+        // return Inertia::render('Project/Create');
     }
 
     /**
@@ -37,7 +41,7 @@ class ProjectController extends Controller
         $name = $request->getName();
         $key = $request->getKey();
 
-        $this->projectService->StoreProject($name, $key);
+        $this->projectService->storeProject($name, $key);
 
         return to_route('projects.index');
     }
@@ -47,7 +51,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        
+        return Inertia::render('Project/Show', [
+            'project' => $project
+        ]);
     }
 
     /**

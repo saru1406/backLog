@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ProjectRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProjectService implements ProjectServiceInterface
 {
@@ -10,11 +11,16 @@ class ProjectService implements ProjectServiceInterface
     {
     }
 
+    public function getProjectNames(): Collection
+    {
+        return $this->projectRepository->getProjectNames();
+    }
+
     /**
      * {@inheritDoc}
      */
     public function StoreProject(string $name, string $key): void
     {
-        $this->projectRepository->StoreProjet($name, $key);
+        $this->projectRepository->storeProjet($name, $key);
     }
 }

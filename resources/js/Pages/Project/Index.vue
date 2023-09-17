@@ -3,8 +3,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import Modal from '@/Components/Modal.vue';
 import { ref, reactive } from 'vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const showModal = ref(false);
+defineProps({
+    'projects': Array
+})
+
 
 const form = reactive({
     name: null,
@@ -36,11 +41,13 @@ function storeProject() {
                         <form @submit.prevent="storeProject">
                             <div class="m-10">
                                 <p>プロジェクト名</p>
-                                <textarea name="name" class="w-full" rows="1" v-model="form.name"></textarea>
+                                <TextInput type="text" class="w-full" v-model="form.name"></TextInput>
+                                <!-- <textarea name="name" class="w-full" rows="1" v-model="form.name"></textarea> -->
                             </div>
                             <div class="m-10">
                                 <p>プロジェクトキー</p>
-                                <textarea name="name" class="w-full" rows="1" v-model="form.key"></textarea>
+                                <TextInput type="text" class="w-full" v-model="form.key"></TextInput>
+                                <!-- <textarea name="name" class="w-full" rows="1" v-model="form.key"></textarea> -->
                             </div>
                             <div class="m-5">
                                 <button class="flex mx-auto text-white bg-indigo-400 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-400 rounded text-lg">登録する</button>
@@ -48,8 +55,9 @@ function storeProject() {
                         </form>
                     </Modal>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
-                        <div class="p-6 text-gray-900 text-center">
-                            プロジェクト一覧中身
+                        <div v-for="project in projects" class="p-6 text-gray-900 text-center">
+                            <Link class="text-blue-500" :href="route('projects.show',{project: project})">{{ project.name }}</Link>
+                            <hr>
                         </div>
                     </div>
                 </div>

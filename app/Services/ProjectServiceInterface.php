@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface ProjectServiceInterface
 {
     /**
@@ -11,5 +13,12 @@ interface ProjectServiceInterface
      * @param string $key
      * @return void
      */
-    public function StoreProject(string $name, string $key): void;
+    public function storeProject(string $name, string $key): void;
+
+    /**
+     * プロジェクト名取得
+     *
+     * @return Collection
+     */
+    public function getProjectNames(): Collection;
 }
