@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Collection;
 
 interface ProjectRepositoryInterface
@@ -11,9 +12,9 @@ interface ProjectRepositoryInterface
          *
          * @param string $name
          * @param string $key
-         * @return void
+         * @return Project
          */
-        public function storeProjet(string $name, string $key): void;
+        public function storeProjet(string $name, string $key): Project;
 
         /**
          * プロジェクトの名取得

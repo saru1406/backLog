@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Services\ProjectServiceInterface;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -38,10 +39,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+        $user = Auth::user();
         $name = $request->getName();
         $key = $request->getKey();
 
-        $this->projectService->storeProject($name, $key);
+        $this->projectService->storeProject($name, $key, $user);
 
         return to_route('projects.index');
     }
@@ -51,7 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        
+
         return Inertia::render('Project/Show', [
             'project' => $project
         ]);

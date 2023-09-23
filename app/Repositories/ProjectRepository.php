@@ -11,9 +11,9 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function storeProjet(string $name, string $key): void
+    public function storeProjet(string $name, string $key): Project
     {
-        Project::create([
+        return Project::create([
             'name' => $name,
             'key' => $key,
         ]);

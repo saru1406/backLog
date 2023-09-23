@@ -5,6 +5,10 @@ import SideMenu from '@/Components/SideMenu.vue'
 import TextInput from '@/Components/TextInput.vue'
 import { ref, reactive } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+const date = ref();
 
 const form = reactive({
     title: null,
@@ -19,7 +23,7 @@ const form = reactive({
 function storeTask() {
     router.post('/tasks', form)
 }
-console.log("storeTask")
+
 </script>
 
 <template>
@@ -50,12 +54,16 @@ console.log("storeTask")
                             <label>優先度</label>
                             <TextInput type="text" v-model="form.priority" class="m-5"></TextInput>
                         </div>
-                        <label>開始日</label>
-                        <TextInput type="text" v-model="form.start_date" class="m-5"></TextInput>
-                        <label>終了日</label>
-                        <TextInput type="text" v-model="form.end_date" class="m-5"></TextInput>
+                        <div class="w-1/2 m-5">
+                            <label>開始日</label>
+                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" />
+                        </div>
+                        <div class="w-1/2 m-5">
+                            <label>終了日</label>
+                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" />
+                        </div>
                     </div>
-                    <div  class="text-center">
+                    <div class="text-center">
                         <PrimaryButton>追加</PrimaryButton>
                     </div>
                 </form>
