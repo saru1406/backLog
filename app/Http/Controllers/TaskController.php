@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Project;
 use App\Models\Task;
 use App\Services\TaskServiceInterface;
 use Carbon\Carbon;
@@ -27,16 +28,20 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Project $project)
     {
-        // $projectUsers = user
-        return Inertia::render('Task/Create');
+        $projectUsers = $project->users;
+
+        return Inertia::render('Task/Create', [
+            'project' => $project,
+            'projectUsers' => $projectUsers
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(Project $project, StoreTaskRequest $request)
     {
         $userId = Auth::id();
         $title = $request->getTitle();

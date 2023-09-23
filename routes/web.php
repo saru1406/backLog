@@ -30,7 +30,7 @@ Route::get('/', function () {
 Route::resource('projects', ProjectController::class)
 ->middleware(['auth', 'verified']);
 
-Route::resource('tasks', TaskController::class)
+Route::resource('projects.tasks', TaskController::class)
 ->middleware(['auth', 'verified']);
 
 Route::get('/dashboard', function () {

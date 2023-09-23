@@ -7,8 +7,12 @@ import { ref, reactive } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import axios from 'axios';
 
-const date = ref();
+const props = defineProps({
+    'project': Object,
+    'projectUsers': Array,
+})
 
 const form = reactive({
     title: null,
@@ -21,9 +25,24 @@ const form = reactive({
 })
 
 function storeTask() {
-    router.post('/tasks', form)
+    axios.post(`/projects/${props.project.id}/tasks`, form)
+        .then((response) => {
+            // 保存が成功した後にフォームをリセット
+            form.title = null;
+            form.content = null;
+            form.status = null;
+            form.manager = null;
+            form.priority = null;
+            form.start_date = null;
+            form.end_date = null;
+        })
+        .catch((error) => {
+            // エラーハンドリング
+            console.error(error);
+        });
 }
 
+// console.log(props.project);
 </script>
 
 <template>
@@ -35,7 +54,7 @@ function storeTask() {
         </template> -->
 
         <div class="flex w-full">
-            <SideMenu class="h-screen" />
+            <SideMenu :project="props.project" class="h-screen" />
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
                 <form @submit.prevent="storeTask">
@@ -50,7 +69,11 @@ function storeTask() {
                             <label>状態</label>
                             <TextInput type="text" v-model="form.status" class="m-5"></TextInput>
                             <label>担当者</label>
-                            <TextInput type="number" v-model="form.manager" class="m-5"></TextInput>
+                            <select v-model="form.manager" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectUser in props.projectUsers" :key="projectUser.id" :value="projectUser.id">
+                                    {{ projectUser.name }}
+                                </option>
+                            </select>
                             <label>優先度</label>
                             <TextInput type="text" v-model="form.priority" class="m-5"></TextInput>
                         </div>

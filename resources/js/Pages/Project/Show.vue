@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 
 defineProps({
-    'project': Object
+    'project': Object,
 })
 
 </script>
@@ -18,7 +18,7 @@ defineProps({
         </template> -->
 
         <div class="flex w-full">
-            <SideMenu class="h-screen"/>
+            <SideMenu :project="project" class="h-screen"/>
             <!-- 左側のコンテナ -->
                 <div class="flex flex-col w-3/5 sm:px-6 lg:px-8 py-12">
                     <div class="p-6 text-gray-900">

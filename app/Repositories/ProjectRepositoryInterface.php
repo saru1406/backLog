@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ProjectRepositoryInterface
 {
-        /**
-         * プロジェクト保存
-         *
-         * @param string $name
-         * @param string $key
-         * @return Project
-         */
-        public function storeProjet(string $name, string $key): Project;
+    /**
+     * プロジェクト保存
+     *
+     * @param string $name
+     * @param string $key
+     * @return Project
+     */
+    public function storeProjet(string $name, string $key): Project;
 
-        /**
-         * プロジェクトの名取得
-         *
-         * @return Collection
-         */
-        public function getProjectNames(): Collection;
+    /**
+     * プロジェクトの名取得
+     *
+     * @return Collection
+     */
+    public function getProjectNames(): Collection;
 }

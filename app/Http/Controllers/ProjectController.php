@@ -37,7 +37,7 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(Project $project, StoreProjectRequest $request)
     {
         $user = Auth::user();
         $name = $request->getName();
@@ -53,7 +53,6 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
         return Inertia::render('Project/Show', [
             'project' => $project
         ]);

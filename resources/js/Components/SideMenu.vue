@@ -1,5 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+defineProps({
+    project: Object
+})
 </script>
 
 <template>
@@ -9,7 +12,7 @@ import { Link } from '@inertiajs/vue3';
             <nav class="nav-list-wrapper">
                 <ul class="nav-list">
                     <li class="nav-list-item"><Link :href="route('projects.index')">ホーム</Link></li>
-                    <li class="nav-list-item"><Link :href="route('tasks.create')">課題の追加</Link></li>
+                    <li class="nav-list-item"><Link :href="route('projects.tasks.create', {project: project})">課題の追加</Link></li>
                     <li class="nav-list-item"><a href="#">ボード</a></li>
                     <li class="nav-list-item"><a href="#">ガントチャート</a></li>
                     <li class="nav-list-item"><a href="#">Wiki</a></li>
