@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Services\ProjectServiceInterface;
+use App\Services\UserServiceInterface;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    public function __construct(private ProjectServiceInterface $projectService)
+    public function __construct(private ProjectServiceInterface $projectService, private UserServiceInterface $userService)
     {
     }
 
@@ -63,7 +64,13 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        $projectUsers = $this->projectService->getProjectUsers($project);
+        $projectNotUsers = $this->projectService->getProjectNotUsers($projectUsers);
+        return Inertia::render('Project/Edit', [
+            'project' => $project,
+            'project_users' => $projectUsers,
+            'project_not_users'  => $projectNotUsers
+        ]);
     }
 
     /**
@@ -80,5 +87,14 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+    public function bord(Project $project)
+    {
+        $projectUsers = $project->users;
+        return Inertia::render('Project/Bord', [
+            'project' => $project,
+            'project_users' => $projectUsers
+        ]);
     }
 }

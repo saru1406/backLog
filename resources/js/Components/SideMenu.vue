@@ -13,11 +13,11 @@ defineProps({
                 <ul class="nav-list">
                     <li class="nav-list-item"><Link :href="route('projects.index')">ホーム</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.tasks.create', {project: project})">課題の追加</Link></li>
-                    <li class="nav-list-item"><a href="#">ボード</a></li>
+                    <li class="nav-list-item"><Link :href="route('projects.bord', {project: project})">ボード</Link></li>
                     <li class="nav-list-item"><a href="#">ガントチャート</a></li>
                     <li class="nav-list-item"><a href="#">Wiki</a></li>
                     <li class="nav-list-item"><a href="#">ファイル</a></li>
-                    <li class="nav-list-item"><a href="#">プロジェクト設定</a></li>
+                    <li class="nav-list-item"><Link :href="route('projects.edit', {project: project})">プロジェクト設定</Link></li>
                 </ul>
             </nav>
         </div>

@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
 {
-    
+    public function getUser(Collection $projectUserIds): Collection;
 }

@@ -67,7 +67,11 @@ function storeTask() {
                             placeholder="課題の詳細"></textarea>
                         <div>
                             <label>状態</label>
-                            <TextInput type="text" v-model="form.status" class="m-5"></TextInput>
+                            <select v-model="form.status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option value="対応前">対応前</option>
+                                <option value="対応中">対応中</option>
+                                <option value="完了">完了</option>
+                            </select>
                             <label>担当者</label>
                             <select v-model="form.manager" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                                 <option v-for="projectUser in props.projectUsers" :key="projectUser.id" :value="projectUser.id">
@@ -75,7 +79,11 @@ function storeTask() {
                                 </option>
                             </select>
                             <label>優先度</label>
-                            <TextInput type="text" v-model="form.priority" class="m-5"></TextInput>
+                            <select v-model="form.priority" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option value="低">低</option>
+                                <option value="中">中</option>
+                                <option value="高">高</option>
+                            </select>
                         </div>
                         <div class="w-1/2 m-5">
                             <label>開始日</label>

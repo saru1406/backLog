@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -11,8 +12,4 @@ class UserService implements UserServiceInterface
     {
     }
 
-    public function getProjectUser(): Collection
-    {
-        return $this->userRepository->getProjectUser();
-    }
 }

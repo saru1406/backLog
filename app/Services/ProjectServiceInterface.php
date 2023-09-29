@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface ProjectServiceInterface
 {
@@ -23,4 +24,8 @@ interface ProjectServiceInterface
      * @return Collection
      */
     public function getProjectNames(): Collection;
+
+    public function getProjectUsers(Project $project): Collection;
+
+    public function getProjectNotUsers(Collection $projectUsers): Collection;
 }
