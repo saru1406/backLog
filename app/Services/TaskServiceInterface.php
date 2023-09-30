@@ -10,7 +10,8 @@ interface TaskServiceInterface
     /**
      * タスク保存
      *
-     * @param int $userId
+     * @param integer $userId
+     * @param integer $projectId
      * @param string $title
      * @param string $content
      * @param string $status
@@ -22,6 +23,7 @@ interface TaskServiceInterface
      */
     public function storeTask(
         int $userId,
+        int $projectId,
         string $title,
         string $content,
         string $status,

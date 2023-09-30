@@ -33,7 +33,7 @@ Route::resource('projects', ProjectController::class)
 Route::resource('projects.tasks', TaskController::class)
 ->middleware(['auth', 'verified']);
 
-Route::get('/projects/{project}/bord', [ProjectController::class, 'bord'])->name('projects.bord')
+Route::get('/projects/{project}/board', [ProjectController::class, 'board'])->name('projects.board')
 ->middleware(['auth', 'verified']);
 
 Route::post('/projects/{project}/user', [ProjectController::class, 'storeProjectUser'])->name('projects.user')

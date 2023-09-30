@@ -44,6 +44,9 @@ class TaskController extends Controller
     public function store(Project $project, StoreTaskRequest $request)
     {
         $userId = Auth::id();
+        // dd($request);
+        // dd($project);
+        $projectId = $project->id;
         $title = $request->getTitle();
         $content = $request->getContents();
         $status = $request->getStatus();
@@ -54,6 +57,7 @@ class TaskController extends Controller
 
         $this->taskService->storeTask(
             $userId,
+            $projectId,
             $title,
             $content,
             $status,

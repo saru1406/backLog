@@ -25,7 +25,7 @@ interface ProjectRepositoryInterface
     public function getProjectNames(): Collection;
 
     /**
-     * プロジェクトに紐づくユーザー
+     * プロジェクトに紐づくユーザー取得
      *
      * @param Project $project
      * @return Collection
@@ -39,5 +39,5 @@ interface ProjectRepositoryInterface
      * @param Project $project
      * @return void
      */
-    public function storeProjetUser(int $userId, Project $project): void;
+    public function storeProjectUser(int $userId, Project $project): void;
 }

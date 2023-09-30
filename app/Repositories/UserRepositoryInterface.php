@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 interface UserRepositoryInterface
 {
     /**
-     * プロジェクトに紐づかないユーザー取得
+     * プロジェクトに紐づいていないユーザー取得
      *
      * @param Collection $projectUserIds
      * @return Collection

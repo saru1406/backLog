@@ -20,6 +20,7 @@ class TaskService implements TaskServiceInterface
      */
     public function storeTask(
         int $userId,
+        int $projectId,
         string $title,
         string $content,
         string $status,
@@ -30,6 +31,7 @@ class TaskService implements TaskServiceInterface
     ): void {
         $this->taskRepository->storeTask(
             $userId,
+            $projectId,
             $title,
             $content,
             $status,

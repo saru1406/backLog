@@ -24,7 +24,7 @@ class ProjectService implements ProjectServiceInterface
     public function StoreProject(string $name, string $key, ?User $user): void
     {
         $project = $this->projectRepository->storeProjet($name, $key);
-        $this->projectRepository->storeProjetUser($user->id, $project);
+        $this->projectRepository->storeProjectUser($user->id, $project);
     }
 
     /**
@@ -41,7 +41,6 @@ class ProjectService implements ProjectServiceInterface
     public function getProjectNotUsers(Collection $projectUsers): Collection
     {
         $projectUserIds = $projectUsers->pluck('id');
-        dd($projectUserIds);
         return $this->userRepository->getProjectNotUser($projectUserIds);
     }
 }

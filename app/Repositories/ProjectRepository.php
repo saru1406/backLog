@@ -39,7 +39,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function storeProjetUser(int $userId, Project $project): void
+    public function storeProjectUser(int $userId, Project $project): void
     {
         $project->users()->attach($userId);
     }

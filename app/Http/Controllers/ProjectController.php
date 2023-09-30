@@ -97,12 +97,13 @@ class ProjectController extends Controller
 
     public function storeProjectUser(StoreProjectUserRequest $request, Project $project)
     {
-        $this->projectRepository->storeProjetUser($request->getUserId(), $project);
+        $this->projectRepository->storeProjectUser($request->getUserId(), $project);
     }
 
-    public function bord(Project $project)
+    public function board(Project $project)
     {
-        $projectUsers = $project->users;
+        $projectUsers = $this->projectService->getProjectUsers($project);
+        // $userTask = $this->projectService->getUserTasks($projectUsers);
         return Inertia::render('Project/Bord', [
             'project' => $project,
             'project_users' => $projectUsers

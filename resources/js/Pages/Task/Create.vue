@@ -25,21 +25,21 @@ const form = reactive({
 })
 
 function storeTask() {
-    axios.post(`/projects/${props.project.id}/tasks`, form)
-        .then((response) => {
-            // 保存が成功した後にフォームをリセット
-            form.title = null;
-            form.content = null;
-            form.status = null;
-            form.manager = null;
-            form.priority = null;
-            form.start_date = null;
-            form.end_date = null;
-        })
-        .catch((error) => {
-            // エラーハンドリング
-            console.error(error);
-        });
+    router.post(`/projects/${props.project.id}/tasks`, form)
+        // .then((response) => {
+        //     // 保存が成功した後にフォームをリセット
+        //     form.title = null;
+        //     form.content = null;
+        //     form.status = null;
+        //     form.manager = null;
+        //     form.priority = null;
+        //     form.start_date = null;
+        //     form.end_date = null;
+        // })
+        // .catch((error) => {
+        //     // エラーハンドリング
+        //     console.error(error);
+        // });
 }
 
 // console.log(props.project);

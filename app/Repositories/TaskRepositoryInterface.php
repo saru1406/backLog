@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 interface TaskRepositoryInterface
@@ -10,6 +12,7 @@ interface TaskRepositoryInterface
      * タスク保存
      *
      * @param integer $userId
+     * @param integer $projectId
      * @param string $title
      * @param string $content
      * @param string $status
@@ -21,6 +24,7 @@ interface TaskRepositoryInterface
      */
     public function storeTask(
         int $userId,
+        int $projectId,
         string $title,
         string $content,
         string $status,
@@ -29,4 +33,6 @@ interface TaskRepositoryInterface
         string $startDate = null,
         string $endDate = null
     ): void;
+
+    public function getProjectUserTask(Project $project, User $projectUser, string $status);
 }
