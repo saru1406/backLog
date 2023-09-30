@@ -24,17 +24,24 @@ class ProjectService implements ProjectServiceInterface
     public function StoreProject(string $name, string $key, ?User $user): void
     {
         $project = $this->projectRepository->storeProjet($name, $key);
-        $user->projects()->attach($project->id);
+        $this->projectRepository->storeProjetUser($user->id, $project);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getProjectUsers(Project $project): Collection
     {
         return $this->projectRepository->getProjectUsers($project);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getProjectNotUsers(Collection $projectUsers): Collection
     {
         $projectUserIds = $projectUsers->pluck('id');
-        return $this->userRepository->getUser($projectUserIds);
+        dd($projectUserIds);
+        return $this->userRepository->getProjectNotUser($projectUserIds);
     }
 }

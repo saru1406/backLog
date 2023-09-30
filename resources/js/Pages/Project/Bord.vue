@@ -26,6 +26,7 @@ const props = defineProps({
                 <div class="flex flex-col w-3/5 sm:px-6 lg:px-8 py-12">
                     <div class="p-6 text-gray-900">
                         <p>ボード</p>
+                        <label>担当者</label>
                         <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option v-for="projectUser in props.project_users" value="projectUser.id">{{ projectUser.name }}</option>
                         </select>

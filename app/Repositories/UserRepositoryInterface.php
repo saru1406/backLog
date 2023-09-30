@@ -6,5 +6,11 @@ use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
 {
-    public function getUser(Collection $projectUserIds): Collection;
+    /**
+     * プロジェクトに紐づかないユーザー取得
+     *
+     * @param Collection $projectUserIds
+     * @return Collection
+     */
+    public function getProjectNotUser(Collection $projectUserIds): Collection;
 }

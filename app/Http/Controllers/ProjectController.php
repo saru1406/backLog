@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\StoreProjectUserRequest;
+use App\Repositories\ProjectRepositoryInterface;
 use App\Services\ProjectServiceInterface;
 use App\Services\UserServiceInterface;
 use Inertia\Inertia;
@@ -11,7 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    public function __construct(private ProjectServiceInterface $projectService, private UserServiceInterface $userService)
+    public function __construct(
+        private ProjectServiceInterface $projectService,
+        private UserServiceInterface $userService,
+        private ProjectRepositoryInterface $projectRepository
+    )
     {
     }
 
@@ -87,6 +93,11 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+    public function storeProjectUser(StoreProjectUserRequest $request, Project $project)
+    {
+        $this->projectRepository->storeProjetUser($request->getUserId(), $project);
     }
 
     public function bord(Project $project)

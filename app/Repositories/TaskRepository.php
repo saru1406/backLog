@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TaskRepository implements TaskRepositoryInterface
 {
+    /**
+     * {@inheritDoc}
+     *
+     */
     public function storeTask(
         int $userId,
         string $title,

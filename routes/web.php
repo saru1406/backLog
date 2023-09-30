@@ -36,6 +36,9 @@ Route::resource('projects.tasks', TaskController::class)
 Route::get('/projects/{project}/bord', [ProjectController::class, 'bord'])->name('projects.bord')
 ->middleware(['auth', 'verified']);
 
+Route::post('/projects/{project}/user', [ProjectController::class, 'storeProjectUser'])->name('projects.user')
+->middleware(['auth', 'verified']);
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

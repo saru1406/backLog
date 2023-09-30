@@ -7,7 +7,11 @@ use Illuminate\Support\Collection;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function getUser(Collection $projectUserIds): Collection
+    /**
+     * {@inheritdoc}
+     *
+     */
+    public function getProjectNotUser(Collection $projectUserIds): Collection
     {
         return User::whereNotIn('id', $projectUserIds)->get();
     }

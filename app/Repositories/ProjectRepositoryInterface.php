@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface ProjectRepositoryInterface
@@ -23,5 +24,20 @@ interface ProjectRepositoryInterface
      */
     public function getProjectNames(): Collection;
 
+    /**
+     * プロジェクトに紐づくユーザー
+     *
+     * @param Project $project
+     * @return Collection
+     */
     public function getProjectUsers(Project $project): Collection;
+
+    /**
+     * プロジェクトにユーザーを追加
+     *
+     * @param integer $userId
+     * @param Project $project
+     * @return void
+     */
+    public function storeProjetUser(int $userId, Project $project): void;
 }
