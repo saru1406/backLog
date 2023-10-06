@@ -25,7 +25,6 @@ class TaskService implements TaskServiceInterface
         string $content,
         string $status,
         string $priority,
-        int $manager = null,
         string $startDate = null,
         string $endDate = null
     ): void {
@@ -36,7 +35,6 @@ class TaskService implements TaskServiceInterface
             $content,
             $status,
             $priority,
-            $manager,
             $startDate,
             $endDate
         );

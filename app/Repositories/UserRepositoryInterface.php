@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface

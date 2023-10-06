@@ -12,34 +12,21 @@ import axios from 'axios';
 const props = defineProps({
     'project': Object,
     'projectUsers': Array,
+    'task': Object,
 })
 
 const form = reactive({
-    user_id: null,
-    title: null,
-    content: null,
-    status: null,
-    priority: null,
-    start_date: null,
-    end_date: null,
+    user_id: props.task ? props.task.user_id : null,
+    title: props.task ? props.task.title : null,
+    content: props.task ? props.task.content : null,
+    status: props.task ? props.task.status : null,
+    priority: props.task ? props.task.priority : null,
+    start_date: props.task ? props.task.start_date : null,
+    end_date: props.task ? props.task.end_date : null,
 })
 
-function storeTask() {
-    router.post(`/projects/${props.project.id}/tasks`, form)
-        // .then((response) => {
-        //     // 保存が成功した後にフォームをリセット
-        //     form.title = null;
-        //     form.content = null;
-        //     form.status = null;
-        //     form.manager = null;
-        //     form.priority = null;
-        //     form.start_date = null;
-        //     form.end_date = null;
-        // })
-        // .catch((error) => {
-        //     // エラーハンドリング
-        //     console.error(error);
-        // });
+function updateTask() {
+    router.put(`/projects/${props.project.id}/tasks/${props.task.id}`, form)
 }
 
 // console.log(props.project);
@@ -57,7 +44,7 @@ function storeTask() {
             <SideMenu :project="props.project" class="h-screen" />
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
-                <form @submit.prevent="storeTask">
+                <form @submit.prevent="updateTask">
                     <div class="m-5">
                         <p>課題の追加</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>

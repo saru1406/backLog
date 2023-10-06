@@ -6,23 +6,31 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Repositories\ProjectRepository;
+use App\Repositories\TaskRepositoryInterface;
 use App\Services\TaskServiceInterface;
-use Carbon\Carbon;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function __construct(private TaskServiceInterface $taskService)
-    {
+    public function __construct(
+        private TaskServiceInterface $taskService,
+        private TaskRepositoryInterface $taskRepository,
+        private ProjectRepository $projectRepository,
+    ) {
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Project $project)
     {
-        //
+        $projectUsers = $this->projectRepository->getUsers($project);
+
+        return Inertia::render('Task/Index', [
+            'project' => $project,
+            'projectUser' => $projectUsers
+        ]);
     }
 
     /**
@@ -30,7 +38,7 @@ class TaskController extends Controller
      */
     public function create(Project $project)
     {
-        $projectUsers = $project->users;
+        $projectUsers = $this->projectRepository->getUsers($project);
 
         return Inertia::render('Task/Create', [
             'project' => $project,
@@ -43,15 +51,12 @@ class TaskController extends Controller
      */
     public function store(Project $project, StoreTaskRequest $request)
     {
-        $userId = Auth::id();
-        // dd($request);
-        // dd($project);
         $projectId = $project->id;
+        $userId = $request->getUserId();
         $title = $request->getTitle();
         $content = $request->getContents();
         $status = $request->getStatus();
         $priority = $request->getPriority();
-        $manager = $request->getManager();
         $startDate = $request->getStartDate();
         $endDate = $request->getEndDate();
 
@@ -62,7 +67,6 @@ class TaskController extends Controller
             $content,
             $status,
             $priority,
-            $manager,
             $startDate,
             $endDate
         );
@@ -79,17 +83,42 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task)
+    public function edit(Project $project, Task $task)
     {
-        //
+        $projectUsers = $this->projectRepository->getUsers($project);
+        return Inertia::render('Task/Edit', [
+            'project' => $project,
+            'projectUsers' => $projectUsers,
+            'task' => $task
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Project $project, Task $task)
     {
-        //
+        $projectId = $project->id;
+        $taskId = $task->id;
+        $userId = $request->getUserId();
+        $title = $request->getTitle();
+        $content = $request->getContents();
+        $status = $request->getStatus();
+        $priority = $request->getPriority();
+        $startDate = $request->getStartDate();
+        $endDate = $request->getEndDate();
+
+        $this->taskRepository->updateTask(
+            $userId,
+            $taskId,
+            $projectId,
+            $title,
+            $content,
+            $status,
+            $priority,
+            $startDate,
+            $endDate
+        );
     }
 
     /**

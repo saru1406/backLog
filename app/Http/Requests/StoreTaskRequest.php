@@ -22,14 +22,19 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => ['nullable', 'integer'],
             'title' => ['required', 'max:255', 'string'],
             'content' => ['required', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
-            'manager' => ['nullable', 'int'],
             'priority' => ['required', 'max:255', 'string'],
             'start_date' => ['nullable', 'max:255', 'string'],
             'end_date' => ['nullable', 'max:255', 'string'],
         ];
+    }
+
+    public function getUserId()
+    {
+        return $this->input('user_id');
     }
 
     public function getTitle()
@@ -50,11 +55,6 @@ class StoreTaskRequest extends FormRequest
     public function getPriority()
     {
         return $this->input('priority');
-    }
-
-    public function getManager()
-    {
-        return $this->input('manager');
     }
 
     public function getStartDate()

@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
 {
@@ -17,7 +17,6 @@ interface TaskRepositoryInterface
      * @param string $content
      * @param string $status
      * @param string $priority
-     * @param integer|null $manager
      * @param string|null $startDate
      * @param string|null $endDate
      * @return void
@@ -29,10 +28,27 @@ interface TaskRepositoryInterface
         string $content,
         string $status,
         string $priority,
-        int $manager = null,
         string $startDate = null,
         string $endDate = null
     ): void;
 
-    public function getProjectUserTask(Project $project, User $projectUser, string $status);
+    /**
+     * 担当者に紐づく課題を取得
+     *
+     * @param integer $managerId
+     * @return void
+     */
+    public function findByUserId(int $userId): Collection;
+
+    public function updateTask(
+        $userId,
+        $taskId,
+        $projectId,
+        $title,
+        $content,
+        $status,
+        $priority,
+        $startDate,
+        $endDate
+    );
 }

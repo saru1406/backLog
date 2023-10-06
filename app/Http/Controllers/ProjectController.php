@@ -16,7 +16,7 @@ class ProjectController extends Controller
     public function __construct(
         private ProjectServiceInterface $projectService,
         private UserServiceInterface $userService,
-        private ProjectRepositoryInterface $projectRepository
+        private ProjectRepositoryInterface $projectRepository,
     )
     {
     }
@@ -103,8 +103,7 @@ class ProjectController extends Controller
     public function board(Project $project)
     {
         $projectUsers = $this->projectService->getProjectUsers($project);
-        // $userTask = $this->projectService->getUserTasks($projectUsers);
-        return Inertia::render('Project/Bord', [
+        return Inertia::render('Project/Board', [
             'project' => $project,
             'project_users' => $projectUsers
         ]);

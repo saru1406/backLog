@@ -40,4 +40,12 @@ interface ProjectRepositoryInterface
      * @return void
      */
     public function storeProjectUser(int $userId, Project $project): void;
+
+    /**
+     * プロジェクトに紐づくユーザー取得
+     *
+     * @param Project $project
+     * @return Collection
+     */
+    public function getUsers(Project $project): Collection;
 }

@@ -46,12 +46,12 @@ function store_project_user(){
                     </form>
                     <div class="p-6 text-gray-900">
                         <p>参加ユーザー</p>
-                        <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm border border-gray-200">
-                            <p>{{ project_user.name }}</p>
+                        <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5">
+                            <p class="pl-10">{{ project_user.name }}</p>
+                            <hr>
                         </div>
                     </div>
                 </div>
-
                 <!-- 右側のコンテナ -->
                 <div class="flex flex-col w-2/5 sm:px-6 lg:px-8 py-12">
                     <div class="p-6 text-gray-900">状態

@@ -11,7 +11,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,48 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['nullable', 'integer'],
+            'title' => ['required', 'max:255', 'string'],
+            'content' => ['required', 'max:255', 'string'],
+            'status' => ['required', 'max:255', 'string'],
+            'priority' => ['required', 'max:255', 'string'],
+            'start_date' => ['nullable', 'max:255', 'string'],
+            'end_date' => ['nullable', 'max:255', 'string'],
         ];
+    }
+
+    public function getUserId()
+    {
+        return $this->input('user_id');
+    }
+
+    public function getTitle()
+    {
+        return $this->input('title');
+    }
+
+    public function getContents()
+    {
+        return $this->input('content');
+    }
+
+    public function getStatus()
+    {
+        return $this->input('status');
+    }
+
+    public function getPriority()
+    {
+        return $this->input('priority');
+    }
+
+    public function getStartDate()
+    {
+        return $this->input('start_date');
+    }
+
+    public function getEndDate()
+    {
+        return $this->input('end_date');
     }
 }

@@ -43,4 +43,9 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $project->users()->attach($userId);
     }
+
+    public function getUsers(Project $project): Collection
+    {
+        return $project->users;
+    }
 }

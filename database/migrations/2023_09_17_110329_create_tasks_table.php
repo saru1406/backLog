@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('content');
             $table->string('status');
             $table->string('priority')->nullable(true);
-            $table->integer('manager')->nullable(true);
             $table->datetime('start_date')->nullable(true);
             $table->datetime('end_date')->nullable(true);
             $table->timestamps();

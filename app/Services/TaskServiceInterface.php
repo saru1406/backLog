@@ -16,7 +16,6 @@ interface TaskServiceInterface
      * @param string $content
      * @param string $status
      * @param string $priority
-     * @param integer|null $manager
      * @param string|null $startDate
      * @param string|null $endDate
      * @return void
@@ -28,7 +27,6 @@ interface TaskServiceInterface
         string $content,
         string $status,
         string $priority,
-        int $manager = null,
         string $startDate = null,
         string $endDate = null
     ): void;
