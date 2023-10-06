@@ -10,7 +10,6 @@ class UserRepository implements UserRepositoryInterface
 {
     /**
      * {@inheritdoc}
-     *
      */
     public function getProjectNotUser(Collection $projectUserIds): Collection
     {

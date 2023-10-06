@@ -13,6 +13,9 @@ class ProjectService implements ProjectServiceInterface
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getProjectNames(): Collection
     {
         return $this->projectRepository->getProjectNames();

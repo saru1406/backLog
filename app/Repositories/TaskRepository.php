@@ -13,7 +13,6 @@ class TaskRepository implements TaskRepositoryInterface
 {
     /**
      * {@inheritDoc}
-     *
      */
     public function storeTask(
         int $userId,
@@ -39,6 +38,9 @@ class TaskRepository implements TaskRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function findByUserId(int $userId, int $projectId): Collection
     {
         return Task::where('user_id', $userId)
@@ -47,17 +49,20 @@ class TaskRepository implements TaskRepositoryInterface
             ->get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function updateTask(
-        $userId,
-        $taskId,
-        $projectId,
-        $title,
-        $content,
-        $status,
-        $priority,
-        $startDate,
-        $endDate
-    ) {
+        int $userId,
+        int $taskId,
+        int $projectId,
+        string $title,
+        string $content,
+        string $status,
+        string $priority,
+        string $startDate = null,
+        string $endDate = null
+    ): void {
         $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
         $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
         Task::where('id', $taskId)->update([

@@ -40,15 +40,29 @@ interface TaskRepositoryInterface
      */
     public function findByUserId(int $userId, int $projectId): Collection;
 
+    /**
+     * 課題を更新
+     *
+     * @param integer $userId
+     * @param integer $taskId
+     * @param integer $projectId
+     * @param string $title
+     * @param string $content
+     * @param string $status
+     * @param string $priority
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @return void
+     */
     public function updateTask(
-        $userId,
-        $taskId,
-        $projectId,
-        $title,
-        $content,
-        $status,
-        $priority,
-        $startDate,
-        $endDate
-    );
+        int $userId,
+        int $taskId,
+        int $projectId,
+        string $title,
+        string $content,
+        string $status,
+        string $priority,
+        string $startDate = null,
+        string $endDate = null
+    ): void;
 }

@@ -44,11 +44,17 @@ class ProjectRepository implements ProjectRepositoryInterface
         $project->users()->attach($userId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getUsers(Project $project): Collection
     {
         return $project->users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getTasks(Project $project): Collection
     {
         return $project->tasks;
