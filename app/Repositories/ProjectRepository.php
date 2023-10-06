@@ -12,7 +12,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function storeProjet(string $name, string $key): Project
+    public function storeProject(string $name, string $key): Project
     {
         return Project::create([
             'name' => $name,
@@ -47,5 +47,10 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function getUsers(Project $project): Collection
     {
         return $project->users;
+    }
+
+    public function getTasks(Project $project): Collection
+    {
+        return $project->tasks;
     }
 }

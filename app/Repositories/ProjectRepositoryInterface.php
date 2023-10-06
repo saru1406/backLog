@@ -15,7 +15,7 @@ interface ProjectRepositoryInterface
      * @param string $key
      * @return Project
      */
-    public function storeProjet(string $name, string $key): Project;
+    public function storeProject(string $name, string $key): Project;
 
     /**
      * プロジェクトの名取得
@@ -48,4 +48,12 @@ interface ProjectRepositoryInterface
      * @return Collection
      */
     public function getUsers(Project $project): Collection;
+
+    /**
+     * プロジェクトに紐づく課題取得
+     *
+     * @param Project $project
+     * @return Collection
+     */
+    public function getTasks(Project $project): Collection;
 }

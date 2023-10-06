@@ -39,9 +39,12 @@ class TaskRepository implements TaskRepositoryInterface
         ]);
     }
 
-    public function findByUserId(int $userId): Collection
+    public function findByUserId(int $userId, int $projectId): Collection
     {
-        return Task::where('user_id', $userId)->with('user')->get();
+        return Task::where('user_id', $userId)
+            ->where('project_id', $projectId)
+            ->with('user')
+            ->get();
     }
 
     public function updateTask(

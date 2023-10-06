@@ -24,6 +24,6 @@ class Project extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Task::class);
     }
 }

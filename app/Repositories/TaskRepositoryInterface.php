@@ -33,12 +33,12 @@ interface TaskRepositoryInterface
     ): void;
 
     /**
-     * 担当者に紐づく課題を取得
+     * プロジェクトと担当者に紐づく課題を取得
      *
      * @param integer $managerId
      * @return void
      */
-    public function findByUserId(int $userId): Collection;
+    public function findByUserId(int $userId, int $projectId): Collection;
 
     public function updateTask(
         $userId,

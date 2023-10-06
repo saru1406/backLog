@@ -103,6 +103,7 @@ class ProjectController extends Controller
     public function board(Project $project)
     {
         $projectUsers = $this->projectService->getProjectUsers($project);
+        
         return Inertia::render('Project/Board', [
             'project' => $project,
             'project_users' => $projectUsers

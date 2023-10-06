@@ -17,19 +17,19 @@ const props = defineProps({
 const tasks = ref([]);
 const selectedTask = ref(null);
 
-const fetchTasks = async (userId) => {
+const fetchTasks = async (project, userId) => {
     try {
-        const response = await axios.get(`/api/tasks?user_id=${userId}`);
+        const response = await axios.get(`/api/projects/${project.id}/tasks?user_id=${userId}`);
         tasks.value = response.data;
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
 };
-console.log(tasks.value);
 
 const handleUserChange = (event) => {
     const selectedUserId = event.target.value;
-    fetchTasks(selectedUserId);
+    const project =props.project;
+    fetchTasks(project, selectedUserId);
 };
 
 const openModalWithTask = (task) => {

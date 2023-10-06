@@ -25,10 +25,12 @@ class TaskController extends Controller
      */
     public function index(Project $project)
     {
+        $projectTasks = $this->projectRepository->getTasks($project);
         $projectUsers = $this->projectRepository->getUsers($project);
 
         return Inertia::render('Task/Index', [
             'project' => $project,
+            'projectTasks' => $projectTasks,
             'projectUser' => $projectUsers
         ]);
     }

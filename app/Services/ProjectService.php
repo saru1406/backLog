@@ -23,7 +23,7 @@ class ProjectService implements ProjectServiceInterface
      */
     public function StoreProject(string $name, string $key, ?User $user): void
     {
-        $project = $this->projectRepository->storeProjet($name, $key);
+        $project = $this->projectRepository->storeProject($name, $key);
         $this->projectRepository->storeProjectUser($user->id, $project);
     }
 
