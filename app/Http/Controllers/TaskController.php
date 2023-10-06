@@ -30,8 +30,8 @@ class TaskController extends Controller
 
         return Inertia::render('Task/Index', [
             'project' => $project,
-            'projectTasks' => $projectTasks,
-            'projectUser' => $projectUsers
+            'project_tasks' => $projectTasks,
+            'project_users' => $projectUsers
         ]);
     }
 
@@ -44,7 +44,7 @@ class TaskController extends Controller
 
         return Inertia::render('Task/Create', [
             'project' => $project,
-            'projectUsers' => $projectUsers
+            'project_users' => $projectUsers
         ]);
     }
 
@@ -90,7 +90,7 @@ class TaskController extends Controller
         $projectUsers = $this->projectRepository->getUsers($project);
         return Inertia::render('Task/Edit', [
             'project' => $project,
-            'projectUsers' => $projectUsers,
+            'project_users' => $projectUsers,
             'task' => $task
         ]);
     }

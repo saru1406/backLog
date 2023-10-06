@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class TaskRepository implements TaskRepositoryInterface
 {
@@ -41,12 +42,28 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function findByUserId(int $userId, int $projectId): Collection
-    {
-        return Task::where('user_id', $userId)
-            ->where('project_id', $projectId)
-            ->with('user')
-            ->get();
+    public function searchTasksByParameters(
+        int $projectId,
+        int $userId = null,
+        string $status = null,
+        string $priority = null,
+    ): Collection {
+        $query = Task::query();
+        $query->where('project_id', $projectId);
+
+        if ($userId !== null) {
+            $query->where('user_id', $userId);
+        }
+
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        if ($priority !== null) {
+            $query->where('priority', $priority);
+        }
+
+        return $query->with('user')->get();;
     }
 
     /**

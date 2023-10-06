@@ -1,52 +1,53 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import TextInput from '@/Components/TextInput.vue'
-import { ref, reactive } from 'vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
+import Modal from '@/Components/Modal.vue';
+
+const showModal = ref(false);
 
 const props = defineProps({
     'project': Object,
-    'projectUsers': Array,
+    'project_tasks': Object,
+    'project_users': Array
 })
 
-const form = reactive({
-    user_id: null,
-    title: null,
-    content: null,
-    status: null,
-    priority: null,
-    start_date: null,
-    end_date: null,
-})
+const tasks = ref([]);
+console.log(tasks)
 
-function storeTask() {
-    router.post(`/projects/${props.project.id}/tasks`, form)
-        // .then((response) => {
-        //     // 保存が成功した後にフォームをリセット
-        //     form.title = null;
-        //     form.content = null;
-        //     form.status = null;
-        //     form.manager = null;
-        //     form.priority = null;
-        //     form.start_date = null;
-        //     form.end_date = null;
-        // })
-        // .catch((error) => {
-        //     // エラーハンドリング
-        //     console.error(error);
-        // });
-}
+const filters = reactive({
+  user_id: null,
+  status: null,
+  priority: null,
+});
 
-// console.log(props.project);
+const fetchTasks = async (project, filters) => {
+    try {
+        let url = `/api/projects/${project.id}/tasks`;
+        const params = new URLSearchParams();
+
+        if(filters.user_id !== null) params.append('user_id', filters.user_id);
+        if(filters.status !== null) params.append('status', filters.status);
+        if(filters.priority !== null) params.append('priority', filters.priority);
+
+        const response = await axios.get(url, { params: params });
+        tasks.value = response.data;
+    } catch (error) {
+        console.error('An error occurred while fetching data: ', error);
+    }
+};
+
+watch(filters, () => {
+  fetchTasks(props.project, filters);
+}, { deep: true });
+
+
 </script>
 
 <template>
-    <!-- <Head :title="project.name" /> -->
+    <Head :title="project.name" />
 
     <AuthenticatedLayout>
         <!-- <template #header>
@@ -54,57 +55,113 @@ function storeTask() {
         </template> -->
 
         <div class="flex w-full">
-            <SideMenu :project="props.project" class="h-screen" />
+            <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
-            <div class="p-6 text-gray-900 w-full">
-                <form @submit.prevent="storeTask">
-                    <div class="m-5">
-                        <p>課題の追加</p>
-                        <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
+
+            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-12">
+                <div class="p-6 text-gray-900">
+                    <p>ボード</p>
+                    <div>
+                        <label>担当者</label>
+                        <select v-model="filters.user_id"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <option value="" disabled selected>選択してください</option>
+                            <option v-for="projectUser in props.project_users" :value="projectUser.id">
+                            {{ projectUser.name}}
+                            </option>
+                        </select>
+                        <label>状態</label>
+                        <select v-model="filters.status"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="対応前">対応前</option>
+                            <option value="対応中">対応中</option>
+                            <option value="完了">完了</option>
+                        </select>
+                        <label>優先度</label>
+                        <select v-model="filters.priority"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="低">低</option>
+                            <option value="中">中</option>
+                            <option value="高">高</option>
+                        </select>
                     </div>
-                    <div class="bg-white p-5 m-5">
-                        <textarea v-model="form.content" rows="12" class="w-full sm:rounded-lg border-gray-300"
-                            placeholder="課題の詳細"></textarea>
-                        <div>
-                            <label>状態</label>
-                            <select v-model="form.status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option value="対応前">対応前</option>
-                                <option value="対応中">対応中</option>
-                                <option value="完了">完了</option>
-                            </select>
-                            <label>担当者</label>
-                            <select v-model="form.user_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.projectUsers" :key="projectUser.id" :value="projectUser.id">
-                                    {{ projectUser.name }}
-                                </option>
-                            </select>
-                            <label>優先度</label>
-                            <select v-model="form.priority" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option value="低">低</option>
-                                <option value="中">中</option>
-                                <option value="高">高</option>
-                            </select>
-                        </div>
-                        <div class="w-1/2 m-5">
-                            <label>開始日</label>
-                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" />
-                        </div>
-                        <div class="w-1/2 m-5">
-                            <label>終了日</label>
-                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" />
+
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2 p-6 text-gray-900 bg-white">
+                        <h3>対応前</h3>
+                        <div v-for="task in tasks" :key="task.id">
+                            <button @click="openModalWithTask(task)">
+                                <div v-if="task.status === '対応前'" class="border">
+                                    {{ task.title }}<br />
+                                    {{ task.end_date }}
+                                </div>
+                            </button>
                         </div>
                     </div>
-                    <div class="text-center">
-                        <PrimaryButton>追加</PrimaryButton>
+                    <div class="w-1/2 p-6 text-gray-900 bg-white">
+                        <h3>対応中</h3>
+                        <div v-for="task in tasks" :key="task.id">
+                            <button @click="openModalWithTask(task)">
+                                <div v-if="task.status === '対応中'" class="border">
+                                    {{ task.title }}<br />
+                                    {{ task.user.name }}{{ task.end_date }}
+                                </div>
+                            </button>
+                        </div>
                     </div>
-                </form>
+                    <div class="w-1/2 p-6 text-gray-900 bg-white">
+                        <h3>対応済み</h3>
+                        <div v-for="task in tasks" :key="task.id">
+                            <button @click="openModalWithTask(task)">
+                                <div v-if="task.status === '完了'" class="border">
+                                    {{ task.title }}<br />
+                                    {{ task.user.name }}
+                                    {{ task.end_date }}
+                                </div>
+                            </button>
+                            <Modal :show="showModal" @close="showModal = false">
+                                <div class="h-[700px] bg-gray-100">
+                                    <div class="p-10">
+                                        <p class="font-semibold">{{ selectedTaskValue.title }}</p>
+                                        <Link :href="route('projects.tasks.edit', { project: project, task: task })"
+                                            class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        編集</Link>
+                                        <label class="pl-5">開始日</label>{{ selectedTaskValue.start_date }}
+                                        <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
+                                        <div class="h-auto bg-white p-4">
+                                            <div>
+                                                <p class="p-5">{{ selectedTaskValue.user.name }}</p>
+                                                <hr>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold p-5">概要</p>
+                                                <hr>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold p-5">詳細</p>
+                                                <p class="p-5">{{ selectedTaskValue.content }}</p>
+                                                <hr>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold p-5">備考</p>
+                                                <hr>
+                                                <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
+                                                <hr>
+                                                <p class="m-3">カテゴリー</p>
+                                                <hr>
+                                                <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Modal>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
-
-<style>
-.input-class::placeholder {
-    opacity: 0.5;
-}
-</style>

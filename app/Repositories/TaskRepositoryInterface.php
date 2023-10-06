@@ -35,10 +35,18 @@ interface TaskRepositoryInterface
     /**
      * プロジェクトと担当者に紐づく課題を取得
      *
-     * @param integer $managerId
-     * @return void
+     * @param integer $projectId
+     * @param integer|null $userId
+     * @param string|null $status
+     * @param string|null $priority
+     * @return Collection
      */
-    public function findByUserId(int $userId, int $projectId): Collection;
+    public function searchTasksByParameters(
+        int $projectId,
+        int $userId = null,
+        string $status = null,
+        string $priority = null,
+    ): Collection;
 
     /**
      * 課題を更新

@@ -22,12 +22,24 @@ class FetchAPITaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'integer'],
+            'user_id' => ['nullable', 'integer'],
+            'status' => ['nullable', 'string'],
+            'priority' => ['nullable', 'string'],
         ];
     }
 
     public function getUserId()
     {
         return $this->input('user_id');
+    }
+
+    public function getStatus()
+    {
+        return $this->input('status');
+    }
+
+    public function getPriority()
+    {
+        return $this->input('priority');
     }
 }

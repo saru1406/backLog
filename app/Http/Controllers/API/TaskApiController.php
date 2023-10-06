@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FetchAPITaskRequest;
 use App\Models\Project;
 use App\Repositories\TaskRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 
 class TaskApiController extends Controller
 {
@@ -15,7 +16,13 @@ class TaskApiController extends Controller
 
     public function getTasksByUser(FetchAPITaskRequest $request, Project $project)
     {
-        $tasks = $this->taskRepository->findByUserId($request->getUserId(), $project->id);
+        $tasks = $this->taskRepository->searchTasksByParameters(
+            $project->id,
+            $request->getUserId(),
+            $request->getStatus(),
+            $request->getPriority(),
+        );
+        Log::info($tasks);
 
         return response()->json($tasks);
     }

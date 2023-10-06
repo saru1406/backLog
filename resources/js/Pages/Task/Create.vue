@@ -11,7 +11,7 @@ import axios from 'axios';
 
 const props = defineProps({
     'project': Object,
-    'projectUsers': Array,
+    'project_users': Array,
 })
 
 const form = reactive({
