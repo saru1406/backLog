@@ -74,9 +74,11 @@ watch(filters, () => {
                         <select v-model="filters.status"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
-                            <option value="対応前">対応前</option>
-                            <option value="対応中">対応中</option>
+                            <option value="未対応">未対応</option>
+                            <option value="処理中">処理中</option>
+                            <option value="処理済み">処理済み</option>
                             <option value="完了">完了</option>
+                            <option value="完了以外">完了以外</option>
                         </select>
                         <label>優先度</label>
                         <select v-model="filters.priority"
@@ -91,10 +93,10 @@ watch(filters, () => {
                 </div>
                 <div class="flex space-x-4">
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応前</h3>
+                        <h3>未対応</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '対応前'" class="border">
+                                <div v-if="task.status === '未対応'" class="border">
                                     {{ task.title }}<br />
                                     {{ task.end_date }}
                                 </div>
@@ -105,7 +107,7 @@ watch(filters, () => {
                         <h3>対応中</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '対応中'" class="border">
+                                <div v-if="task.status === '処理中'" class="border">
                                     {{ task.title }}<br />
                                     {{ task.user.name }}{{ task.end_date }}
                                 </div>
@@ -113,7 +115,18 @@ watch(filters, () => {
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応済み</h3>
+                        <h3>処理済み</h3>
+                        <div v-for="task in tasks" :key="task.id">
+                            <button @click="openModalWithTask(task)">
+                                <div v-if="task.status === '処理済み'" class="border">
+                                    {{ task.title }}<br />
+                                    {{ task.user.name }}{{ task.end_date }}
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-1/2 p-6 text-gray-900 bg-white">
+                        <h3>完了</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
                                 <div v-if="task.status === '完了'" class="border">

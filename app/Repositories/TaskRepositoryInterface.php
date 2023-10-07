@@ -33,7 +33,7 @@ interface TaskRepositoryInterface
     ): void;
 
     /**
-     * プロジェクトと担当者に紐づく課題を取得
+     * タスク検索
      *
      * @param integer $projectId
      * @param integer|null $userId

@@ -68,8 +68,9 @@ function storeTask() {
                         <div>
                             <label>状態</label>
                             <select v-model="form.status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option value="対応前">対応前</option>
-                                <option value="対応中">対応中</option>
+                                <option value="未対応">未対応</option>
+                                <option value="処理中">処理中</option>
+                                <option value="処理済み">処理済み</option>
                                 <option value="完了">完了</option>
                             </select>
                             <label>担当者</label>

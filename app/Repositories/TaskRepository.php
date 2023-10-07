@@ -53,17 +53,26 @@ class TaskRepository implements TaskRepositoryInterface
 
         if ($userId !== null) {
             $query->where('user_id', $userId);
+            Log::info('user_id', ['user_id' => $userId]);
         }
 
-        if ($status !== null) {
+        if (in_array($status, ['未対応', '処理中', '処理済み', '完了'])) {
             $query->where('status', $status);
+            Log::info('status', ['status' => $status]);
+        }
+
+        if ($status === "完了以外") {
+            $query->where('status', '!=', '完了');
+            Log::info('完了以外だよ');
         }
 
         if ($priority !== null) {
             $query->where('priority', $priority);
+            Log::info('priority', ['priority' => $priority]);
         }
 
-        return $query->with('user')->get();;
+        return $query->with('user')->get();
+        ;
     }
 
     /**

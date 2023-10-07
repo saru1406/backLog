@@ -68,10 +68,10 @@ const selectedTaskValue = computed(() => selectedTask.value);
                 </div>
                 <div class="flex space-x-4">
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応前</h3>
+                        <h3>未対応</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '対応前'" class="border">
+                                <div v-if="task.status === '未対応'" class="border">
                                     {{ task.title }}<br />
                                     {{ task.end_date }}
                                 </div>
@@ -79,10 +79,10 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応中</h3>
+                        <h3>処理中</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '対応中'" class="border">
+                                <div v-if="task.status === '処理中'" class="border">
                                     {{ task.title }}<br />
                                     {{ task.user.name }}{{ task.end_date }}
                                 </div>
@@ -90,7 +90,18 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応済み</h3>
+                        <h3>処理済み</h3>
+                        <div v-for="task in tasks" :key="task.id">
+                            <button @click="openModalWithTask(task)">
+                                <div v-if="task.status === '処理済み'" class="border">
+                                    {{ task.title }}<br />
+                                    {{ task.user.name }}{{ task.end_date }}
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-1/2 p-6 text-gray-900 bg-white">
+                        <h3>完了</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <button @click="openModalWithTask(task)">
                                 <div v-if="task.status === '完了'" class="border">
