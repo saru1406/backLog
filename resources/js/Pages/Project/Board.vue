@@ -153,10 +153,6 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                         <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
                                         <div class="h-auto bg-white p-4">
                                             <div>
-                                                <p class="p-5">{{ selectedTaskValue.user.name }}</p>
-                                                <hr>
-                                            </div>
-                                            <div>
                                                 <p class="font-semibold p-5">概要</p>
                                                 <hr>
                                             </div>

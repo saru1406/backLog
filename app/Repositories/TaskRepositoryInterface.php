@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -74,4 +75,6 @@ interface TaskRepositoryInterface
         string $startDate = null,
         string $endDate = null
     ): void;
+
+    public function getUser(Task $task): User;
 }

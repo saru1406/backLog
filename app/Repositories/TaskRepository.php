@@ -102,4 +102,9 @@ class TaskRepository implements TaskRepositoryInterface
             'end_date' => $endDate
         ]);
     }
+
+    public function getUser(Task $task): User
+    {
+        return $task->user;
+    }
 }
