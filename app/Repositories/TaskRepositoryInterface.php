@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
@@ -46,7 +47,7 @@ interface TaskRepositoryInterface
         int $userId = null,
         string $status = null,
         string $priority = null,
-    ): Collection;
+    ): Paginator;
 
     /**
      * 課題を更新

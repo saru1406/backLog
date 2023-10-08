@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -47,7 +48,7 @@ class TaskRepository implements TaskRepositoryInterface
         int $userId = null,
         string $status = null,
         string $priority = null,
-    ): Collection {
+    ): Paginator {
         $query = Task::query();
         $query->where('project_id', $projectId);
 
@@ -71,8 +72,7 @@ class TaskRepository implements TaskRepositoryInterface
             Log::info('priority', ['priority' => $priority]);
         }
 
-        return $query->with('user')->get();
-        ;
+        return $query->with('user')->paginate(20);
     }
 
     /**

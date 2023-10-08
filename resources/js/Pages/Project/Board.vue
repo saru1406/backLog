@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import { reactive, ref, onMounted, computed } from 'vue';
+import { reactive, ref, watch, computed } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
 
@@ -16,21 +16,34 @@ const props = defineProps({
 
 const tasks = ref([]);
 const selectedTask = ref(null);
+console.log(tasks)
 
-const fetchTasks = async (project, userId) => {
+const filters = reactive({
+    user_id: null,
+    status: null,
+    priority: null,
+});
+
+const fetchTasks = async (project, filters) => {
     try {
-        const response = await axios.get(`/api/projects/${project.id}/tasks?user_id=${userId}`);
-        tasks.value = response.data;
+        let url = `/api/projects/${project.id}/tasks`;
+        const params = new URLSearchParams();
+
+        if (filters.user_id !== null) params.append('user_id', filters.user_id);
+        if (filters.status !== null) params.append('status', filters.status);
+        if (filters.priority !== null) params.append('priority', filters.priority);
+
+        const response = await axios.get(url, { params: params });
+        tasks.value = response.data.data;
     } catch (error) {
-        console.error('An error occurred while fetching data: ', error);
+        console.error('APIエラー: ', error);
     }
 };
 
-const handleUserChange = (event) => {
-    const selectedUserId = event.target.value;
-    const project =props.project;
-    fetchTasks(project, selectedUserId);
-};
+watch(filters, () => {
+    fetchTasks(props.project, filters);
+}, { deep: true });
+
 
 const openModalWithTask = (task) => {
     console.log("Selected task:", task);
@@ -59,12 +72,31 @@ const selectedTaskValue = computed(() => selectedTask.value);
                 <div class="p-6 text-gray-900">
                     <p>ボード</p>
                     <label>担当者</label>
-                    <select @change="handleUserChange"
-                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="" disabled selected>選択してください</option>
-                        <option v-for="projectUser in props.project_users" :value="projectUser.id">{{ projectUser.name }}
-                        </option>
-                    </select>
+                        <select v-model="filters.user_id"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            <option value="" disabled selected>選択してください</option>
+                            <option v-for="projectUser in props.project_users" :value="projectUser.id">
+                            {{ projectUser.name}}
+                            </option>
+                        </select>
+                        <label>状態</label>
+                        <select v-model="filters.status"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="未対応">未対応</option>
+                            <option value="処理中">処理中</option>
+                            <option value="処理済み">処理済み</option>
+                            <option value="完了">完了</option>
+                            <option value="完了以外">完了以外</option>
+                        </select>
+                        <label>優先度</label>
+                        <select v-model="filters.priority"
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="低">低</option>
+                            <option value="中">中</option>
+                            <option value="高">高</option>
+                        </select>
                 </div>
                 <div class="flex space-x-4">
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
@@ -111,10 +143,12 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                 </div>
                             </button>
                             <Modal :show="showModal" @close="showModal = false">
-                                <div class="h-[700px] bg-gray-100">
+                                <div class="h-[850px] bg-gray-100">
                                     <div class="p-10">
                                         <p class="font-semibold">{{ selectedTaskValue.title }}</p>
-                                        <Link :href="route('projects.tasks.edit', {project: project, task: task})" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">編集</Link>
+                                        <Link :href="route('projects.tasks.edit', { project: project, task: task })"
+                                            class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        編集</Link>
                                         <label class="pl-5">開始日</label>{{ selectedTaskValue.start_date }}
                                         <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
                                         <div class="h-auto bg-white p-4">
@@ -136,9 +170,9 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                                 <hr>
                                                 <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
                                                 <hr>
-                                                <p  class="m-3">カテゴリー</p>
+                                                <p class="m-3">カテゴリー</p>
                                                 <hr>
-                                                <p  class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
+                                                <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
                                             </div>
                                         </div>
                                     </div>
@@ -148,6 +182,5 @@ const selectedTaskValue = computed(() => selectedTask.value);
                     </div>
                 </div>
             </div>
-        </div>
-    </AuthenticatedLayout>
-</template>
+    </div>
+</AuthenticatedLayout></template>

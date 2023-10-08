@@ -1,26 +1,22 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
 
-const showModal = ref(false);
-
 const props = defineProps({
     'project': Object,
-    'project_tasks': Object,
     'project_users': Array
 })
 
 const tasks = ref([]);
-console.log(tasks)
 
 const filters = reactive({
-  user_id: null,
-  status: null,
-  priority: null,
+    user_id: null,
+    status: null,
+    priority: null,
 });
 
 const fetchTasks = async (project, filters) => {
@@ -28,20 +24,23 @@ const fetchTasks = async (project, filters) => {
         let url = `/api/projects/${project.id}/tasks`;
         const params = new URLSearchParams();
 
-        if(filters.user_id !== null) params.append('user_id', filters.user_id);
-        if(filters.status !== null) params.append('status', filters.status);
-        if(filters.priority !== null) params.append('priority', filters.priority);
+        if (filters.user_id !== null) params.append('user_id', filters.user_id);
+        if (filters.status !== null) params.append('status', filters.status);
+        if (filters.priority !== null) params.append('priority', filters.priority);
 
         const response = await axios.get(url, { params: params });
-        tasks.value = response.data;
+        tasks.value = response.data.data;
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
 };
 
 watch(filters, () => {
-  fetchTasks(props.project, filters);
+    fetchTasks(props.project, filters);
 }, { deep: true });
+
+const renderTaskShow = (task) =>
+    router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
 
 </script>
@@ -67,7 +66,7 @@ watch(filters, () => {
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             <option value="" disabled selected>選択してください</option>
                             <option v-for="projectUser in props.project_users" :value="projectUser.id">
-                            {{ projectUser.name}}
+                                {{ projectUser.name }}
                             </option>
                         </select>
                         <label>状態</label>
@@ -91,89 +90,69 @@ watch(filters, () => {
                     </div>
 
                 </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>未対応</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '未対応'" class="border">
-                                    {{ task.title }}<br />
-                                    {{ task.end_date }}
-                                </div>
-                            </button>
+                <section class="text-gray-600 body-font bg-white">
+                    <div class="container px-5 py-8 mx-auto">
+                        <div class="lg:w-full mx-auto overflow-auto">
+                            <table class="table-auto w-full text-left whitespace-no-wrap">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl text-center">
+                                            件名</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            担当者</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            状態</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            優先度</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            開始日</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            期限日</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            登録日</th>
+                                        <th
+                                            class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="task in tasks" :key="task.id">
+                                    <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderTaskShow(task)">
+                                        <td class="px-4 py-3 w-1/5">{{ task.title }}</td>
+                                        <td class="px-4 py-3">{{ task.user.name }}</td>
+                                        <td class="px-4 py-3">{{ task.status }}</td>
+                                        <td class="px-4 py-3 text-lg">{{ task.priority }}</td>
+                                        <td class="px-4 py-3">
+                                            {{ task.start_date }}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            {{ task.end_date }}
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            {{ task.created_at }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
+                            <a class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                            <button
+                                class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
                         </div>
                     </div>
-                    <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>対応中</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '処理中'" class="border">
-                                    {{ task.title }}<br />
-                                    {{ task.user.name }}{{ task.end_date }}
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>処理済み</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '処理済み'" class="border">
-                                    {{ task.title }}<br />
-                                    {{ task.user.name }}{{ task.end_date }}
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="w-1/2 p-6 text-gray-900 bg-white">
-                        <h3>完了</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '完了'" class="border">
-                                    {{ task.title }}<br />
-                                    {{ task.user.name }}
-                                    {{ task.end_date }}
-                                </div>
-                            </button>
-                            <Modal :show="showModal" @close="showModal = false">
-                                <div class="h-[700px] bg-gray-100">
-                                    <div class="p-10">
-                                        <p class="font-semibold">{{ selectedTaskValue.title }}</p>
-                                        <Link :href="route('projects.tasks.edit', { project: project, task: task })"
-                                            class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        編集</Link>
-                                        <label class="pl-5">開始日</label>{{ selectedTaskValue.start_date }}
-                                        <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
-                                        <div class="h-auto bg-white p-4">
-                                            <div>
-                                                <p class="p-5">{{ selectedTaskValue.user.name }}</p>
-                                                <hr>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold p-5">概要</p>
-                                                <hr>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold p-5">詳細</p>
-                                                <p class="p-5">{{ selectedTaskValue.content }}</p>
-                                                <hr>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold p-5">備考</p>
-                                                <hr>
-                                                <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
-                                                <hr>
-                                                <p class="m-3">カテゴリー</p>
-                                                <hr>
-                                                <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Modal>
-                        </div>
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
     </AuthenticatedLayout>

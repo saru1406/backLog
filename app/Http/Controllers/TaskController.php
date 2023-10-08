@@ -25,12 +25,10 @@ class TaskController extends Controller
      */
     public function index(Project $project)
     {
-        $projectTasks = $this->projectRepository->getTasks($project);
         $projectUsers = $this->projectRepository->getUsers($project);
 
         return Inertia::render('Task/Index', [
             'project' => $project,
-            'project_tasks' => $projectTasks,
             'project_users' => $projectUsers
         ]);
     }
@@ -77,9 +75,12 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(Project $project, Task $task)
     {
-        //
+        return Inertia::render('Task/Show', [
+            'project' => $project,
+            'task' => $task
+        ]);
     }
 
     /**
