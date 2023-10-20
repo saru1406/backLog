@@ -45,9 +45,9 @@ class TaskRepository implements TaskRepositoryInterface
      */
     public function searchTasksByParameters(
         int $projectId,
-        int $userId = null,
-        string $status = null,
-        string $priority = null,
+        ?int $userId,
+        ?string $status,
+        ?string $priority,
     ): Paginator {
         $query = Task::query();
         $query->where('project_id', $projectId);

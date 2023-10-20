@@ -5,6 +5,7 @@ import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
+import Paginator from 'primevue/paginator';
 
 const props = defineProps({
     'project': Object,
@@ -13,10 +14,19 @@ const props = defineProps({
 
 const tasks = ref([]);
 
+const pagination = reactive({
+    current_page: null,
+    links: null,
+    last_page: null,
+    total: null,
+})
+console.log(pagination)
+
 const filters = reactive({
     user_id: null,
     status: null,
     priority: null,
+    page: null
 });
 
 const fetchTasks = async (project, filters) => {
@@ -27,17 +37,41 @@ const fetchTasks = async (project, filters) => {
         if (filters.user_id !== null) params.append('user_id', filters.user_id);
         if (filters.status !== null) params.append('status', filters.status);
         if (filters.priority !== null) params.append('priority', filters.priority);
+        if (filters.page !== null) params.append('page', filters.page);
 
         const response = await axios.get(url, { params: params });
         tasks.value = response.data.data;
+        pagination.current_page = response.data.current_page;
+        pagination.links = response.data.links;
+        pagination.last_page = response.data.last_page;
+        pagination.total = response.data.total;
+        console.log(response.data)
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
 };
 
+const rowsPerPageOption = computed(() => {
+    if (pagination.total > 400) {
+        return [10, 20];
+    } else if (pagination.total > 200) {
+        return [10];
+    } else {
+        return [1]; // または適切なデフォルト値
+    }
+});
+
 watch(filters, () => {
     fetchTasks(props.project, filters);
 }, { deep: true });
+
+const onPageChange = async (event) => {
+  // ここでeventオブジェクトが使える
+  const page = event.page + 1;
+  console.log(page)
+  filters.page = page;
+  await fetchTasks(props.project, filters);
+};
 
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
@@ -143,6 +177,9 @@ const renderTaskShow = (task) =>
                         </div>
                     </div>
                 </section>
+                <div class="card">
+                    <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total" :rowsPerPageOptions="rowsPerPageOption"></Paginator>
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>

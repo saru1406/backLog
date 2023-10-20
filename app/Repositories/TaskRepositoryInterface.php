@@ -34,20 +34,21 @@ interface TaskRepositoryInterface
         string $endDate = null
     ): void;
 
-    /**
-     * タスク検索
-     *
-     * @param integer $projectId
-     * @param integer|null $userId
-     * @param string|null $status
-     * @param string|null $priority
-     * @return Collection
-     */
+     /**
+      * タスク検索
+      *
+      * @param integer $projectId
+      * @param integer|null $userId
+      * @param string|null $status
+      * @param string|null $priority
+      * @param integer|null $page
+      * @return Paginator
+      */
     public function searchTasksByParameters(
         int $projectId,
-        int $userId = null,
-        string $status = null,
-        string $priority = null,
+        ?int $userId,
+        ?string $status,
+        ?string $priority,
     ): Paginator;
 
     /**
