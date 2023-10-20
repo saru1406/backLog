@@ -8,6 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import axios from 'axios';
+import Editor from 'primevue/editor';
 
 const props = defineProps({
     'project': Object,
@@ -26,20 +27,20 @@ const form = reactive({
 
 function storeTask() {
     router.post(`/projects/${props.project.id}/tasks`, form)
-        // .then((response) => {
-        //     // 保存が成功した後にフォームをリセット
-        //     form.title = null;
-        //     form.content = null;
-        //     form.status = null;
-        //     form.manager = null;
-        //     form.priority = null;
-        //     form.start_date = null;
-        //     form.end_date = null;
-        // })
-        // .catch((error) => {
-        //     // エラーハンドリング
-        //     console.error(error);
-        // });
+    // .then((response) => {
+    //     // 保存が成功した後にフォームをリセット
+    //     form.title = null;
+    //     form.content = null;
+    //     form.status = null;
+    //     form.manager = null;
+    //     form.priority = null;
+    //     form.start_date = null;
+    //     form.end_date = null;
+    // })
+    // .catch((error) => {
+    //     // エラーハンドリング
+    //     console.error(error);
+    // });
 }
 
 // console.log(props.project);
@@ -63,24 +64,29 @@ function storeTask() {
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                     </div>
                     <div class="bg-white p-5 m-5">
-                        <textarea v-model="form.content" rows="12" class="w-full sm:rounded-lg border-gray-300"
-                            placeholder="課題の詳細"></textarea>
+                        <div class="card">
+                            <Editor v-model="form.content" editorStyle="height: 320px" />
+                        </div>
                         <div>
                             <label>状態</label>
-                            <select v-model="form.status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <select v-model="form.status"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                                 <option value="未対応">未対応</option>
                                 <option value="処理中">処理中</option>
                                 <option value="処理済み">処理済み</option>
                                 <option value="完了">完了</option>
                             </select>
                             <label>担当者</label>
-                            <select v-model="form.user_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.projectUsers" :key="projectUser.id" :value="projectUser.id">
+                            <select v-model="form.user_id"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectUser in props.project_users" :key="projectUser.id"
+                                    :value="projectUser.id">
                                     {{ projectUser.name }}
                                 </option>
                             </select>
                             <label>優先度</label>
-                            <select v-model="form.priority" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <select v-model="form.priority"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                                 <option value="低">低</option>
                                 <option value="中">中</option>
                                 <option value="高">高</option>
@@ -107,5 +113,4 @@ function storeTask() {
 <style>
 .input-class::placeholder {
     opacity: 0.5;
-}
-</style>
+}</style>

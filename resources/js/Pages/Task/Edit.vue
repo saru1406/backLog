@@ -61,7 +61,7 @@ function updateTask() {
                             </select>
                             <label>担当者</label>
                             <select v-model="form.user_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.projectUsers" :key="projectUser.id" :value="projectUser.id">
+                                <option v-for="projectUser in props.project_users" :key="projectUser.id" :value="projectUser.id">
                                     {{ projectUser.name }}
                                 </option>
                             </select>

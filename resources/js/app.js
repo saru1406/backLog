@@ -7,6 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import PrimeVue from 'primevue/config';
 import "primevue/resources/themes/lara-light-indigo/theme.css";
+import { TroisJSVuePlugin } from 'troisjs';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,6 +19,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(PrimeVue)
+            .use(TroisJSVuePlugin)
             .mount(el)
     },
     progress: {
