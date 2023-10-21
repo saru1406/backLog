@@ -24,7 +24,7 @@ down:
 	./vendor/bin/sail down
 ps:
 	./vendor/bin/sail ps
-app:
+bash:
 	./vendor/bin/sail bash
 fresh:
 	./vendor/bin/sail php artisan migrate:fresh --seed
