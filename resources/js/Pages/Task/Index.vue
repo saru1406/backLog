@@ -66,11 +66,10 @@ watch(filters, () => {
 }, { deep: true });
 
 const onPageChange = async (event) => {
-  // ここでeventオブジェクトが使える
-  const page = event.page + 1;
-  console.log(page)
-  filters.page = page;
-  await fetchTasks(props.project, filters);
+    const page = event.page + 1;
+    console.log(page)
+    filters.page = page;
+    await fetchTasks(props.project, filters);
 };
 
 const renderTaskShow = (task) =>
@@ -178,7 +177,8 @@ const renderTaskShow = (task) =>
                     </div>
                 </section>
                 <div class="card">
-                    <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total" :rowsPerPageOptions="rowsPerPageOption"></Paginator>
+                    <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total"
+                        :rowsPerPageOptions="rowsPerPageOption"></Paginator>
                 </div>
             </div>
         </div>
