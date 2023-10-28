@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChildTaskController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectController::class);
 
     Route::resource('projects.tasks', TaskController::class);
+    Route::resource('projects.tasks.child-tasks', ChildTaskController::class);
 
     Route::get('/projects/{project}/board', [ProjectController::class, 'board'])->name('projects.board');
 

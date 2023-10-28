@@ -50,6 +50,10 @@ defineProps({
                             <p class="m-3">担当者</p>{{ task_user.name }}
                         </div>
                     </div>
+                    <!-- TODOモーダルでcreate画面表示する -->
+                    <div class="h-auto mt-10 bg-white p-4">
+                        <Link :href="route('projects.tasks.child-tasks.create', {project: project, task: task})">子課題を追加</Link>
+                    </div>
                 </div>
             </div>
         </div>

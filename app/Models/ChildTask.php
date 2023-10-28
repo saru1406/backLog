@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Task extends Model
+class ChildTask extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
         'project_id',
+        'task_id',
         'title',
         'content',
         'status',
@@ -22,18 +23,8 @@ class Task extends Model
         'end_date'
     ];
 
-    public function user()
+    public function task(): BelongsTo
     {
-        return $this->BelongsTo(User::class);
-    }
-
-    public function project()
-    {
-        return $this->BelongsTo(Project::class);
-    }
-
-    public function childTasks(): HasMany
-    {
-        return $this->hasMany(ChildTask::class);
+        return $this->belongsTo(Task::class);
     }
 }
