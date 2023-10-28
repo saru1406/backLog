@@ -19,7 +19,7 @@ jobs:
     - name: Copy .env
       run: cp .env.example .env
     - name: Build and up docker containers
-      run: ./vendor/bin/sail up -d
+      run: docker compose up -d --build
     - name: Install Composer Dependencies
       run: ./vendor/bin/sail composer install
     - name: Generate key
