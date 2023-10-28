@@ -32,7 +32,10 @@ jobs:
         node-version: '18.18.2'
 
     - name: Install Node Dependencies
-      run: npm install
+      run: ./vendor/bin/sail npm install
+
+    - name: Build assets
+      run: ./vendor/bin/sail npm run build
 
     - name: generate key
       run: ./vendor/bin/sail artisan key:generate
