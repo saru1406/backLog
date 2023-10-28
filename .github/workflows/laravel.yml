@@ -26,6 +26,14 @@ jobs:
     - name: start
       run: ./vendor/bin/sail up -d
 
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.18.2'
+
+    - name: Install Node Dependencies
+      run: npm install
+
     - name: generate key
       run: ./vendor/bin/sail artisan key:generate
 
@@ -33,7 +41,7 @@ jobs:
       run: ./vendor/bin/sail artisan migrate
 
     - name: test
-      run: ./vendor/bin/sail test
+      run: ./vendor/bin/sail exec laravel.test vendor/bin/phpunit
 
     # - uses: actions/checkout@v3
     # - name: Setup PHP
