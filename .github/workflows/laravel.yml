@@ -28,6 +28,8 @@ jobs:
       run: ./vendor/bin/sail exec laravel.test php artisan key:generate
     - name: Directory Permissions
       run: ./vendor/bin/sail exec laravel.test chmod -R 777 storage bootstrap/cache
+    - name: Test MySQL Connection
+      run: ./vendor/bin/sail exec laravel.test mysql -h mysql -u sail -ppassword -e 'SHOW DATABASES;'
     - name: Create Database
       run: |
         ./vendor/bin/sail exec laravel.test touch database/database.sqlite
@@ -35,7 +37,7 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # こちらのバージョンはプロジェクトに合わせて変更してください
+        node-version: '18.18.2'  # こちらのバージョンはプロジェクトに合わせて変更してください
     - name: Install Node Dependencies
       run: npm install
     # テスト実行
