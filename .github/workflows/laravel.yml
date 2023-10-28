@@ -29,7 +29,15 @@ jobs:
     - name: Directory Permissions
       run: ./vendor/bin/sail exec laravel.test chmod -R 777 storage bootstrap/cache
     - name: Create Database
-      run: ./vendor/bin/sail exec laravel.test touch database/database.sqlite
+      run: |
+        ./vendor/bin/sail exec laravel.test touch database/database.sqlite
+        ./vendor/bin/sail exec laravel.test php artisan migrate
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # こちらのバージョンはプロジェクトに合わせて変更してください
+    - name: Install Node Dependencies
+      run: npm install
     # テスト実行
     - name: Execute tests
       env:
