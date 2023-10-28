@@ -1,6 +1,8 @@
-name: CI
+name: Laravel
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -9,26 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: cp env
-        run: cp .env.example .env
-
-      - name: composer install
-        run: docker run --rm -u "$(id -u):$(id -g)" -v $(pwd):/var/www/html -w /var/www/html laravelsail/php81-composer:latest composer install --ignore-platform-reqs
-
-      # 先に起動しておく
-      - name: start mysql
-        run: ./vendor/bin/sail up -d mysql
-
-      - name: start
-        run: ./vendor/bin/sail up -d
-
-      - name: generate key
-        run: ./vendor/bin/sail artisan key:generate
-
-      - name: migrate
-        run: ./vendor/bin/sail artisan migrate
-
-      - name: test
-        run: ./vendor/bin/sail test
+    - uses: actions/checkout@v3
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+    - name: Copy .env
+      run: cp .env.example .env
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-scripts --no-progress --no-interaction
+    # Dockerコンテナを起動
+    - name: Start Containers
+      run: ./vendor/bin/sail up -d
+    # 以降のステップも同様にsail execを使用してコンテナ内で実行
+    - name: Generate Key
+      run: ./vendor/bin/sail exec laravel.test php artisan key:generate
+    - name: Directory Permissions
+      run: ./vendor/bin/sail exec laravel.test chmod -R 777 storage bootstrap/cache
+    - name: Create Database
+      run: ./vendor/bin/sail exec laravel.test touch database/database.sqlite
+    # テスト実行
+    - name: Execute tests
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: ./vendor/bin/sail exec laravel.test vendor/bin/phpunit
