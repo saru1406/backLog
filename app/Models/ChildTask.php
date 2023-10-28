@@ -18,7 +18,6 @@ class ChildTask extends Model
         'content',
         'status',
         'priority',
-        'manager',
         'start_date',
         'end_date'
     ];

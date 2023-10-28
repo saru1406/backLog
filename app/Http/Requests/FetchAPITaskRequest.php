@@ -28,18 +28,34 @@ class FetchAPITaskRequest extends FormRequest
         ];
     }
 
-    public function getUserId()
+
+    /**
+     * ユーザID取得
+     *
+     * @return integer|null
+     */
+    public function getUserId(): ?int
     {
-        return $this->input('user_id');
+        return $this->query('user_id');
     }
 
-    public function getStatus()
+    /**
+     * 状態取得
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
     {
-        return $this->input('status');
+        return $this->query('status');
     }
 
-    public function getPriority()
+    /**
+     * 優先度取得
+     *
+     * @return string|null
+     */
+    public function getPriority(): ?string
     {
-        return $this->input('priority');
+        return $this->query('priority');
     }
 }

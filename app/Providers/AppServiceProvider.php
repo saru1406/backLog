@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Repositories\ChildTaskRepository;
+use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepository;
 use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryInterface;
+use App\Services\ChildTaskService;
+use App\Services\ChildTaskServiceInterface;
 use App\Services\ProjectService;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskService;
@@ -24,16 +28,16 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
-
         $this->app->bind(ProjectServiceInterface::class, ProjectService::class);
 
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
-
         $this->app->bind(TaskServiceInterface::class, TaskService::class);
 
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-
         $this->app->bind(UserServiceInterface::class, UserService::class);
+
+        $this->app->bind(ChildTaskRepositoryInterface::class, ChildTaskRepository::class);
+        $this->app->bind(ChildTaskServiceInterface::class, ChildTaskService::class);
     }
 
     /**

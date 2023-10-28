@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateChildTaskRequest;
 use App\Models\ChildTask;
 use App\Models\Project;
 use App\Models\Task;
+use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepositoryInterface;
 use App\Services\TaskServiceInterface;
@@ -16,8 +17,7 @@ class ChildTaskController extends Controller
 {
 
     public function __construct(
-        private TaskServiceInterface $taskService,
-        private TaskRepositoryInterface $taskRepository,
+        private ChildTaskRepositoryInterface $childTaskRepository,
         private ProjectRepository $projectRepository,
     ) {
     }
@@ -49,7 +49,18 @@ class ChildTaskController extends Controller
      */
     public function store(StoreChildTaskRequest $request, Project $project, Task $task)
     {
-        //
+        // dd($request->getStartDate());
+        $this->childTaskRepository->storeChildTask(
+            $request->getUserId(),
+            $project->id,
+            $task->id,
+            $request->getTitle(),
+            $request->getContents(),
+            $request->getStatus(),
+            $request->getPriority(),
+            $request->getStartDate(),
+            $request->getEndDate(),
+        );
     }
 
     /**

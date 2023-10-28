@@ -22,7 +22,7 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['nullable', 'integer'],
+            'user_id' => ['required', 'integer'],
             'title' => ['required', 'max:255', 'string'],
             'content' => ['required', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
@@ -32,37 +32,72 @@ class UpdateTaskRequest extends FormRequest
         ];
     }
 
-    public function getUserId()
+    /**
+     * ユーザID取得
+     *
+     * @return int
+     */
+    public function getUserId(): int
     {
         return $this->input('user_id');
     }
 
-    public function getTitle()
+    /**
+     * タイトル取得
+     *
+     * @return string
+     */
+    public function getTitle(): string
     {
         return $this->input('title');
     }
 
-    public function getContents()
+    /**
+     * 内容取得
+     *
+     * @return string
+     */
+    public function getContents(): string
     {
         return $this->input('content');
     }
 
-    public function getStatus()
+    /**
+     * 状態取得
+     *
+     * @return string
+     */
+    public function getStatus(): string
     {
         return $this->input('status');
     }
 
-    public function getPriority()
+    /**
+     * 優先度取得
+     *
+     * @return string
+     */
+    public function getPriority(): string
     {
         return $this->input('priority');
     }
 
-    public function getStartDate()
+    /**
+     * 開始日取得
+     *
+     * @return string
+     */
+    public function getStartDate(): string
     {
         return $this->input('start_date');
     }
 
-    public function getEndDate()
+    /**
+     * 終了日取得
+     *
+     * @return string
+     */
+    public function getEndDate(): string
     {
         return $this->input('end_date');
     }

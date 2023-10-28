@@ -11,6 +11,7 @@ import Editor from 'primevue/editor';
 
 const props = defineProps({
     'project': Object,
+    'task': Object,
     'project_users': Array,
 })
 
@@ -24,8 +25,8 @@ const form = reactive({
     end_date: null,
 })
 
-function storeTask() {
-    router.post(`/projects/${props.project.id}/tasks`, form)
+function storeChildTask() {
+    router.post(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks`, form)
     // 保存が成功した後にフォームをリセット
     form.user_id = null;
     form.title = null;
@@ -51,7 +52,7 @@ function storeTask() {
             <SideMenu :project="props.project" class="h-screen" />
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
-                <form @submit.prevent="storeTask">
+                <form @submit.prevent="storeChildTask">
                     <div class="m-5">
                         <p>課題の追加</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>

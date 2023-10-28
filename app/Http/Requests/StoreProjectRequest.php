@@ -28,12 +28,22 @@ class StoreProjectRequest extends FormRequest
         ];
     }
 
-    public function getName()
+    /**
+     * プロジェクト名取得
+     *
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->input('name');
     }
 
-    public function getKey()
+    /**
+     * プロジェクトKey取得
+     *
+     * @return string
+     */
+    public function getKey(): string
     {
         return $this->input('key');
     }
