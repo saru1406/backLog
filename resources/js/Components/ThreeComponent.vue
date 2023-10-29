@@ -1,97 +1,143 @@
 <template>
-    <Renderer ref="renderer" resize antialias :orbit-ctrl="{ autoRotate: true, enableDamping: true, dampingFactor: 0.05 }" pointer>
-      <Camera :position="{ x: 0, y: 0, z: 10 }" />
-      <Scene background="#000000" >
-        <PointLight ref="light" :intensity="0.5" :position="{ x: 0, y: 0, z: 0 }">
-          <Sphere :radius="0.1" />
-        </PointLight>
-        <Group :rotation="{ x: -Math.PI / 2, y: 0, z: 0 }">
-          <RectAreaLight color="#ff6000" :position="{ x: 0, y: 10, z: 1 }" v-bind="rectLightsProps" />
-          <RectAreaLight color="#0060ff" :position="{ x: 10, y: 0, z: 1 }" v-bind="rectLightsProps" />
-          <RectAreaLight color="#60ff60" :position="{ x: -10, y: 0, z: 1 }" v-bind="rectLightsProps" />
-          <RectAreaLight color="#ffffff" :position="{ x: 0, y: -10, z: 1 }" v-bind="rectLightsProps" />
-          <Plane :width="30" :height="30" :rotation="{ x: 0 }" :position="{ z: -3 }">
-            <StandardMaterial :props="{ displacementScale: 0.2, roughness: 0, metalness: 0 }"  >
-              <Texture :props="texturesProps" src="/assets/textures/Wood_Tiles_002_basecolor.jpg" />
-              <Texture :props="texturesProps" src="/assets/textures/Wood_Tiles_002_height.png" name="displacementMap" />
-              <Texture :props="texturesProps" src="/assets/textures/Wood_Tiles_002_normal.jpg" name="normalMap" />
-              <Texture :props="texturesProps" src="/assets/textures/Wood_Tiles_002_roughness.jpg" name="roughnessMap" />
-              <Texture :props="texturesProps" src="/assets/textures/Wood_Tiles_002_ambientOcclusion.jpg" name="aoMap" />
-            </StandardMaterial>
-          </Plane>
-        </Group>
+    <Renderer ref="renderer" resize orbit-ctrl pointer>
+      <Camera :position="{ z: 200 }" />
+      <Scene>
+        <AmbientLight color="#808080" />
+        <PointLight color="#ff6000" />
+        <PointLight ref="light" color="#0060ff" :intensity="0.5" />
+        <PointLight color="#ff6000" :intensity="0.5" :position="{ x: 100}" />
+        <PointLight color="#0000ff" :intensity="0.5" :position="{ x: -100}" />
+
+        <InstancedMesh ref="imesh" :count="NUM_INSTANCES">
+          <BoxGeometry :width="2" :height="2" :depth="10" />
+          <StandardMaterial :props="{ transparent: true, opacity: 0.9, metalness: 0.8, roughness: 0.5 }"  />
+        </InstancedMesh>
+
+        <Text
+          text="TroisJS"
+          font-src="/assets/helvetiker_regular.typeface.json"
+          align="center"
+          :size="30"
+          :height="5"
+          :position="{ x: 0, y: 0, z: 0 }"
+          :cast-shadow="true"
+        >
+          <PhongMaterial />
+        </Text>
       </Scene>
       <EffectComposer>
         <RenderPass />
-        <UnrealBloomPass :strength="0.3" />
-        <FXAAPass />
+        <UnrealBloomPass :strength="1" />
+        <HalftonePass :radius="1" :scatter="0" />
       </EffectComposer>
     </Renderer>
   </template>
 
   <script>
-//   textures from https://3dtextures.me/2019/04/26/wood-tiles-002/
-  import { RepeatWrapping } from 'three';
+  import { Object3D, MathUtils, Vector3 } from 'three';
+  const { randFloat: rnd, randFloatSpread: rndFS } = MathUtils;
+
   import {
     AmbientLight,
+    BoxGeometry,
     Camera,
     EffectComposer,
-    FXAAPass,
-    Group,
-    Renderer,
-    Plane,
+    HalftonePass,
+    InstancedMesh,
+    PhongMaterial,
     PointLight,
-    RectAreaLight,
+    Renderer,
     RenderPass,
-    Scene,
-    Sphere,
     StandardMaterial,
-    Texture,
+    Scene,
+    Text,
     UnrealBloomPass,
   } from 'troisjs';
 
   export default {
     components: {
       AmbientLight,
+      BoxGeometry,
       Camera,
       EffectComposer,
-      FXAAPass,
-      Group,
-      Renderer,
-      Plane,
+      HalftonePass,
+      InstancedMesh,
+      PhongMaterial,
       PointLight,
-      RectAreaLight,
+      Renderer,
       RenderPass,
-      Scene,
-      Sphere,
       StandardMaterial,
-      Texture,
+      Scene,
+      Text,
       UnrealBloomPass,
     },
-    data() {
+    setup() {
+      const NUM_INSTANCES = 2000;
+      const instances = [];
+      const target = new Vector3();
+      const dummyO = new Object3D();
+      const dummyV = new Vector3();
+
+      for (let i = 0; i < NUM_INSTANCES; i++) {
+        instances.push({
+          position: new Vector3(rndFS(200), rndFS(200), rndFS(200)),
+          scale: rnd(0.2, 1),
+          scaleZ: rnd(0.1, 1),
+          velocity: new Vector3(rndFS(2), rndFS(2), rndFS(2)),
+          attraction: 0.03 + rnd(-0.01, 0.01),
+          vlimit: 1.2 + rnd(-0.1, 0.1),
+        });
+      }
+
       return {
-        texturesProps: {
-          repeat: { x: 10, y: 10 },
-          wrapS: RepeatWrapping,
-          wrapT: RepeatWrapping,
-        },
-        rectLightsProps: {
-          // rotation: { x: -Math.PI / 2 },
-          lookAt: { x: 0, y: 0, z: 1 },
-          intensity: 5,
-          width: 5,
-          height: 5,
-          helper: true,
-        },
+        NUM_INSTANCES,
+        instances,
+        target,
+        dummyO,
+        dummyV,
       };
     },
     mounted() {
-      const renderer = this.$refs.renderer;
-      const light = this.$refs.light.light;
-      const pointerV3 = renderer.three.pointer.positionV3;
-      renderer.onBeforeRender(() => {
-        light.position.copy(pointerV3);
-      });
+      this.renderer = this.$refs.renderer;
+      this.imesh = this.$refs.imesh.mesh;
+      this.light = this.$refs.light.light;
+      this.init();
+    },
+    methods: {
+      init() {
+        // init instanced mesh matrix
+        for (let i = 0; i < this.NUM_INSTANCES; i++) {
+          const { position, scale, scaleZ } = this.instances[i];
+          this.dummyO.position.copy(position);
+          this.dummyO.scale.set(scale, scale, scaleZ);
+          this.dummyO.updateMatrix();
+          this.imesh.setMatrixAt(i, this.dummyO.matrix);
+        }
+        this.imesh.instanceMatrix.needsUpdate = true;
+
+        // animate
+        this.renderer.onBeforeRender(this.animate);
+      },
+      animate() {
+        const { pointer } = this.renderer.three;
+        this.target.copy(pointer.positionV3);
+        this.light.position.copy(this.target);
+
+        for (let i = 0; i < this.NUM_INSTANCES; i++) {
+          const { position, scale, scaleZ, velocity, attraction, vlimit } = this.instances[i];
+
+          this.dummyV.copy(this.target).sub(position).normalize().multiplyScalar(attraction);
+          velocity.add(this.dummyV).clampScalar(-vlimit, vlimit);
+          position.add(velocity);
+
+          this.dummyO.position.copy(position);
+          this.dummyO.scale.set(scale, scale, scaleZ);
+          this.dummyO.lookAt(this.dummyV.copy(position).add(velocity));
+          this.dummyO.updateMatrix();
+          this.imesh.setMatrixAt(i, this.dummyO.matrix);
+        }
+        this.imesh.instanceMatrix.needsUpdate = true;
+      },
     },
   };
   </script>
