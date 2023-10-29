@@ -2,6 +2,7 @@ setup:
 	cp .env.example .env
 	composer install
 	./vendor/bin/sail up -d --build
+	./vendor/bin/sail composer install
 	./vendor/bin/sail php artisan key:generate
 	./vendor/bin/sail php artisan migrate:fresh --seed
 	@make npm-install
