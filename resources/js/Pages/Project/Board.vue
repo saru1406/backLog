@@ -72,111 +72,112 @@ const selectedTaskValue = computed(() => selectedTask.value);
                 <div class="p-6 text-gray-900">
                     <p>ボード</p>
                     <label>担当者</label>
-                        <select v-model="filters.user_id"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                            <option value="" disabled selected>選択してください</option>
-                            <option v-for="projectUser in props.project_users" :value="projectUser.id">
-                            {{ projectUser.name}}
-                            </option>
-                        </select>
-                        <label>状態</label>
-                        <select v-model="filters.status"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="" disabled selected>選択してください</option>
-                            <option value="未対応">未対応</option>
-                            <option value="処理中">処理中</option>
-                            <option value="処理済み">処理済み</option>
-                            <option value="完了">完了</option>
-                            <option value="完了以外">完了以外</option>
-                        </select>
-                        <label>優先度</label>
-                        <select v-model="filters.priority"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="" disabled selected>選択してください</option>
-                            <option value="低">低</option>
-                            <option value="中">中</option>
-                            <option value="高">高</option>
-                        </select>
+                    <select v-model="filters.user_id"
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        <option value="" disabled selected>選択してください</option>
+                        <option v-for="projectUser in props.project_users" :value="projectUser.id">
+                            {{ projectUser.name }}
+                        </option>
+                    </select>
+                    <label>状態</label>
+                    <select v-model="filters.status"
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="未対応">未対応</option>
+                        <option value="処理中">処理中</option>
+                        <option value="処理済み">処理済み</option>
+                        <option value="完了">完了</option>
+                        <option value="完了以外">完了以外</option>
+                    </select>
+                    <label>優先度</label>
+                    <select v-model="filters.priority"
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                        <option value="" disabled selected>選択してください</option>
+                        <option value="低">低</option>
+                        <option value="中">中</option>
+                        <option value="高">高</option>
+                    </select>
                 </div>
                 <div class="flex space-x-4">
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>未対応</h3>
                         <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '未対応'" class="border">
+                            <div v-if="task.status === '未対応'" class="border">
+                                <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
                                     {{ task.end_date }}
-                                </div>
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>処理中</h3>
                         <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '処理中'" class="border">
+                            <div v-if="task.status === '処理中'" class="border">
+                                <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
                                     {{ task.user.name }}{{ task.end_date }}
-                                </div>
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>処理済み</h3>
                         <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '処理済み'" class="border">
+                            <div v-if="task.status === '処理済み'" class="border">
+                                <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
                                     {{ task.user.name }}{{ task.end_date }}
-                                </div>
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>完了</h3>
                         <div v-for="task in tasks" :key="task.id">
-                            <button @click="openModalWithTask(task)">
-                                <div v-if="task.status === '完了'" class="border">
+                            <div v-if="task.status === '完了'" class="border">
+                                <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
                                     {{ task.user.name }}
                                     {{ task.end_date }}
-                                </div>
-                            </button>
-                            <Modal :show="showModal" @close="showModal = false">
-                                <div class="h-[850px] bg-gray-100">
-                                    <div class="p-10">
-                                        <p class="font-semibold">{{ selectedTaskValue.title }}</p>
-                                        <Link :href="route('projects.tasks.edit', { project: project, task: task })"
-                                            class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                        編集</Link>
-                                        <label class="pl-5">開始日</label>{{ selectedTaskValue.start_date }}
-                                        <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
-                                        <div class="h-auto bg-white p-4">
-                                            <div>
-                                                <p class="font-semibold p-5">概要</p>
-                                                <hr>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold p-5">詳細</p>
-                                                <p class="p-5">{{ selectedTaskValue.content }}</p>
-                                                <hr>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold p-5">備考</p>
-                                                <hr>
-                                                <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
-                                                <hr>
-                                                <p class="m-3">カテゴリー</p>
-                                                <hr>
-                                                <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Modal>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
-</AuthenticatedLayout></template>
+        </div>
+    </AuthenticatedLayout>
+    <Modal :show="showModal" @close="showModal = false">
+        <div class="h-[850px] bg-gray-100">
+            <div class="p-10">
+                <p class="font-semibold">{{ selectedTaskValue.title }}</p>
+                <Link :href="route('projects.tasks.edit', { project: project, task: selectedTask })"
+                    class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                編集</Link>
+                <label class="pl-5">開始日</label>{{ selectedTaskValue.start_date }}
+                <label class="pl-5">終了日</label>{{ selectedTaskValue.end_date }}
+                <div class="h-auto bg-white p-4">
+                    <div>
+                        <p class="font-semibold p-5">概要</p>
+                        <hr>
+                    </div>
+                    <div>
+                        <p class="font-semibold p-5">詳細</p>
+                        <p class="p-5">{{ selectedTaskValue.content }}</p>
+                        <hr>
+                    </div>
+                    <div>
+                        <p class="font-semibold p-5">備考</p>
+                        <hr>
+                        <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
+                        <hr>
+                        <p class="m-3">カテゴリー</p>
+                        <hr>
+                        <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Modal>
+</template>

@@ -66,6 +66,7 @@ onMounted(() => {
     const savedStatus = localStorage.getItem("status");
     const savedPriority = localStorage.getItem("priority");
 
+    // localStorageで保持したデータはstringになる為、"null"をnullに変換
     if (savedUserId === "null") { // 文字列"null"をチェック
       filters.user_id = null; // 実際のnullをセット
     } else {
