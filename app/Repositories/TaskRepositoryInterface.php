@@ -38,7 +38,7 @@ interface TaskRepositoryInterface
       * タスク検索
       *
       * @param integer $projectId
-      * @param integer|null $userId
+      * @param int|null $userId
       * @param string|null $status
       * @param string|null $priority
       * @param integer|null $page

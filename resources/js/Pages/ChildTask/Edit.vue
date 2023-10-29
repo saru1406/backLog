@@ -12,20 +12,22 @@ const props = defineProps({
     'project': Object,
     'project_users': Array,
     'task': Object,
+    'child_task': Object,
+    'child_task_user': Object,
 })
 
 const form = reactive({
-    user_id: props.task ? props.task.user_id : null,
-    title: props.task ? props.task.title : null,
-    content: props.task ? props.task.content : null,
-    status: props.task ? props.task.status : null,
-    priority: props.task ? props.task.priority : null,
-    start_date: props.task ? props.task.start_date : null,
-    end_date: props.task ? props.task.end_date : null,
+    user_id: props.child_task ? props.child_task.user_id : null,
+    title: props.child_task ? props.child_task.title : null,
+    content: props.child_task ? props.child_task.content : null,
+    status: props.child_task ? props.child_task.status : null,
+    priority: props.child_task ? props.child_task.priority : null,
+    start_date: props.child_task ? props.child_task.start_date : null,
+    end_date: props.child_task ? props.child_task.end_date : null,
 })
 
-function updateTask() {
-    router.put(`/projects/${props.project.id}/tasks/${props.task.id}`, form)
+function updateChildTask() {
+    router.put(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${props.child_task.id}`, form)
 }
 
 // console.log(props.project);
@@ -43,7 +45,7 @@ function updateTask() {
             <SideMenu :project="props.project" class="h-screen" />
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
-                <form @submit.prevent="updateTask">
+                <form @submit.prevent="updateChildTask">
                     <div class="m-5">
                         <p>課題の追加</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>

@@ -22,7 +22,7 @@ class FetchAPITaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['nullable', 'integer'],
+            'user_id' => ['nullable', 'int'],
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
         ];
@@ -32,7 +32,7 @@ class FetchAPITaskRequest extends FormRequest
     /**
      * ユーザID取得
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getUserId(): ?int
     {

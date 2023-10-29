@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class ChildTaskRepository implements ChildTaskRepositoryInterface
 {
     public function storeChildTask(
-        ?int $userId,
+        int $userId,
         int $projectId,
         int $taskId,
         string $title,
@@ -20,19 +20,17 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
         ?string $startDate,
         ?string $endDate
     ): void {
-        // dd($startDate);
-        $startDate = Carbon::parse($startDate)->format('Y-m-d');
-        $endDate = Carbon::parse($endDate)->format('Y-m-d');
-        // dd($startDate);
-        // dd($endDate);
+        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+
         ChildTask::create([
-            "user_id" => $userId,
-            "project_id" => $projectId,
-            "task_id" => $taskId,
-            "title" => $title,
-            "content" => $content,
-            "status" => $status,
-            "priority" => $priority,
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'task_id' => $taskId,
+            'title' => $title,
+            'content' => $content,
+            'status' => $status,
+            'priority' => $priority,
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);
@@ -41,5 +39,29 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
     public function getChildTasksByUser(ChildTask $childTasks): User
     {
         return $childTasks->user;
+    }
+
+    public function updateChildTask(
+        int $childTaskId,
+        int $userId,
+        string $title,
+        string $content,
+        string $status,
+        string $priority,
+        ?string $startDate,
+        ?string $endDate
+    ): void {
+        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+
+        ChildTask::where('id', $childTaskId)->update([
+            'user_id' => $userId,
+            'title' => $title,
+            'content' => $content,
+            'status' => $status,
+            'priority' => $priority,
+            'start_date' => $startDate,
+            'end_date' => $endDate
+        ]);
     }
 }

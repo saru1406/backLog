@@ -14,13 +14,11 @@ use Inertia\Inertia;
 
 class ChildTaskController extends Controller
 {
-
     public function __construct(
         private ChildTaskRepositoryInterface $childTaskRepository,
         private ProjectRepositoryInterface $projectRepository,
         private TaskRepositoryInterface $taskRepository
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -68,31 +66,50 @@ class ChildTaskController extends Controller
      */
     public function show(Project $project, Task $task, ChildTask $childTask)
     {
-        $taskUser = $this->taskRepository->getUser($task);
-        $childTasksUser = $this->childTaskRepository->getChildTasksByUser($childTask);
-        return Inertia::render('Task/Show', [
+        $childTaskUser = $this->childTaskRepository->getChildTasksByUser($childTask);
+        $childTasks = $this->taskRepository->getChildTasks($task);
+
+        return Inertia::render('ChildTask/Show', [
             'project' => $project,
             'task' => $task,
-            'task_user' => $taskUser,
-            'child_tasks' => $childTask,
-            'child_tasks_user' => $childTasksUser
+            'child_task_user' => $childTaskUser,
+            'child_task' => $childTask,
+            'child_tasks' => $childTasks,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ChildTask $childTask)
+    public function edit(Project $project, Task $task, ChildTask $childTask)
     {
-        //
+        $projectUsers = $this->projectRepository->getUsers($project);
+        $childTaskUser = $this->childTaskRepository->getChildTasksByUser($childTask);
+
+        return Inertia::render('ChildTask/Edit', [
+            'project' => $project,
+            'project_users' => $projectUsers,
+            'task' => $task,
+            'child_task' => $childTask,
+            'child_task_user' => $childTaskUser,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChildTaskRequest $request, ChildTask $childTask)
+    public function update(UpdateChildTaskRequest $request, Project $project, Task $task, ChildTask $childTask)
     {
-        //
+        $this->childTaskRepository->updateChildTask(
+            $childTask->id,
+            $request->getUserId(),
+            $request->getTitle(),
+            $request->getContents(),
+            $request->getStatus(),
+            $request->getPriority(),
+            $request->getStartDate(),
+            $request->getEndDate(),
+        );
     }
 
     /**

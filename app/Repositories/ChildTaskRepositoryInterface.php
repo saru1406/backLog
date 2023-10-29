@@ -34,4 +34,28 @@ interface ChildTaskRepositoryInterface
     ): void;
 
     public function getChildTasksByUser(ChildTask $childTasks): User;
+
+    /**
+     * 子タスク更新
+     *
+     * @param integer $childTaskId
+     * @param integer $userId
+     * @param string $title
+     * @param string $content
+     * @param string $status
+     * @param string $priority
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @return void
+     */
+    public function updateChildTask(
+        int $childTaskId,
+        int $userId,
+        string $title,
+        string $content,
+        string $status,
+        string $priority,
+        ?string $startDate,
+        ?string $endDate
+    ): void;
 }

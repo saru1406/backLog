@@ -45,7 +45,6 @@ const fetchTasks = async (project, filters) => {
         pagination.links = response.data.links;
         pagination.last_page = response.data.last_page;
         pagination.total = response.data.total;
-        console.log(response.data)
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
@@ -61,7 +60,39 @@ const rowsPerPageOption = computed(() => {
     }
 });
 
+onMounted(() => {
+    // ページ読み込み時にlocalStorageからデータを取得して適用
+    const savedUserId = localStorage.getItem("user_id");
+    const savedStatus = localStorage.getItem("status");
+    const savedPriority = localStorage.getItem("priority");
+
+    if (savedUserId === "null") { // 文字列"null"をチェック
+      filters.user_id = null; // 実際のnullをセット
+    } else {
+      filters.user_id = savedUserId; // それ以外はそのままセット
+    }
+
+    if (savedStatus === "null") {
+        filters.status = null;
+    } else {
+        filters.status = savedStatus;
+    }
+
+    if (savedPriority === "null") {
+        filters.priority = null;
+    } else {
+        filters.priority = savedPriority;
+    }
+
+    fetchTasks(props.project, filters); // 初期データ読み込み
+});
+
 watch(filters, () => {
+    //フィルターが変更されたときにlocalStorageに保存
+    localStorage.setItem("user_id", filters.user_id);
+    localStorage.setItem("status", filters.status);
+    localStorage.setItem("priority", filters.priority);
+
     fetchTasks(props.project, filters);
 }, { deep: true });
 
@@ -98,6 +129,7 @@ const renderTaskShow = (task) =>
                         <select v-model="filters.user_id"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                             <option value="" disabled selected>選択してください</option>
+                            <option :value="null">未設定</option>
                             <option v-for="projectUser in props.project_users" :value="projectUser.id">
                                 {{ projectUser.name }}
                             </option>
@@ -106,6 +138,7 @@ const renderTaskShow = (task) =>
                         <select v-model="filters.status"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
+                            <option :value="null">未設定</option>
                             <option value="未対応">未対応</option>
                             <option value="処理中">処理中</option>
                             <option value="処理済み">処理済み</option>
@@ -116,6 +149,7 @@ const renderTaskShow = (task) =>
                         <select v-model="filters.priority"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
+                            <option :value="null">未設定</option>
                             <option value="低">低</option>
                             <option value="中">中</option>
                             <option value="高">高</option>
