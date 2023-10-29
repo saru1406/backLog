@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
+use App\Models\ChildTask;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -77,5 +77,27 @@ interface TaskRepositoryInterface
         string $endDate = null
     ): void;
 
+    /**
+     * 課題に紐づいているユーザを取得
+     *
+     * @param Task $task
+     * @return User
+     */
     public function getUser(Task $task): User;
+
+    /**
+     * 課題に紐づいているデータ取得
+     *
+     * @param Task $task
+     * @return ChildTask
+     */
+    public function getTasksRelations(Task $task, array $relations): void;
+
+    /**
+     * 課題に紐づいている子タスク取得
+     *
+     * @param Task $task
+     * @return ChildTask
+     */
+    public function getChildTasks(Task $task): Collection;
 }

@@ -78,10 +78,14 @@ class TaskController extends Controller
     public function show(Project $project, Task $task)
     {
         $taskUser = $this->taskRepository->getUser($task);
+
+        $childTasks = $this->taskRepository->getChildTasks($task);
+        dd($childTasks);
         return Inertia::render('Task/Show', [
             'project' => $project,
             'task' => $task,
-            'task_user' => $taskUser
+            'task_user' => $taskUser,
+            'child_tasks' => $childTasks,
         ]);
     }
 

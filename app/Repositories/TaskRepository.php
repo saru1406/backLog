@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
 use App\Repositories\TaskRepositoryInterface;
@@ -72,7 +71,7 @@ class TaskRepository implements TaskRepositoryInterface
             Log::info('priority', ['priority' => $priority]);
         }
 
-        return $query->with('user')->paginate(20);
+        return $query->with(['user', 'childTasks'])->paginate(20);
     }
 
     /**
@@ -106,5 +105,15 @@ class TaskRepository implements TaskRepositoryInterface
     public function getUser(Task $task): User
     {
         return $task->user;
+    }
+
+    public function getTasksRelations(Task $task, array $relations): void
+    {
+        $task->load($relations);
+    }
+
+    public function getChildTasks(Task $task): Collection
+    {
+        return $task->childTasks()->with('user')->get();
     }
 }

@@ -8,9 +8,8 @@ use App\Models\ChildTask;
 use App\Models\Project;
 use App\Models\Task;
 use App\Repositories\ChildTaskRepositoryInterface;
-use App\Repositories\ProjectRepository;
+use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
-use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
 
 class ChildTaskController extends Controller
@@ -18,7 +17,8 @@ class ChildTaskController extends Controller
 
     public function __construct(
         private ChildTaskRepositoryInterface $childTaskRepository,
-        private ProjectRepository $projectRepository,
+        private ProjectRepositoryInterface $projectRepository,
+        private TaskRepositoryInterface $taskRepository
     ) {
     }
 
@@ -66,9 +66,17 @@ class ChildTaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ChildTask $childTask)
+    public function show(Project $project, Task $task, ChildTask $childTask)
     {
-        //
+        $taskUser = $this->taskRepository->getUser($task);
+        $childTasksUser = $this->childTaskRepository->getChildTasksByUser($childTask);
+        return Inertia::render('Task/Show', [
+            'project' => $project,
+            'task' => $task,
+            'task_user' => $taskUser,
+            'child_tasks' => $childTask,
+            'child_tasks_user' => $childTasksUser
+        ]);
     }
 
     /**

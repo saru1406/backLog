@@ -22,6 +22,16 @@ class ChildTask extends Model
         'end_date'
     ];
 
+    public function user()
+    {
+        return $this->BelongsTo(User::class);
+    }
+
+    public function project()
+    {
+        return $this->BelongsTo(Project::class);
+    }
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);

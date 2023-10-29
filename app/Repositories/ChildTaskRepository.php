@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ChildTask;
+use App\Models\User;
 use App\Repositories\ChildTaskRepositoryInterface;
 use Carbon\Carbon;
 
@@ -35,5 +36,10 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);
+    }
+
+    public function getChildTasksByUser(ChildTask $childTasks): User
+    {
+        return $childTasks->user;
     }
 }

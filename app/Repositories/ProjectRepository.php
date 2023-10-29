@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Project;
-use App\Models\User;
 use App\Repositories\ProjectRepositoryInterface;
 use Illuminate\Support\Collection;
 

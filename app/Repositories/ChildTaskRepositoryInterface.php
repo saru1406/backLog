@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\ChildTask;
+use App\Models\User;
+
 interface ChildTaskRepositoryInterface
 {
     /**
@@ -29,4 +32,6 @@ interface ChildTaskRepositoryInterface
         ?string $startDate,
         ?string $endDate
     ): void;
+
+    public function getChildTasksByUser(ChildTask $childTasks): User;
 }
