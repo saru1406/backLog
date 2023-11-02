@@ -71,6 +71,7 @@ class TaskRepository implements TaskRepositoryInterface
             $query->where('priority', $priority);
             Log::info('priority', ['priority' => $priority]);
         }
+        
         if ($isPagination) {
             return $query->with(['user', 'childTasks'])->paginate(20);
         }

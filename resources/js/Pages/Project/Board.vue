@@ -16,13 +16,30 @@ const props = defineProps({
 
 const tasks = ref([]);
 const selectedTask = ref(null);
-console.log(tasks)
 
 const filters = reactive({
     user_id: null,
     status: null,
     priority: null,
 });
+
+const draggedTask = ref(null);
+
+const handleDragStart = (task) => {
+    draggedTask.value = task;
+};
+
+const handleDrop = (status) => {
+    if (draggedTask.value) {
+        draggedTask.value.status = status;
+        // ここでAPI呼び出しをしてサーバー側のデータも更新できます。
+        draggedTask.value = null;
+    }
+};
+
+const allowDrop = (event) => {
+    event.preventDefault();
+};
 
 const fetchTasks = async (project, filters) => {
     try {
@@ -50,9 +67,9 @@ onMounted(() => {
 
     // localStorageで保持したデータはstringになる為、"null"をnullに変換
     if (savedUserId === "null") { // 文字列"null"をチェック
-      filters.user_id = null; // 実際のnullをセット
+        filters.user_id = null; // 実際のnullをセット
     } else {
-      filters.user_id = savedUserId; // それ以外はそのままセット
+        filters.user_id = savedUserId; // それ以外はそのままセット
     }
 
     if (savedStatus === "null") {
@@ -139,46 +156,93 @@ const selectedTaskValue = computed(() => selectedTask.value);
                 <div class="flex space-x-4">
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>未対応</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <div v-if="task.status === '未対応'" class="border">
-                                <button @click="openModalWithTask(task)">
-                                    {{ task.title }}<br />
-                                    {{ task.end_date }}
-                                </button>
+                        <div v-for="(task, index) in tasks" :key="task.id" @dragstart="handleDragStart(task)" draggable="true"
+                            @drop="handleDrop('未対応')" @dragover="allowDrop($event)">
+                            <!-- <div v-for="childTask in tasks" :key="childTask.id"> -->
+                            <div v-if="task.status === '未対応'">
+                                <div class="border">
+                                    <button @click="openModalWithTask(task)">
+                                        {{ task.title }}<br />
+                                        {{ task.user.name }}<br />
+                                        {{ task.end_date }}
+                                    </button>
+                                </div>
+                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
+                                    <div class="border">
+                                        <button @click="openModalWithTask(childTask.id)">
+                                            {{ childTask.title }}<br />
+                                            {{ task.user.name }}<br />
+                                            {{ childTask.end_date }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- </div> -->
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>処理中</h3>
-                        <div v-for="task in tasks" :key="task.id">
+                        <div v-for="task in tasks" :key="task.id" @dragstart="handleDragStart(task)" draggable="true"
+                            @drop="handleDrop('処理中')" @dragover="allowDrop($event)">
                             <div v-if="task.status === '処理中'" class="border">
                                 <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
-                                    {{ task.user.name }}{{ task.end_date }}
+                                    {{ task.user.name }}<br />
+                                    {{ task.end_date }}
                                 </button>
+                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
+                                    <div class="border">
+                                        <button @click="openModalWithTask(childTask.id)">
+                                            {{ childTask.title }}<br />
+                                            {{ task.user.name }}<br />
+                                            {{ childTask.end_date }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>処理済み</h3>
-                        <div v-for="task in tasks" :key="task.id">
+                        <div v-for="task in tasks" :key="task.id" @dragstart="handleDragStart(task)" draggable="true"
+                            @drop="handleDrop('処理済み')" @dragover="allowDrop($event)">
                             <div v-if="task.status === '処理済み'" class="border">
                                 <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
-                                    {{ task.user.name }}{{ task.end_date }}
+                                    {{ task.user.name }}<br />
+                                    {{ task.end_date }}
                                 </button>
+                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
+                                    <div class="border">
+                                        <button @click="openModalWithTask(childTask.id)">
+                                            {{ childTask.title }}<br />
+                                            {{ task.user.name }}<br />
+                                            {{ childTask.end_date }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="w-1/2 p-6 text-gray-900 bg-white">
                         <h3>完了</h3>
-                        <div v-for="task in tasks" :key="task.id">
+                        <div v-for="task in tasks" :key="task.id" @dragstart="handleDragStart(task)" draggable="true"
+                            @drop="handleDrop('完了')" @dragover="allowDrop($event)">
                             <div v-if="task.status === '完了'" class="border">
                                 <button @click="openModalWithTask(task)">
                                     {{ task.title }}<br />
-                                    {{ task.user.name }}
+                                    {{ task.user.name }}<br />
                                     {{ task.end_date }}
                                 </button>
+                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
+                                    <div class="border">
+                                        <button @click="openModalWithTask(childTask.id)">
+                                            {{ childTask.title }}<br />
+                                            {{ task.user.name }}<br />
+                                            {{ childTask.end_date }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
