@@ -14,6 +14,17 @@ class FetchAPITaskRequest extends FormRequest
         return true;
     }
 
+    public function validationData()
+    {
+        $params = $this->only(['is_pagination']);
+
+        if (isset($params['is_pagination'])) {
+            $params['is_pagination'] = $this->boolean('is_pagination');
+            $this->merge($params);
+        }
+        return $params;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,6 +36,7 @@ class FetchAPITaskRequest extends FormRequest
             'user_id' => ['nullable', 'int'],
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
+            'is_pagination' => ['nullable', 'boolean']
         ];
     }
 
@@ -57,5 +69,15 @@ class FetchAPITaskRequest extends FormRequest
     public function getPriority(): ?string
     {
         return $this->query('priority');
+    }
+
+    /**
+     * ページネーションで取得の有無
+     *
+     * @return boolean
+     */
+    public function getIsPagination(): bool
+    {
+        return $this->input('is_pagination', true);
     }
 }

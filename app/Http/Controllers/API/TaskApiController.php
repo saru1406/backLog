@@ -14,13 +14,15 @@ class TaskApiController extends Controller
     {
     }
 
-    public function getTasksByUser(FetchAPITaskRequest $request, Project $project)
+    public function fetchTasks(FetchAPITaskRequest $request, Project $project)
     {
+        Log::info("なんでやねん",['pagination' => $request->getIsPagination()]);
         $tasks = $this->taskRepository->searchTasksByParameters(
             $project->id,
             $request->getUserId(),
             $request->getStatus(),
             $request->getPriority(),
+            $request->getIsPagination(),
         );
         Log::info($tasks);
 

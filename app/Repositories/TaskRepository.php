@@ -47,7 +47,8 @@ class TaskRepository implements TaskRepositoryInterface
         ?int $userId,
         ?string $status,
         ?string $priority,
-    ): Paginator {
+        bool $isPagination,
+    ): Paginator|Collection {
         $query = Task::query();
         $query->where('project_id', $projectId);
 
@@ -70,8 +71,11 @@ class TaskRepository implements TaskRepositoryInterface
             $query->where('priority', $priority);
             Log::info('priority', ['priority' => $priority]);
         }
+        if ($isPagination) {
+            return $query->with(['user', 'childTasks'])->paginate(20);
+        }
 
-        return $query->with(['user', 'childTasks'])->paginate(20);
+        return $query->with(['user', 'childTasks'])->get();
     }
 
     /**

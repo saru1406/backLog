@@ -19,5 +19,5 @@ use Illuminate\Support\Facades\Route;
         return $request->user();
     });
 
-    Route::get('/projects/{project}/tasks', [TaskApiController::class, 'getTasksByUser']);
+    Route::get('/projects/{project}/tasks', [TaskApiController::class, 'fetchTasks']);
 // });

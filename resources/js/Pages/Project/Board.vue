@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import { reactive, ref, watch, computed } from 'vue';
+import { reactive, ref, watch, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
 
@@ -32,15 +32,50 @@ const fetchTasks = async (project, filters) => {
         if (filters.user_id !== null) params.append('user_id', filters.user_id);
         if (filters.status !== null) params.append('status', filters.status);
         if (filters.priority !== null) params.append('priority', filters.priority);
+        params.append('is_pagination', 'false');
 
         const response = await axios.get(url, { params: params });
-        tasks.value = response.data.data;
+        console.log(response.data)
+        tasks.value = response.data;
     } catch (error) {
         console.error('APIエラー: ', error);
     }
 };
 
+onMounted(() => {
+    // ページ読み込み時にlocalStorageからデータを取得して適用
+    const savedUserId = localStorage.getItem("user_id");
+    const savedStatus = localStorage.getItem("status");
+    const savedPriority = localStorage.getItem("priority");
+
+    // localStorageで保持したデータはstringになる為、"null"をnullに変換
+    if (savedUserId === "null") { // 文字列"null"をチェック
+      filters.user_id = null; // 実際のnullをセット
+    } else {
+      filters.user_id = savedUserId; // それ以外はそのままセット
+    }
+
+    if (savedStatus === "null") {
+        filters.status = null;
+    } else {
+        filters.status = savedStatus;
+    }
+
+    if (savedPriority === "null") {
+        filters.priority = null;
+    } else {
+        filters.priority = savedPriority;
+    }
+
+    fetchTasks(props.project, filters); // 初期データ読み込み
+});
+
 watch(filters, () => {
+    //フィルターが変更されたときにlocalStorageに保存
+    localStorage.setItem("user_id", filters.user_id);
+    localStorage.setItem("status", filters.status);
+    localStorage.setItem("priority", filters.priority);
+
     fetchTasks(props.project, filters);
 }, { deep: true });
 
@@ -75,6 +110,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                     <select v-model="filters.user_id"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                         <option value="" disabled selected>選択してください</option>
+                        <option :value="null">未設定</option>
                         <option v-for="projectUser in props.project_users" :value="projectUser.id">
                             {{ projectUser.name }}
                         </option>
@@ -83,6 +119,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                     <select v-model="filters.status"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                         <option value="" disabled selected>選択してください</option>
+                        <option :value="null">未設定</option>
                         <option value="未対応">未対応</option>
                         <option value="処理中">処理中</option>
                         <option value="処理済み">処理済み</option>
@@ -93,6 +130,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                     <select v-model="filters.priority"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                         <option value="" disabled selected>選択してください</option>
+                        <option :value="null">未設定</option>
                         <option value="低">低</option>
                         <option value="中">中</option>
                         <option value="高">高</option>

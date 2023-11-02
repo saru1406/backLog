@@ -41,15 +41,16 @@ interface TaskRepositoryInterface
       * @param int|null $userId
       * @param string|null $status
       * @param string|null $priority
-      * @param integer|null $page
-      * @return Paginator
+      * @param bool $isPagination
+      * @return Paginator|Collection
       */
     public function searchTasksByParameters(
         int $projectId,
         ?int $userId,
         ?string $status,
         ?string $priority,
-    ): Paginator;
+        bool $isPagination,
+    ): Paginator|Collection;
 
     /**
      * 課題を更新
