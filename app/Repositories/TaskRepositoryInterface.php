@@ -44,7 +44,6 @@ interface TaskRepositoryInterface
      * 課題を更新
      *
      * @param integer $taskId
-     * @param integer $projectId
      * @param TaskParams $params
      * @return void
      */
