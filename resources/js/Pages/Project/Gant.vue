@@ -4,7 +4,6 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
-import Paginator from 'primevue/paginator';
 import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from '@vuepic/vue-datepicker';
 
@@ -15,14 +14,6 @@ const props = defineProps({
 
 const tasks = ref([]);
 
-const pagination = reactive({
-    current_page: null,
-    links: null,
-    last_page: null,
-    total: null,
-})
-console.log(pagination)
-
 const filters = reactive({
     start_date: null,
     group: null,
@@ -32,7 +23,7 @@ const filters = reactive({
 
 const fetchTasks = async (project, filters) => {
     try {
-        let url = `/api/projects/${project.id}/tasks`;
+        let url = `/api/projects/${project.id}/gant`;
         const params = new URLSearchParams();
 
         if (filters.start_date !== null) params.append('start_date', filters.start_date);
@@ -41,7 +32,7 @@ const fetchTasks = async (project, filters) => {
         if (filters.group !== null) params.append('group', filters.group);
 
         const response = await axios.get(url, { params: params });
-        tasks.value = response.data.data;
+        tasks.value = response.data;
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
@@ -121,10 +112,10 @@ const renderTaskShow = (task) =>
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">未設定</option>
-                            <option value="1カ月">1カ月</option>
-                            <option value="2カ月">2カ月</option>
-                            <option value="3カ月">3カ月</option>
-                            <option value="6カ月">6カ月</option>
+                            <option value=1>1カ月</option>
+                            <option value=2>2カ月</option>
+                            <option value=3>3カ月</option>
+                            <option value=6>6カ月</option>
                         </select>
                         <label>グルーピング</label>
                         <select v-model="filters.group"
@@ -202,10 +193,6 @@ const renderTaskShow = (task) =>
                         </div>
                     </div>
                 </section>
-                <div class="card">
-                    <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total"
-                        :rowsPerPageOptions="rowsPerPageOption"></Paginator>
-                </div>
             </div>
         </div>
     </AuthenticatedLayout>

@@ -45,12 +45,12 @@ class TaskRepository implements TaskRepositoryInterface
 
         if ($params->getUserId() !== null) {
             $query->where('user_id', $params->getUserId());
-            Log::info('user_id', ['user_id' => $params->getUserId()]);
+            Log::info('ユーザID', ['user_id' => $params->getUserId()]);
         }
 
         if (in_array($params->getStatus(), ['未対応', '処理中', '処理済み', '完了'])) {
             $query->where('status', $params->getStatus());
-            Log::info('status', ['status' => $params->getStatus()]);
+            Log::info('ステータス', ['status' => $params->getStatus()]);
         }
 
         if ($params->getStatus() === "完了以外") {
@@ -60,25 +60,49 @@ class TaskRepository implements TaskRepositoryInterface
 
         if ($params->getPriority() !== null) {
             $query->where('priority', $params->getPriority());
-            Log::info('priority', ['priority' => $params->getPriority()]);
+            Log::info('優先度', ['priority' => $params->getPriority()]);
         }
 
-        if($params->getStartDate()){
+        if ($params->getIsPagination()) {
+            Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
+            return $query->with(['user', 'childTasks'])->paginate(20);
+        }
+        Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
+        return $query->with(['user', 'childTasks'])->get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gantTasksByParameters(
+        int $projectId,
+        ApiGantParams $params
+    ): Collection {
+        $query = Task::query();
+        $query->where('project_id', $projectId);
+
+        if (in_array($params->getStatus(), ['未対応', '処理中', '処理済み', '完了'])) {
+            $query->where('status', $params->getStatus());
+            Log::info('ステータス', ['status' => $params->getStatus()]);
+        }
+
+        if ($params->getStatus() === "完了以外") {
+            $query->where('status', '!=', '完了');
+            Log::info('完了以外だよ');
+        }
+
+        if($params->getStartDate()) {
             $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
             $query->where('start_date', '>=', $startDate);
 
             if ($params->getRange()) {
-                $endDate = $startDate->copy()->addMonths($params->getRange());
+                $endDate = Carbon::parse($startDate)->addMonths($params->getRange());
                 $query->where('start_date', '<=', $endDate);
             }
         }
 
-        if($params->getGroup()){
+        if($params->getGroup()) {
             $query->where('start_date', '>=', $params->getGroup());
-        }
-
-        if ($params->getIsPagination()) {
-            return $query->with(['user', 'childTasks'])->paginate(20);
         }
 
         return $query->with(['user', 'childTasks'])->get();

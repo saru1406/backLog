@@ -35,9 +35,9 @@ class ApiTaskParams
     private ?string $group;
 
     /**
-     * @var string|null
+     * @var int|null
      */
-    private ?string $range;
+    private ?int $range;
 
     /**
      * @param integer|null $userId
@@ -46,7 +46,7 @@ class ApiTaskParams
      * @param boolean $isPagination
      * @param string|null $startDate
      * @param string|null $group
-     * @param string|null $range
+     * @param int|null $range
      */
     public function __construct(
         ?int $userId,
@@ -55,7 +55,7 @@ class ApiTaskParams
         bool $isPagination,
         ?string $startDate,
         ?string $group,
-        ?string $range
+        ?int $range
     ) {
         $this->userId = $userId;
         $this->status = $status;
@@ -104,35 +104,5 @@ class ApiTaskParams
     public function getIsPagination(): bool
     {
         return $this->isPagination;
-    }
-
-    /**
-     * 表示開始日取得
-     *
-     * @return string|null
-     */
-    public function getStartDate(): ?string
-    {
-        return $this->startDate;
-    }
-
-    /**
-     * グループを取得
-     *
-     * @return string|null
-     */
-    public function getGroup(): ?string
-    {
-        return $this->group;
-    }
-
-    /**
-     * 表示範囲を取得
-     *
-     * @return string|null
-     */
-    public function getRange(): ?string
-    {
-        return $this->range;
     }
 }

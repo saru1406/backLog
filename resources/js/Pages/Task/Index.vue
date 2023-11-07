@@ -41,6 +41,7 @@ const fetchTasks = async (project, filters) => {
 
         const response = await axios.get(url, { params: params });
         tasks.value = response.data.data;
+        console.log(response.data.data)
         pagination.current_page = response.data.current_page;
         pagination.links = response.data.links;
         pagination.last_page = response.data.last_page;

@@ -22,17 +22,27 @@ interface TaskRepositoryInterface
         TaskParams $params
     ): void;
 
-     /**
-      * タスク検索
-      *
-      * @param integer $projectId
-      * @param ApiTaskParams $params
-      * @return Paginator|Collection
-      */
+    /**
+     * タスク検索
+     * @param integer $projectId
+     * @param ApiTaskParams $params
+     * @return Paginator|Collection
+     */
     public function searchTasksByParameters(
         int $projectId,
         ApiTaskParams $params
     ): Paginator|Collection;
+
+    /**
+     * ガント取得
+     * @param integer $projectId
+     * @param ApiGantParams $params
+     * @return Collection
+     */
+    public function gantTasksByParameters(
+        int $projectId,
+        ApiGantParams $params
+    ): Collection;
 
     /**
      * 課題を更新

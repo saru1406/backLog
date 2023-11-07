@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Repositories\ApiTaskParams;
+use App\Repositories\ApiGantParams;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FetchAPITaskRequest extends FormRequest
+class FetchApiGantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,17 +13,6 @@ class FetchAPITaskRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
-    }
-
-    public function validationData()
-    {
-        $params = $this->only(['is_pagination']);
-
-        if (isset($params['is_pagination'])) {
-            $params['is_pagination'] = $this->boolean('is_pagination');
-            $this->merge($params);
-        }
-        return $params;
     }
 
     /**
@@ -34,23 +23,20 @@ class FetchAPITaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['nullable', 'int'],
             'status' => ['nullable', 'string'],
-            'priority' => ['nullable', 'string'],
-            'is_pagination' => ['nullable', 'boolean'],
             'start_date' => ['nullable', 'string'],
             'group' => ['nullable', 'string'],
-            'range' => ['nullable', 'string']
+            'range' => ['nullable', 'int']
         ];
     }
 
-    public function getParams(): ApiTaskParams
+    /**
+     * @return ApiGantParams
+     */
+    public function getParams(): ApiGantParams
     {
-        return new ApiTaskParams(
-            userId: $this->input('user_id'),
+        return new ApiGantParams(
             status: $this->input('status'),
-            priority: $this->input('priority'),
-            isPagination: $this->input('is_pagination'),
             startDate: $this->input('start_date'),
             group: $this->input('group'),
             range: $this->input('range'),

@@ -39,6 +39,8 @@ cache:
 	./vendor/bin/sail php artisan optimize
 clear:
 	./vendor/bin/sail php artisan optimize:clear
+log-clear:
+	./vendor/bin/sail php artisan logs:clear
 db:
 	docker-compose exec db bash
 sql:

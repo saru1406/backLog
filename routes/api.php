@@ -20,4 +20,5 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::get('/projects/{project}/tasks', [TaskApiController::class, 'fetchTasks']);
+    Route::get('/projects/{project}/gant', [TaskApiController::class, 'fetchGant']);
 // });
