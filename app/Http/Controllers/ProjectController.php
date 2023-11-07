@@ -109,4 +109,14 @@ class ProjectController extends Controller
             'project_users' => $projectUsers
         ]);
     }
+
+    public function gant(Project $project)
+    {
+        $projectUsers = $this->projectService->getProjectUsers($project);
+
+        return Inertia::render('Project/Gant', [
+            'project' => $project,
+            'project_users' => $projectUsers
+        ]);
+    }
 }

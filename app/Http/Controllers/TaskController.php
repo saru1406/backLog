@@ -52,23 +52,10 @@ class TaskController extends Controller
     public function store(Project $project, StoreTaskRequest $request)
     {
         $projectId = $project->id;
-        $userId = $request->getUserId();
-        $title = $request->getTitle();
-        $content = $request->getContents();
-        $status = $request->getStatus();
-        $priority = $request->getPriority();
-        $startDate = $request->getStartDate();
-        $endDate = $request->getEndDate();
 
-        $this->taskService->storeTask(
-            $userId,
+        $this->taskRepository->storeTask(
             $projectId,
-            $title,
-            $content,
-            $status,
-            $priority,
-            $startDate,
-            $endDate
+            $request->getParams()
         );
     }
 
@@ -94,7 +81,7 @@ class TaskController extends Controller
     public function edit(Project $project, Task $task)
     {
         $projectUsers = $this->projectRepository->getUsers($project);
-        
+
         return Inertia::render('Task/Edit', [
             'project' => $project,
             'project_users' => $projectUsers,
@@ -107,26 +94,9 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Project $project, Task $task)
     {
-        $projectId = $project->id;
-        $taskId = $task->id;
-        $userId = $request->getUserId();
-        $title = $request->getTitle();
-        $content = $request->getContents();
-        $status = $request->getStatus();
-        $priority = $request->getPriority();
-        $startDate = $request->getStartDate();
-        $endDate = $request->getEndDate();
-
         $this->taskRepository->updateTask(
-            $userId,
-            $taskId,
-            $projectId,
-            $title,
-            $content,
-            $status,
-            $priority,
-            $startDate,
-            $endDate
+            $task->id,
+            $request->getParams()
         );
     }
 

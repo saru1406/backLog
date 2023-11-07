@@ -14,29 +14,4 @@ class TaskService implements TaskServiceInterface
     {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     */
-    public function storeTask(
-        int $userId,
-        int $projectId,
-        string $title,
-        string $content,
-        string $status,
-        string $priority,
-        string $startDate = null,
-        string $endDate = null
-    ): void {
-        $this->taskRepository->storeTask(
-            $userId,
-            $projectId,
-            $title,
-            $content,
-            $status,
-            $priority,
-            $startDate,
-            $endDate
-        );
-    }
 }

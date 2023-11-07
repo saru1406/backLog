@@ -10,27 +10,21 @@ use Carbon\Carbon;
 class ChildTaskRepository implements ChildTaskRepositoryInterface
 {
     public function storeChildTask(
-        int $userId,
         int $projectId,
         int $taskId,
-        string $title,
-        string $content,
-        string $status,
-        string $priority,
-        ?string $startDate,
-        ?string $endDate
+        ChildTaskParams $params
     ): void {
-        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
 
         ChildTask::create([
-            'user_id' => $userId,
+            'user_id' => $params->getUserId(),
             'project_id' => $projectId,
             'task_id' => $taskId,
-            'title' => $title,
-            'content' => $content,
-            'status' => $status,
-            'priority' => $priority,
+            'title' => $params->getTitle(),
+            'content' => $params->getContents(),
+            'status' => $params->getStatus(),
+            'priority' => $params->getPriority(),
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);
@@ -43,23 +37,17 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
 
     public function updateChildTask(
         int $childTaskId,
-        int $userId,
-        string $title,
-        string $content,
-        string $status,
-        string $priority,
-        ?string $startDate,
-        ?string $endDate
+        ChildTaskParams $params
     ): void {
-        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
 
-        ChildTask::where('id', $childTaskId)->update([
-            'user_id' => $userId,
-            'title' => $title,
-            'content' => $content,
-            'status' => $status,
-            'priority' => $priority,
+        ChildTask::find('id', $childTaskId)->update([
+            'user_id' => $params->getUserId(),
+            'title' => $params->getTitle(),
+            'content' => $params->getContents(),
+            'status' => $params->getStatus(),
+            'priority' => $params->getPriority(),
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);

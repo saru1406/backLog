@@ -16,24 +16,18 @@ class TaskRepository implements TaskRepositoryInterface
      * {@inheritDoc}
      */
     public function storeTask(
-        int $userId,
         int $projectId,
-        string $title,
-        string $content,
-        string $status,
-        string $priority,
-        string $startDate = null,
-        string $endDate = null
+        TaskParams $params
     ): void {
-        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
         Task::create([
-            'user_id' => $userId,
+            'user_id' => $params->getUserId(),
             'project_id' => $projectId,
-            'title' => $title,
-            'content' => $content,
-            'status' => $status,
-            'priority' => $priority,
+            'title' => $params->getTitle(),
+            'content' => $params->getContents(),
+            'status' => $params->getStatus(),
+            'priority' => $params->getPriority(),
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);
@@ -71,7 +65,7 @@ class TaskRepository implements TaskRepositoryInterface
             $query->where('priority', $priority);
             Log::info('priority', ['priority' => $priority]);
         }
-        
+
         if ($isPagination) {
             return $query->with(['user', 'childTasks'])->paginate(20);
         }
@@ -83,25 +77,17 @@ class TaskRepository implements TaskRepositoryInterface
      * {@inheritDoc}
      */
     public function updateTask(
-        int $userId,
         int $taskId,
-        int $projectId,
-        string $title,
-        string $content,
-        string $status,
-        string $priority,
-        string $startDate = null,
-        string $endDate = null
+        TaskParams $params
     ): void {
-        $startDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
-        Task::where('id', $taskId)->update([
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'title' => $title,
-            'content' => $content,
-            'status' => $status,
-            'priority' => $priority,
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
+        Task::find('id', $taskId)->update([
+            'user_id' => $params->getUserId(),
+            'title' => $params->getTitle(),
+            'content' => $params->getContents(),
+            'status' => $params->getStatus(),
+            'priority' => $params->getPriority(),
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);

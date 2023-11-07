@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\ChildTaskParams;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreChildTaskRequest extends FormRequest
@@ -33,72 +34,18 @@ class StoreChildTaskRequest extends FormRequest
     }
 
     /**
-     * ユーザID取得
-     *
-     * @return int
+     * @return ChildTaskParams
      */
-    public function getUserId(): int
+    public function getParams(): ChildTaskParams
     {
-        return $this->input('user_id');
-    }
-
-    /**
-     * タイトル取得
-     *
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->input('title');
-    }
-
-    /**
-     * 内容取得
-     *
-     * @return string
-     */
-    public function getContents(): string
-    {
-        return $this->input('content');
-    }
-
-    /**
-     * 状態取得
-     *
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->input('status');
-    }
-
-    /**
-     * 優先度取得
-     *
-     * @return string
-     */
-    public function getPriority(): string
-    {
-        return $this->input('priority');
-    }
-
-    /**
-     * 開始日取得
-     *
-     * @return string
-     */
-    public function getStartDate(): string
-    {
-        return $this->input('start_date');
-    }
-
-    /**
-     * 終了日取得
-     *
-     * @return string|null
-     */
-    public function getEndDate(): ?string
-    {
-        return $this->input('end_date');
+        return new ChildTaskParams(
+            $this->input('user_id'),
+            $this->input('title'),
+            $this->input('content'),
+            $this->input('status'),
+            $this->input('priority'),
+            $this->input('start_date'),
+            $this->input('end_date'),
+        );
     }
 }

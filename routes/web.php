@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects.tasks.child-tasks', ChildTaskController::class);
 
     Route::get('/projects/{project}/board', [ProjectController::class, 'board'])->name('projects.board');
+    Route::get('/projects/{project}/gant', [ProjectController::class, 'gant'])->name('projects.gant');
 
     Route::post('/projects/{project}/user', [ProjectController::class, 'storeProjectUser'])->name('projects.user');
 

@@ -49,15 +49,9 @@ class ChildTaskController extends Controller
     {
         // dd($request->getStartDate());
         $this->childTaskRepository->storeChildTask(
-            $request->getUserId(),
             $project->id,
             $task->id,
-            $request->getTitle(),
-            $request->getContents(),
-            $request->getStatus(),
-            $request->getPriority(),
-            $request->getStartDate(),
-            $request->getEndDate(),
+            $request->getParams()
         );
     }
 
@@ -102,13 +96,7 @@ class ChildTaskController extends Controller
     {
         $this->childTaskRepository->updateChildTask(
             $childTask->id,
-            $request->getUserId(),
-            $request->getTitle(),
-            $request->getContents(),
-            $request->getStatus(),
-            $request->getPriority(),
-            $request->getStartDate(),
-            $request->getEndDate(),
+            $request->getParams()
         );
     }
 

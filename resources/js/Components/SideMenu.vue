@@ -15,7 +15,7 @@ defineProps({
                     <li class="nav-list-item"><Link :href="route('projects.tasks.create', {project: project})">課題の追加</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.tasks.index', {project: project})">課題</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.board', {project: project})">ボード</Link></li>
-                    <li class="nav-list-item"><a href="#">ガントチャート</a></li>
+                    <li class="nav-list-item"><Link :href="route('projects.gant', {project: project})">ガントチャート</Link></li>
                     <li class="nav-list-item"><a href="#">Wiki</a></li>
                     <li class="nav-list-item"><a href="#">ファイル</a></li>
                     <li class="nav-list-item"><Link :href="route('projects.edit', {project: project})">プロジェクト設定</Link></li>

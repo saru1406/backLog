@@ -87,11 +87,13 @@ function storeTask() {
                         </div>
                         <div class="w-1/2 m-5">
                             <label>開始日</label>
-                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" />
+                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
+                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         </div>
                         <div class="w-1/2 m-5">
                             <label>終了日</label>
-                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" />
+                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
+                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         </div>
                     </div>
                     <div class="text-center">
