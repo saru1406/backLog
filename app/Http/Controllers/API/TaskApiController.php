@@ -18,10 +18,7 @@ class TaskApiController extends Controller
     {
         $tasks = $this->taskRepository->searchTasksByParameters(
             $project->id,
-            $request->getUserId(),
-            $request->getStatus(),
-            $request->getPriority(),
-            $request->getIsPagination(),
+            $request->getParams()
         );
         Log::info($tasks);
 
