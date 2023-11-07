@@ -62,9 +62,9 @@ const rowsPerPageOption = computed(() => {
 
 onMounted(() => {
     // ページ読み込み時にlocalStorageからデータを取得して適用
-    const savedUserId = localStorage.getItem("user_id");
-    const savedStatus = localStorage.getItem("status");
-    const savedPriority = localStorage.getItem("priority");
+    const savedUserId = localStorage.getItem("index_user_id");
+    const savedStatus = localStorage.getItem("index_status");
+    const savedPriority = localStorage.getItem("index_priority");
 
     // localStorageで保持したデータはstringになる為、"null"をnullに変換
     if (savedUserId === "null") { // 文字列"null"をチェック
@@ -90,9 +90,9 @@ onMounted(() => {
 
 watch(filters, () => {
     //フィルターが変更されたときにlocalStorageに保存
-    localStorage.setItem("user_id", filters.user_id);
-    localStorage.setItem("status", filters.status);
-    localStorage.setItem("priority", filters.priority);
+    localStorage.setItem("index_user_id", filters.user_id);
+    localStorage.setItem("index_status", filters.status);
+    localStorage.setItem("index_priority", filters.priority);
 
     fetchTasks(props.project, filters);
 }, { deep: true });

@@ -25,10 +25,9 @@ console.log(pagination)
 
 const filters = reactive({
     start_date: null,
-    user_id: null,
+    group: null,
     status: null,
-    priority: null,
-    page: null
+    range: null
 });
 
 const fetchTasks = async (project, filters) => {
@@ -36,43 +35,36 @@ const fetchTasks = async (project, filters) => {
         let url = `/api/projects/${project.id}/tasks`;
         const params = new URLSearchParams();
 
-        if (filters.user_id !== null) params.append('user_id', filters.user_id);
+        if (filters.start_date !== null) params.append('start_date', filters.start_date);
         if (filters.status !== null) params.append('status', filters.status);
-        if (filters.priority !== null) params.append('priority', filters.priority);
-        if (filters.page !== null) params.append('page', filters.page);
+        if (filters.range !== null) params.append('range', filters.range);
+        if (filters.group !== null) params.append('group', filters.group);
 
         const response = await axios.get(url, { params: params });
         tasks.value = response.data.data;
-        pagination.current_page = response.data.current_page;
-        pagination.links = response.data.links;
-        pagination.last_page = response.data.last_page;
-        pagination.total = response.data.total;
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
 };
 
-const rowsPerPageOption = computed(() => {
-    if (pagination.total > 400) {
-        return [10, 20];
-    } else if (pagination.total > 200) {
-        return [10];
-    } else {
-        return [1]; // または適切なデフォルト値
-    }
-});
-
 onMounted(() => {
     // ページ読み込み時にlocalStorageからデータを取得して適用
-    const savedUserId = localStorage.getItem("user_id");
-    const savedStatus = localStorage.getItem("status");
-    const savedPriority = localStorage.getItem("priority");
+    const savedStartDate = localStorage.getItem("gant_start_date");
+    const savedRange = localStorage.getItem("gant_range");
+    const savedStatus = localStorage.getItem("gant_status");
+    const savedGroup = localStorage.getItem("gant_group");
 
     // localStorageで保持したデータはstringになる為、"null"をnullに変換
-    if (savedUserId === "null") { // 文字列"null"をチェック
-        filters.user_id = null; // 実際のnullをセット
+    if (savedStartDate === "null") { // 文字列"null"をチェック
+        filters.start_date = null; // 実際のnullをセット
     } else {
-        filters.user_id = savedUserId; // それ以外はそのままセット
+        filters.start_date = savedStartDate; // それ以外はそのままセット
+    }
+
+    if (savedRange === "null") {
+        filters.range = null;
+    } else {
+        filters.range = savedRange;
     }
 
     if (savedStatus === "null") {
@@ -81,34 +73,27 @@ onMounted(() => {
         filters.status = savedStatus;
     }
 
-    if (savedPriority === "null") {
-        filters.priority = null;
+    if (savedGroup === "null") {
+        filters.group = null;
     } else {
-        filters.priority = savedPriority;
+        filters.group = savedGroup;
     }
 
-    fetchTasks(props.project, filters); // 初期データ読み込み
+    fetchTasks(props.project, filters);
 });
 
 watch(filters, () => {
     //フィルターが変更されたときにlocalStorageに保存
-    localStorage.setItem("user_id", filters.user_id);
-    localStorage.setItem("status", filters.status);
-    localStorage.setItem("priority", filters.priority);
+    localStorage.setItem("gant_start_date", filters.start_date);
+    localStorage.setItem("gant_range", filters.range);
+    localStorage.setItem("gant_group", filters.group);
+    localStorage.setItem("gant_status", filters.status);
 
     fetchTasks(props.project, filters);
 }, { deep: true });
 
-const onPageChange = async (event) => {
-    const page = event.page + 1;
-    console.log(page)
-    filters.page = page;
-    await fetchTasks(props.project, filters);
-};
-
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
-
 
 </script>
 
@@ -132,7 +117,7 @@ const renderTaskShow = (task) =>
                         <VueDatePicker v-model="filters.start_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
                             model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         <label>表示範囲</label>
-                        <select v-model="filters.status"
+                        <select v-model="filters.range"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">未設定</option>
@@ -142,7 +127,7 @@ const renderTaskShow = (task) =>
                             <option value="6カ月">6カ月</option>
                         </select>
                         <label>グルーピング</label>
-                        <select v-model="filters.status"
+                        <select v-model="filters.group"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">未設定</option>
@@ -151,13 +136,15 @@ const renderTaskShow = (task) =>
                             <option value="親課題">親課題</option>
                         </select>
                         <label>状態</label>
-                        <select v-model="filters.priority"
+                        <select v-model="filters.status"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">未設定</option>
                             <option value="未対応">未対応</option>
                             <option value="処理中">処理中</option>
                             <option value="処理済み">処理済み</option>
+                            <option value="処理済み">完了</option>
+                            <option value="処理済み">完了以外</option>
                         </select>
                     </div>
 

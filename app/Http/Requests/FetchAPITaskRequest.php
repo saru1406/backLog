@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\ApiTaskParams;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FetchAPITaskRequest extends FormRequest
@@ -36,48 +37,23 @@ class FetchAPITaskRequest extends FormRequest
             'user_id' => ['nullable', 'int'],
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
-            'is_pagination' => ['nullable', 'boolean']
+            'is_pagination' => ['nullable', 'boolean'],
+            'start_date' => ['nullable', 'string'],
+            'group' => ['nullable', 'string'],
+            'range' => ['nullable', 'string']
         ];
     }
 
-
-    /**
-     * ユーザID取得
-     *
-     * @return int|null
-     */
-    public function getUserId(): ?int
+    public function getParams(): ApiTaskParams
     {
-        return $this->query('user_id');
-    }
-
-    /**
-     * 状態取得
-     *
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->query('status');
-    }
-
-    /**
-     * 優先度取得
-     *
-     * @return string|null
-     */
-    public function getPriority(): ?string
-    {
-        return $this->query('priority');
-    }
-
-    /**
-     * ページネーションで取得の有無
-     *
-     * @return boolean
-     */
-    public function getIsPagination(): bool
-    {
-        return $this->input('is_pagination', true);
+        return new ApiTaskParams(
+            userId: $this->input('user_id'),
+            status: $this->input('status'),
+            priority: $this->input('priority'),
+            isPagination: $this->input('is_pagination'),
+            startDate: $this->input('start_date'),
+            group: $this->input('group'),
+            range: $this->input('range'),
+        );
     }
 }

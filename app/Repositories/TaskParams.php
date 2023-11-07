@@ -39,6 +39,15 @@ class TaskParams
      */
     private ?string $endDate;
 
+    /**
+     * @param integer $userId
+     * @param string $title
+     * @param string $contents
+     * @param string $status
+     * @param string $priority
+     * @param string|null $startDate
+     * @param string|null $endDate
+     */
     public function __construct(
         int $userId,
         string $title,

@@ -39,13 +39,13 @@ class StoreChildTaskRequest extends FormRequest
     public function getParams(): ChildTaskParams
     {
         return new ChildTaskParams(
-            $this->input('user_id'),
-            $this->input('title'),
-            $this->input('content'),
-            $this->input('status'),
-            $this->input('priority'),
-            $this->input('start_date'),
-            $this->input('end_date'),
+            userId: $this->input('user_id'),
+            title: $this->input('title'),
+            contents: $this->input('content'),
+            status: $this->input('status'),
+            priority: $this->input('priority'),
+            startDate: $this->input('start_date'),
+            endDate: $this->input('end_date'),
         );
     }
 }

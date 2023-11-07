@@ -61,9 +61,9 @@ const fetchTasks = async (project, filters) => {
 
 onMounted(() => {
     // ページ読み込み時にlocalStorageからデータを取得して適用
-    const savedUserId = localStorage.getItem("user_id");
-    const savedStatus = localStorage.getItem("status");
-    const savedPriority = localStorage.getItem("priority");
+    const savedUserId = localStorage.getItem("board_user_id");
+    const savedStatus = localStorage.getItem("board_status");
+    const savedPriority = localStorage.getItem("board_priority");
 
     // localStorageで保持したデータはstringになる為、"null"をnullに変換
     if (savedUserId === "null") { // 文字列"null"をチェック
@@ -89,16 +89,15 @@ onMounted(() => {
 
 watch(filters, () => {
     //フィルターが変更されたときにlocalStorageに保存
-    localStorage.setItem("user_id", filters.user_id);
-    localStorage.setItem("status", filters.status);
-    localStorage.setItem("priority", filters.priority);
+    localStorage.setItem("board_user_id", filters.user_id);
+    localStorage.setItem("board_status", filters.status);
+    localStorage.setItem("board_priority", filters.priority);
 
     fetchTasks(props.project, filters);
 }, { deep: true });
 
 
 const openModalWithTask = (task) => {
-    console.log("Selected task:", task);
     selectedTask.value = task;
     showModal.value = true;
 };

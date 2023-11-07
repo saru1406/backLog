@@ -16,7 +16,6 @@ class TaskApiController extends Controller
 
     public function fetchTasks(FetchAPITaskRequest $request, Project $project)
     {
-        Log::info("なんでやねん",['pagination' => $request->getIsPagination()]);
         $tasks = $this->taskRepository->searchTasksByParameters(
             $project->id,
             $request->getUserId(),
