@@ -19,8 +19,8 @@ class TaskRepository implements TaskRepositoryInterface
         int $projectId,
         TaskParams $params
     ): void {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::create([
             'user_id' => $params->getUserId(),
             'project_id' => $projectId,
@@ -81,6 +81,15 @@ class TaskRepository implements TaskRepositoryInterface
         $query = Task::query();
         $query->where('project_id', $projectId);
 
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
+        $endDate = Carbon::parse($startDate)->addMonths($params->getRange())->format('Y-m-d');
+
+        // $startDate,$endDateの範囲内にある全てのタスク取得
+        $query->where(function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('start_date', [$startDate, $endDate])
+                  ->orWhereBetween('end_date', [$startDate, $endDate]);
+        });
+
         if (in_array($params->getStatus(), ['未対応', '処理中', '処理済み', '完了'])) {
             $query->where('status', $params->getStatus());
             Log::info('ステータス', ['status' => $params->getStatus()]);
@@ -90,22 +99,27 @@ class TaskRepository implements TaskRepositoryInterface
             $query->where('status', '!=', '完了');
             Log::info('完了以外だよ');
         }
-
-        if($params->getStartDate()) {
-            $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
-            $query->where('start_date', '>=', $startDate);
-
-            if ($params->getRange()) {
-                $endDate = Carbon::parse($startDate)->addMonths($params->getRange());
-                $query->where('start_date', '<=', $endDate);
-            }
-        }
+        Log::info('エンドデータ', ['test' => $params->getStartDate()]);
 
         if($params->getGroup()) {
             $query->where('start_date', '>=', $params->getGroup());
         }
 
-        return $query->with(['user', 'childTasks'])->get();
+        $tasks = $query->with(['user', 'childTasks'])->get();
+        $groupedTasks = $tasks->groupBy(function ($task) {
+            return $task->user->id;
+        });
+
+        // 各ユーザーIDのグループにユーザー名を追加
+        $groupedTasks = $groupedTasks->map(function ($tasks, $userId) {
+            return [
+                'user_id' => $userId,
+                'user_name' => $tasks->first()->user->name,
+                'tasks' => $tasks
+            ];
+        });
+
+        return $groupedTasks;
     }
 
     /**
@@ -115,8 +129,8 @@ class TaskRepository implements TaskRepositoryInterface
         int $taskId,
         TaskParams $params
     ): void {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::find('id', $taskId)->update([
             'user_id' => $params->getUserId(),
             'title' => $params->getTitle(),

@@ -33,6 +33,7 @@ const fetchTasks = async (project, filters) => {
 
         const response = await axios.get(url, { params: params });
         tasks.value = response.data;
+        console.log(response.data)
     } catch (error) {
         console.error('An error occurred while fetching data: ', error);
     }
@@ -105,8 +106,8 @@ const renderTaskShow = (task) =>
                     <p>ボード</p>
                     <div>
                         <label>開始日</label>
-                        <VueDatePicker v-model="filters.start_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
-                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
+                        <VueDatePicker v-model="filters.start_date" :disabled-week-days="[6, 0]" locale="jp"
+                            format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         <label>表示範囲</label>
                         <select v-model="filters.range"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
@@ -138,58 +139,60 @@ const renderTaskShow = (task) =>
                             <option value="処理済み">完了以外</option>
                         </select>
                     </div>
-
                 </div>
-                <section class="text-gray-600 body-font bg-white">
-                    <div class="container px-5 py-8 mx-auto">
+                <section class="text-gray-600 body-font">
+                    <div class="container mx-auto">
                         <div class="lg:w-full mx-auto overflow-auto">
-                            <table class="table-auto w-full text-left whitespace-no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl text-center">
-                                            件名</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            担当者</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            状態</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            優先度</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            開始日</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            期限日</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
-                                            登録日</th>
-                                        <th
-                                            class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody v-for="task in tasks" :key="task.id">
-                                    <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderTaskShow(task)">
-                                        <td class="px-4 py-3 w-1/5">{{ task.title }}</td>
-                                        <td class="px-4 py-3">{{ task.user.name }}</td>
-                                        <td class="px-4 py-3">{{ task.status }}</td>
-                                        <td class="px-4 py-3 text-lg">{{ task.priority }}</td>
-                                        <td class="px-4 py-3">
-                                            {{ task.start_date }}
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            {{ task.end_date }}
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            {{ task.created_at }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div v-for="task in tasks" class="bg-white p-10 my-10">
+                                {{ task.user_name }}
+                                <div>
+                                    <table class="table-auto w-full text-left whitespace-no-wrap">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl text-center">
+                                                    件名</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                                    状態</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                                    優先度</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                                    開始日</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                                    期限日</th>
+                                                <th
+                                                    class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                                    登録日</th>
+                                                <th
+                                                    class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-for="item in task.tasks">
+                                            <tr class="border-b border-gray-300 hover:bg-blue-200"
+                                                @click="renderTaskShow(task)">
+                                                <td class="px-4 py-3 w-1/5">{{ item.title }}</td>
+                                                <!-- <td class="px-4 py-3">{{ task.user.name }}</td> -->
+                                                <td class="px-4 py-3">{{ item.status }}</td>
+                                                <td class="px-4 py-3 text-lg">{{ item.priority }}</td>
+                                                <td class="px-4 py-3">
+                                                    {{ item.start_date }}
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    {{ item.end_date }}
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    {{ item.created_at }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
