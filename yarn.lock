@@ -754,6 +754,11 @@ minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
+moment@^2.26.0:
+  version "2.29.4"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
 mz@^2.7.0:
   version "2.7.0"
   resolved "https://registry.npmjs.org/mz/-/mz-2.7.0.tgz"
@@ -1146,6 +1151,11 @@ vite-plugin-full-reload@^1.0.5:
     rollup "^3.27.1"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vue-ganttastic@^0.9.34:
+  version "0.9.34"
+  resolved "https://registry.npmjs.org/vue-ganttastic/-/vue-ganttastic-0.9.34.tgz"
+  integrity sha512-3azlCla/PNnlDwBgs1uHwOu7oIBMCkjonIVxS3GEjm0eyTFaNIoSrBkjn5zXlmw1vDQaPQtzEs4ys/3mE8ddXQ==
 
 vue@^3.0.0, vue@^3.2.25, vue@^3.2.41, vue@>=3.2.0, vue@3.3.4:
   version "3.3.4"
