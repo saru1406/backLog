@@ -4,8 +4,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
-import '@vuepic/vue-datepicker/dist/main.css'
 import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps({
     'project': Object,
@@ -20,6 +20,8 @@ const filters = reactive({
     status: null,
     range: null
 });
+
+console.log(filters.start_date)
 
 const fetchTasks = async (project, filters) => {
     try {
@@ -87,6 +89,35 @@ watch(filters, () => {
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
+const row1BarList = ref([
+    {
+        myBeginDate: "2023-11-15 13:00",
+        myEndDate: "2023-11-16 13:00",
+        ganttBarConfig: {
+            // each bar must have a nested ganttBarConfig object ...
+            id: "unique-id-1", // ... and a unique "id" property
+            label: "Lorem ipsum dolor"
+        }
+    }
+])
+const row2BarList = ref([
+    {
+        myBeginDate: "2023-11-15 13:00",
+        myEndDate: "2023-11-16 13:00",
+        ganttBarConfig: {
+            id: "another-unique-id-2",
+            hasHandles: true,
+            label: "Hey, look at me",
+            style: {
+                // arbitrary CSS styling for your bar
+                background: "#e09b69",
+                borderRadius: "20px",
+                color: "black"
+            },
+            class: "foo" // you can also add CSS classes to your bars!
+        }
+    }
+])
 </script>
 
 <template>
@@ -145,6 +176,13 @@ const renderTaskShow = (task) =>
                         <div class="lg:w-full mx-auto overflow-auto">
                             <div v-for="task in tasks" class="bg-white p-10 my-10">
                                 {{ task.user_name }}
+                                <!-- <div v-for="item in task.tasks"> -->
+                                    <g-gantt-chart :chart-start="`${task.start_date} 00:00`" :chart-end="`${task.end_date} 00:00`"
+                                        precision="day" bar-start="myBeginDate" bar-end="myEndDate">
+                                        <g-gantt-row label="My row 1" :bars="row1BarList" />
+                                        <g-gantt-row label="My row 2" :bars="row2BarList" />
+                                    </g-gantt-chart>
+                                <!-- </div> -->
                                 <div>
                                     <table class="table-auto w-full text-left whitespace-no-wrap">
                                         <thead>

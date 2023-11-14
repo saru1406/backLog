@@ -111,11 +111,13 @@ class TaskRepository implements TaskRepositoryInterface
         });
 
         // 各ユーザーIDのグループにユーザー名を追加
-        $groupedTasks = $groupedTasks->map(function ($tasks, $userId) {
+        $groupedTasks = $groupedTasks->map(function ($tasks, $userId) use($startDate, $endDate) {
             return [
                 'user_id' => $userId,
                 'user_name' => $tasks->first()->user->name,
-                'tasks' => $tasks
+                'tasks' => $tasks,
+                'start_date' => $startDate,
+                'end_date' => $endDate
             ];
         });
 
