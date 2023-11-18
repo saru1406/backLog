@@ -89,21 +89,10 @@ watch(filters, () => {
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
-const row1BarList = ref([
-    {
-        myBeginDate: "2023-11-15 13:00",
-        myEndDate: "2023-11-16 13:00",
-        ganttBarConfig: {
-            // each bar must have a nested ganttBarConfig object ...
-            id: "unique-id-1", // ... and a unique "id" property
-            label: "Lorem ipsum dolor"
-        }
-    }
-])
 const row2BarList = ref([
     {
-        myBeginDate: "2023-11-15 13:00",
-        myEndDate: "2023-11-16 13:00",
+        myBeginDate: "2023-11-15",
+        myEndDate: "2023-11-16",
         ganttBarConfig: {
             id: "another-unique-id-2",
             hasHandles: true,
@@ -118,6 +107,26 @@ const row2BarList = ref([
         }
     }
 ])
+
+function createBarsArray(item) {
+    return [{
+        myBeginDate: item.start_date+" 00:00",
+        myEndDate: item.end_date+" 00:00",
+        ganttBarConfig: {
+            id: item.id,
+            hasHandles: true,
+            label: item.title,
+            style: {
+                // arbitrary CSS styling for your bar
+                background: "#e09b69",
+                borderRadius: "20px",
+                color: "black"
+            },
+            class: "foo" // you can also add CSS classes to your bars!
+        }
+    }];
+}
+
 </script>
 
 <template>
@@ -166,8 +175,8 @@ const row2BarList = ref([
                             <option value="未対応">未対応</option>
                             <option value="処理中">処理中</option>
                             <option value="処理済み">処理済み</option>
-                            <option value="処理済み">完了</option>
-                            <option value="処理済み">完了以外</option>
+                            <option value="完了">完了</option>
+                            <option value="完了以外">完了以外</option>
                         </select>
                     </div>
                 </div>
@@ -179,9 +188,8 @@ const row2BarList = ref([
                                 <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
                                     :chart-end="`${task.end_date} 00:00`" precision="day" bar-start="myBeginDate"
                                     bar-end="myEndDate">
-                                    <g-gantt-row label="My row 1" :bars="row1BarList" />
                                     <div v-for="item in task.tasks">
-                                        <g-gantt-row :label="item.title" :bars="row2BarList" />
+                                        <g-gantt-row :label="item.title" :bars="createBarsArray(item)" />
                                     </div>
                                 </g-gantt-chart>
                                 <div>
