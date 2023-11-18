@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import { reactive, ref, onMounted, computed, watch } from 'vue';
+import { reactive, ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -174,15 +174,16 @@ const row2BarList = ref([
                 <section class="text-gray-600 body-font">
                     <div class="container mx-auto">
                         <div class="lg:w-full mx-auto overflow-auto">
-                            <div v-for="task in tasks" class="bg-white p-10 my-10">
+                            <div v-for="task in tasks" :key="task.id" class="bg-white p-10 my-10">
                                 {{ task.user_name }}
-                                <!-- <div v-for="item in task.tasks"> -->
-                                    <g-gantt-chart :chart-start="`${task.start_date} 00:00`" :chart-end="`${task.end_date} 00:00`"
-                                        precision="day" bar-start="myBeginDate" bar-end="myEndDate">
-                                        <g-gantt-row label="My row 1" :bars="row1BarList" />
-                                        <g-gantt-row label="My row 2" :bars="row2BarList" />
-                                    </g-gantt-chart>
-                                <!-- </div> -->
+                                <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
+                                    :chart-end="`${task.end_date} 00:00`" precision="day" bar-start="myBeginDate"
+                                    bar-end="myEndDate">
+                                    <g-gantt-row label="My row 1" :bars="row1BarList" />
+                                    <div v-for="item in task.tasks">
+                                        <g-gantt-row :label="item.title" :bars="row2BarList" />
+                                    </div>
+                                </g-gantt-chart>
                                 <div>
                                     <table class="table-auto w-full text-left whitespace-no-wrap">
                                         <thead>

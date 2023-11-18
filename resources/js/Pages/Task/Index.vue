@@ -85,8 +85,6 @@ onMounted(() => {
     } else {
         filters.priority = savedPriority;
     }
-
-    fetchTasks(props.project, filters); // 初期データ読み込み
 });
 
 watch(filters, () => {

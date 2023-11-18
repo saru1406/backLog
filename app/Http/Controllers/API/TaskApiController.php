@@ -33,7 +33,9 @@ class TaskApiController extends Controller
             $request->getParams()
         );
 
-        Log::info("タスク数". $tasks->count());
-        return response()->json($tasks);
+        // Log::info("タスク数". $tasks->count());
+        $task = response()->json($tasks);
+        // Log::info("タスク",['task' => $task]);
+        return $task;
     }
 }
