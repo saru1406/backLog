@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChildTaskController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -29,6 +30,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('companies', CompanyController::class);
     Route::resource('projects', ProjectController::class);
 
     Route::resource('projects.tasks', TaskController::class);

@@ -25,7 +25,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'user_id' => ['required', 'integer'],
             'title' => ['required', 'max:255', 'string'],
-            'content' => ['required', 'max:255', 'string'],
+            'content' => ['nullable', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
             'priority' => ['required', 'max:255', 'string'],
             'start_date' => ['nullable', 'max:255', 'string'],
