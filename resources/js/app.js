@@ -9,6 +9,10 @@ import PrimeVue from 'primevue/config';
 import "primevue/resources/themes/lara-light-indigo/theme.css";
 import { TroisJSVuePlugin } from 'troisjs';
 import ganttastic from '@infectoone/vue-ganttastic'
+import dayjs from 'dayjs';
+import 'dayjs/locale/ja';
+
+dayjs.locale('ja');
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
