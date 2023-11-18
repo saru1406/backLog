@@ -110,8 +110,8 @@ const row2BarList = ref([
 
 function createBarsArray(item) {
     return [{
-        myBeginDate: item.start_date+" 00:00",
-        myEndDate: item.end_date+" 00:00",
+        myBeginDate: item.start_date + " 00:00",
+        myEndDate: item.end_date + " 00:00",
         ganttBarConfig: {
             id: item.id,
             hasHandles: true,
@@ -183,13 +183,14 @@ function createBarsArray(item) {
                 <section class="text-gray-600 body-font">
                     <div class="container mx-auto">
                         <div class="lg:w-full mx-auto overflow-auto">
-                            <div v-for="task in tasks" :key="task.id" class="bg-white p-10 my-10">
+                            <div v-for="task in tasks" :key="task.id" class="gantt-container bg-white p-10 my-10">
                                 {{ task.user_name }}
                                 <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
-                                    :chart-end="`${task.end_date} 00:00`" precision="day" bar-start="myBeginDate"
-                                    bar-end="myEndDate">
+                                    :chart-end="`${task.end_date} 23:59`" precision="day" bar-start="myBeginDate"
+                                    bar-end="myEndDate" class="gantt-chart">
                                     <div v-for="item in task.tasks">
-                                        <g-gantt-row :label="item.title" :bars="createBarsArray(item)" />
+                                        <g-gantt-row label="" :bars="createBarsArray(item)">
+                                        </g-gantt-row>
                                     </div>
                                 </g-gantt-chart>
                                 <div>
@@ -247,3 +248,15 @@ function createBarsArray(item) {
         </div>
     </AuthenticatedLayout>
 </template>
+<style>
+.gantt-container {
+    overflow-x: auto;
+    /* 横スクロールを有効に */
+    min-width: 1500px;
+}
+
+.gantt-chart {
+    width: 100%;
+    min-width: 3000px;
+    /* 必要に応じて調整 */
+}</style>
