@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\User;
 use App\Repositories\ProjectRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -11,9 +12,10 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function storeProject(string $name, string $key): Project
+    public function storeProject(?int $companyId, string $name, string $key): Project
     {
         return Project::create([
+            'company_id' => $companyId,
             'name' => $name,
             'key' => $key,
         ]);
@@ -22,9 +24,17 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getProjectNames(): Collection
+    public function getProjectNames(?User $user): Collection
     {
-        return Project::select('id', 'name')->get();
+        return $user->projects()->select('projects.id', 'projects.name')->get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchProjectNameByCompanyId(int $companyId): Collection
+    {
+        return Project::where('company_id', $companyId)->select('id', 'name')->get();
     }
 
     /**

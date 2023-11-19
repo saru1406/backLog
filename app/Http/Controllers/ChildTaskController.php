@@ -18,7 +18,8 @@ class ChildTaskController extends Controller
         private ChildTaskRepositoryInterface $childTaskRepository,
         private ProjectRepositoryInterface $projectRepository,
         private TaskRepositoryInterface $taskRepository
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.

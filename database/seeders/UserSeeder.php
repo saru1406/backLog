@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as FakerFactory;
 
 class UserSeeder extends Seeder
 {
@@ -20,6 +22,16 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
 
-        User::factory(50)->create();
+        $faker = FakerFactory::create('en_US');
+        //　companyに紐づくuserを複数作成
+        $companies = Company::all();
+        foreach ($companies as $company) {
+            for ($i = 0; $i < 5; $i++) {
+                User::factory()->create([
+                    'company_id' => $company->id,
+                    'email' => $faker->unique()->userName() . '@' . $company->domain
+                ]);
+            }
+        }
     }
 }

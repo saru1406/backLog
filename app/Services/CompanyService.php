@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyService implements CompanyServiceInterface
 {
-    public function __construct(private CompanyRepositoryInterface $companyRepository) {}
+    public function __construct(private CompanyRepositoryInterface $companyRepository)
+    {
+    }
 
     /**
      * {@inheritDoc}

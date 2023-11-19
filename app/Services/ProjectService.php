@@ -7,9 +7,11 @@ use App\Models\User;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+
 class ProjectService implements ProjectServiceInterface
 {
-   public function __construct(private ProjectRepositoryInterface $projectRepository, private UserRepositoryInterface $userRepository)
+    public function __construct(private ProjectRepositoryInterface $projectRepository, private UserRepositoryInterface $userRepository)
     {
     }
 
@@ -18,7 +20,13 @@ class ProjectService implements ProjectServiceInterface
      */
     public function getProjectNames(): Collection
     {
-        return $this->projectRepository->getProjectNames();
+        $user = Auth::user();
+        $companyId = $user->company_id;
+        if ( $companyId ) {
+            return $this->projectRepository->fetchProjectNameByCompanyId($companyId);
+        }
+
+        return $this->projectRepository->getProjectNames($user);
     }
 
     /**
@@ -26,7 +34,7 @@ class ProjectService implements ProjectServiceInterface
      */
     public function StoreProject(string $name, string $key, ?User $user): void
     {
-        $project = $this->projectRepository->storeProject($name, $key);
+        $project = $this->projectRepository->storeProject($user->company_id, $name, $key);
         $this->projectRepository->storeProjectUser($user->id, $project);
     }
 

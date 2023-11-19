@@ -17,8 +17,7 @@ class ProjectController extends Controller
         private ProjectServiceInterface $projectService,
         private UserServiceInterface $userService,
         private ProjectRepositoryInterface $projectRepository,
-    )
-    {
+    ) {
     }
 
     /**

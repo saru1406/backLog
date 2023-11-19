@@ -20,7 +20,8 @@ class CompanyController extends Controller
         private CompanyServiceInterface $companyService,
         private CompanyRepositoryInterface $companyRepository,
         private UserRepositoryInterface $userRepository
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.
