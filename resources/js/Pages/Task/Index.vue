@@ -85,6 +85,10 @@ onMounted(() => {
     } else {
         filters.priority = savedPriority;
     }
+
+    if (savedUserId === "null" && savedStatus === "null" && savedPriority === "null") {
+        fetchTasks(props.project, filters); // 初期データ読み込み
+    }
 });
 
 watch(filters, () => {
@@ -158,50 +162,56 @@ const renderTaskShow = (task) =>
 
                 </div>
                 <section class="text-gray-600 body-font bg-white">
-                    <div class="container px-5 py-8 mx-auto">
+                    <div class="container mx-auto border ">
                         <div class="lg:w-full mx-auto overflow-auto">
                             <table class="table-auto w-full text-left whitespace-no-wrap">
-                                <thead>
+                                <thead class="shadow-lg text-green-700">
                                     <tr>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
                                             件名</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             担当者</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             状態</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             優先度</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             開始日</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             期限日</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 text-center">
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             登録日</th>
-                                        <th
-                                            class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br">
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody v-for="task in tasks" :key="task.id">
                                     <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderTaskShow(task)">
-                                        <td class="px-4 py-3 w-1/5">{{ task.title }}</td>
-                                        <td class="px-4 py-3">{{ task.user.name }}</td>
-                                        <td class="px-4 py-3">{{ task.status }}</td>
-                                        <td class="px-4 py-3 text-lg">{{ task.priority }}</td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 w-1/5 text-center">{{ task.title }}</td>
+                                        <td class="px-4 py-3 text-center">{{ task.user.name }}</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">{{ task.status }}</div>
+                                            <div v-if="task.status === '処理済み'" class="rounded-full p-1 bg-indigo-200">{{ task.status }}</div>
+                                            <div v-if="task.status === '未対応'" class="rounded-full p-1 bg-orange-200">{{ task.status }}</div>
+                                            <div v-if="task.status === '処理中'" class="rounded-full p-1 bg-green-300">{{ task.status }}</div>
+                                        </td>
+                                        <td class="px-4 py-6 text-lg text-center">
+                                            <div v-if="task.priority === '高'" class ="text-red-600 rounded">{{ task.priority }}</div>
+                                            <div v-if="task.priority === '中'" class ="text-green-500 rounded">{{ task.priority }}</div>
+                                            <div v-if="task.priority === '低'" class ="text-blue-500 rounded">{{ task.priority }}</div>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
                                             {{ task.start_date }}
                                         </td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 text-center">
                                             {{ task.end_date }}
                                         </td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 text-center">
                                             {{ task.created_at }}
                                         </td>
                                     </tr>
@@ -218,3 +228,6 @@ const renderTaskShow = (task) =>
         </div>
     </AuthenticatedLayout>
 </template>
+<style>
+
+</style>

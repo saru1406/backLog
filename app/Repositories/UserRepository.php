@@ -12,9 +12,9 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getProjectNotUser(Collection $projectUserIds): Collection
+    public function getProjectNotUser(int $companyId, Collection $projectUserIds): Collection
     {
-        return User::whereNotIn('id', $projectUserIds)->get();
+        return User::where('company_id', $companyId)->whereNotIn('id', $projectUserIds)->get();
     }
 
     /**

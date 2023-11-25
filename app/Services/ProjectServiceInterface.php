@@ -29,7 +29,7 @@ interface ProjectServiceInterface
      * プロジェクトに紐づくユーザーを取得
      *
      * @param Project $project
-     * @return Collection
+     * @return Collection|User|null
      */
     public function getProjectUsers(Project $project): Collection;
 

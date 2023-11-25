@@ -40,7 +40,7 @@ interface ProjectRepositoryInterface
      * @param Project $project
      * @return Collection
      */
-    public function getProjectUsers(Project $project): Collection;
+    public function getProjectUsers(Project $project, $companyId): Collection;
 
     /**
      * プロジェクトにユーザーを追加

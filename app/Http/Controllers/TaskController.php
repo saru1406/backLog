@@ -8,12 +8,14 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepositoryInterface;
+use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
     public function __construct(
+        private ProjectServiceInterface $projectService,
         private TaskServiceInterface $taskService,
         private TaskRepositoryInterface $taskRepository,
         private ProjectRepository $projectRepository,
@@ -25,7 +27,7 @@ class TaskController extends Controller
      */
     public function index(Project $project)
     {
-        $projectUsers = $this->projectRepository->getUsers($project);
+        $projectUsers = $this->projectService->getProjectUsers($project);
 
         return Inertia::render('Task/Index', [
             'project' => $project,
@@ -38,7 +40,7 @@ class TaskController extends Controller
      */
     public function create(Project $project)
     {
-        $projectUsers = $this->projectRepository->getUsers($project);
+        $projectUsers = $this->projectService->getProjectUsers($project);
 
         return Inertia::render('Task/Create', [
             'project' => $project,

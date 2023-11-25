@@ -22,4 +22,12 @@ interface CompanyRepositoryInterface
      * @return Company
      */
     public function storeCompany(string $companyName, string $domain): Company;
+
+    /**
+     * 企業に所属しているユーザか判定
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function isCompanyByuserId(int $userId): bool;
 }

@@ -10,10 +10,11 @@ interface UserRepositoryInterface
     /**
      * プロジェクトに紐づいていないユーザー取得
      *
+     * @param int $companyId
      * @param Collection $projectUserIds
      * @return Collection
      */
-    public function getProjectNotUser(Collection $projectUserIds): Collection;
+    public function getProjectNotUser(int $companyId, Collection $projectUserIds): Collection;
 
     /**
      * 企業IDと紐づけ

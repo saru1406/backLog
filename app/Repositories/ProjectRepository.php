@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Company;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\ProjectRepositoryInterface;
@@ -17,7 +18,6 @@ class ProjectRepository implements ProjectRepositoryInterface
         return Project::create([
             'company_id' => $companyId,
             'name' => $name,
-            'key' => $key,
         ]);
     }
 
@@ -40,9 +40,9 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getProjectUsers(Project $project): Collection
+    public function getProjectUsers(Project $project, $companyId): Collection
     {
-        return $project->users;
+        return Company::find($companyId)->projects->find($project->id)->users;
     }
 
     /**

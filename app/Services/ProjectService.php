@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -11,8 +12,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectService implements ProjectServiceInterface
 {
-    public function __construct(private ProjectRepositoryInterface $projectRepository, private UserRepositoryInterface $userRepository)
-    {
+    public function __construct(
+        private ProjectRepositoryInterface $projectRepository,
+        private UserRepositoryInterface $userRepository,
+        private CompanyRepositoryInterface $companyRepository
+    ) {
     }
 
     /**
@@ -22,7 +26,7 @@ class ProjectService implements ProjectServiceInterface
     {
         $user = Auth::user();
         $companyId = $user->company_id;
-        if ( $companyId ) {
+        if ($companyId) {
             return $this->projectRepository->fetchProjectNameByCompanyId($companyId);
         }
 
@@ -43,7 +47,12 @@ class ProjectService implements ProjectServiceInterface
      */
     public function getProjectUsers(Project $project): Collection
     {
-        return $this->projectRepository->getProjectUsers($project);
+        $user = Auth::user();
+        $companyId = $user->company_id;
+        if (!$companyId) {
+            return collect([$user]);
+        }
+        return $this->projectRepository->getProjectUsers($project, $companyId);
     }
 
     /**
@@ -51,7 +60,12 @@ class ProjectService implements ProjectServiceInterface
      */
     public function getProjectNotUsers(Collection $projectUsers): Collection
     {
+        $user = Auth::user();
+        $companyId = $user->company_id;
+        if (!$companyId) {
+            return collect([$user]);
+        }
         $projectUserIds = $projectUsers->pluck('id');
-        return $this->userRepository->getProjectNotUser($projectUserIds);
+        return $this->userRepository->getProjectNotUser($companyId, $projectUserIds);
     }
 }

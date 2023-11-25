@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->nullable();
             $table->string('name');
-            $table->string('key')->unique();
             $table->boolean('is_display')->default(false);
             $table->timestamps();
         });

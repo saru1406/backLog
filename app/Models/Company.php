@@ -24,4 +24,14 @@ class Company extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * プロジェクトに紐づけ
+     *
+     * @return HasMany
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
 }

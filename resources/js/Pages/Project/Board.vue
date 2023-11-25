@@ -83,6 +83,10 @@ onMounted(() => {
     } else {
         filters.priority = savedPriority;
     }
+
+    if (savedUserId === "null" && savedStatus === "null" && savedPriority === "null") {
+        fetchTasks(props.project, filters);
+    }
 });
 
 watch(filters, () => {
@@ -156,7 +160,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         <div v-for="(task, index) in tasks" :key="task.id">
                             <!-- <div v-for="childTask in tasks" :key="childTask.id"> -->
                             <div v-if="task.status === '未対応'">
-                                <div class="border mt-5" @dragstart="handleDragStart(task)" draggable="true">
+                                <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button @click="openModalWithTask(task)">
                                         {{ task.title }}<br />
                                         {{ task.user.name }}<br />
@@ -164,7 +168,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                     </button>
                                 </div>
                                 <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-5" @dragstart="handleDragStart(childTask)" draggable="true">
+                                    <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(childTask)" draggable="true">
                                         <button @click="openModalWithTask(childTask.id)">
                                             {{ childTask.title }}<br />
                                             {{ task.user.name }}<br />
@@ -180,7 +184,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         <h3>処理中</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '処理中'">
-                                <div class="border mt-5" @dragstart="handleDragStart(task)" draggable="true">
+                                <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button @click="openModalWithTask(task)">
                                         {{ task.title }}<br />
                                         {{ task.user.name }}<br />
@@ -188,7 +192,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                     </button>
                                 </div>
                                 <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-5" @dragstart="handleDragStart(childTask)" draggable="true">
+                                    <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(childTask)" draggable="true">
                                         <button @click="openModalWithTask(childTask.id)">
                                             {{ childTask.title }}<br />
                                             {{ task.user.name }}<br />
@@ -203,7 +207,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         <h3>処理済み</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '処理済み'">
-                                <div class="border mt-5" @dragstart="handleDragStart(task)" draggable="true">
+                                <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button @click="openModalWithTask(task)">
                                         {{ task.title }}<br />
                                         {{ task.user.name }}<br />
@@ -211,7 +215,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                     </button>
                                 </div>
                                 <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-5" @dragstart="handleDragStart(childTask)" draggable="true">
+                                    <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(childTask)" draggable="true">
                                         <button @click="openModalWithTask(childTask.id)">
                                             {{ childTask.title }}<br />
                                             {{ task.user.name }}<br />
@@ -226,7 +230,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                         <h3>完了</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '完了'">
-                                <div class="border mt-5" @dragstart="handleDragStart(task)" draggable="true">
+                                <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button @click="openModalWithTask(task)">
                                         {{ task.title }}<br />
                                         {{ task.user.name }}<br />
@@ -234,7 +238,7 @@ const selectedTaskValue = computed(() => selectedTask.value);
                                     </button>
                                 </div>
                                 <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-5" @dragstart="handleDragStart(childTask)" draggable="true">
+                                    <div class="border mt-5 shadow rounded" @dragstart="handleDragStart(childTask)" draggable="true">
                                         <button @click="openModalWithTask(childTask.id)">
                                             {{ childTask.title }}<br />
                                             {{ task.user.name }}<br />

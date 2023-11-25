@@ -18,7 +18,6 @@ class ProjectFactory extends Factory
     {
         return [
             'name' => fake()->realText(),
-            'key' => fake()->unique()->word(),
         ];
     }
 }
