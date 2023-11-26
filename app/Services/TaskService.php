@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TaskService implements TaskServiceInterface
 {
-    public function __construct(private TaskRepositoryInterface $taskRepository, private ProjectRepositoryInterface $projectRepository)
-    {
-    }
+    public function __construct(private TaskRepositoryInterface $taskRepository) {}
 
 }

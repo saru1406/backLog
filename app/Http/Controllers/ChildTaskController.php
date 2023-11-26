@@ -10,6 +10,8 @@ use App\Models\Task;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
+use App\Services\ChildTaskServiceInterface;
+use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
 
 class ChildTaskController extends Controller
@@ -17,7 +19,8 @@ class ChildTaskController extends Controller
     public function __construct(
         private ChildTaskRepositoryInterface $childTaskRepository,
         private ProjectRepositoryInterface $projectRepository,
-        private TaskRepositoryInterface $taskRepository
+        private TaskRepositoryInterface $taskRepository,
+        private ChildTaskServiceInterface $childTaskService
     ) {
     }
 
@@ -107,5 +110,11 @@ class ChildTaskController extends Controller
     public function destroy(ChildTask $childTask)
     {
         //
+    }
+
+    public function storeGpt(Project $project, Task $task)
+    {
+        $childTasksArray = $this->childTaskService->createChildTaskByGpt($task->title, $task->content);
+        $this->childTaskService->storeChildTasksByGpt($project, $task, $childTasksArray);
     }
 }

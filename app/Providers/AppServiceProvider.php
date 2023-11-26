@@ -6,6 +6,8 @@ use App\Repositories\ChildTaskRepository;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\CompanyRepository;
 use App\Repositories\CompanyRepositoryInterface;
+use App\Repositories\GptRepository;
+use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepository;
@@ -45,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ChildTaskRepositoryInterface::class, ChildTaskRepository::class);
         $this->app->bind(ChildTaskServiceInterface::class, ChildTaskService::class);
+
+        $this->app->bind(GptRepositoryInterface::class, GptRepository::class);
     }
 
     /**

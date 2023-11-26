@@ -34,4 +34,6 @@ interface ChildTaskRepositoryInterface
         int $childTaskId,
         ChildTaskParams $params
     ): void;
+
+    public function storeChildTaskByGpt($projectId, $taskId, $userId, $childTask) : void;
 }

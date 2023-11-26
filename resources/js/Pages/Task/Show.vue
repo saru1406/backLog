@@ -13,6 +13,19 @@ const props = defineProps({
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
 
+function store_gpt() {
+    try {
+        // isLoading.value = true; // ローディング開始
+        router.post(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/store-gpt`);
+        // 成功時の処理
+    } catch (error) {
+        // エラー処理
+        console.error('エラーが発生しました:', error);
+    } finally {
+        // isLoading.value = false; // ローディング終了
+    }
+}
+
 console.log(props.child_tasks)
 </script>
 
@@ -57,8 +70,13 @@ console.log(props.child_tasks)
                     </div>
                     <!-- TODOモーダルでcreate画面表示する -->
                     <div class="h-auto mt-10 bg-white p-4">
-                        <Link :href="route('projects.tasks.child-tasks.create', { project: props.project, task: props.task })">子課題を追加
+                        <Link class="m-5"
+                            :href="route('projects.tasks.child-tasks.create', { project: props.project, task: props.task })">
+                        子課題を追加
                         </Link>
+                        <div @click="store_gpt" class="bg-green-500 text-white rounded p-1"
+                            :href="route('projects.tasks.child-tasks.store-gpt', { project: props.project, task: props.task })">
+                            GPTで子タスクを自動作成</div>
                         <table class="table-auto w-full text-left whitespace-no-wrap">
                             <thead>
                                 <tr>

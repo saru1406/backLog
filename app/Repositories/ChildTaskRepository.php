@@ -52,4 +52,20 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             'end_date' => $endDate
         ]);
     }
+
+    public function storeChildTaskByGpt($projectId, $taskId, $userId, $childTask): void
+    {
+        // dd($childTask);
+        ChildTask::create([
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'task_id' => $taskId,
+            'title' => $childTask['title'],
+            'content' => $childTask['content'],
+            'status' => '未対応',
+            'priority' => '中',
+            'start_date' => null,
+            'end_date' => null
+        ]);
+    }
 }
