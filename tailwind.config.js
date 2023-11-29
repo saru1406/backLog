@@ -15,6 +15,18 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            maxHeight: {
+                '730px': '730px',
+            },
+            minHeight: {
+                '730px': '730px', // ここに追加
+            },
+            maxWidth: {
+                '375px': '375px',
+            },
+            minWidth: {
+                '375px': '375px', // ここに追加
+            },
         },
     },
 

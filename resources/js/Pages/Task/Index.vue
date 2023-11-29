@@ -110,6 +110,20 @@ const onPageChange = async (event) => {
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+
+  // Dateインスタンスを作成
+  const date = new Date(dateString);
+
+  // 年月日を取得
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  // フォーマットされた文字列を返す
+  return `${year}/${month}/${day}`;
+};
 
 </script>
 
@@ -125,24 +139,24 @@ const renderTaskShow = (task) =>
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
 
-            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col w-full sm:px-6 lg:px-8 px-12">
                 <div class="p-6 text-gray-900">
-                    <p>ボード</p>
-                    <div>
+                    <p>課題一覧</p>
+                    <div class="my-5">
                         <label>担当者</label>
                         <select v-model="filters.user_id"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
+                            <option :value="null">全て</option>
                             <option v-for="projectUser in props.project_users" :value="projectUser.id">
                                 {{ projectUser.name }}
                             </option>
                         </select>
                         <label>状態</label>
                         <select v-model="filters.status"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
+                            <option :value="null">全て</option>
                             <option value="未対応">未対応</option>
                             <option value="処理中">処理中</option>
                             <option value="処理済み">処理済み</option>
@@ -151,9 +165,9 @@ const renderTaskShow = (task) =>
                         </select>
                         <label>優先度</label>
                         <select v-model="filters.priority"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
+                            <option :value="null">全て</option>
                             <option value="低">低</option>
                             <option value="中">中</option>
                             <option value="高">高</option>
@@ -161,12 +175,15 @@ const renderTaskShow = (task) =>
                     </div>
 
                 </div>
-                <section class="text-gray-600 body-font bg-white">
-                    <div class="container mx-auto border ">
+                <section class="text-gray-600 body-font ">
+                    <div class="container border bg-white">
                         <div class="lg:w-full mx-auto overflow-auto">
                             <table class="table-auto w-full text-left whitespace-no-wrap">
                                 <thead class="shadow-lg text-green-700">
                                     <tr>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
+                                            タスクNo</th>
                                         <th
                                             class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
                                             件名</th>
@@ -191,8 +208,9 @@ const renderTaskShow = (task) =>
                                     </tr>
                                 </thead>
                                 <tbody v-for="task in tasks" :key="task.id">
-                                    <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderTaskShow(task)">
-                                        <td class="px-4 py-3 w-1/5 text-center">{{ task.title }}</td>
+                                    <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm" @click="renderTaskShow(task)">
+                                        <td class="px-4 py-3 text-center">{{ task.id }}</td>
+                                        <td class="px-4 py-3 w-1/5 text-left">{{ task.title }}</td>
                                         <td class="px-4 py-3 text-center">{{ task.user.name }}</td>
                                         <td class="px-4 py-3 text-center">
                                             <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">{{ task.status }}</div>
@@ -200,30 +218,31 @@ const renderTaskShow = (task) =>
                                             <div v-if="task.status === '未対応'" class="rounded-full p-1 bg-orange-200">{{ task.status }}</div>
                                             <div v-if="task.status === '処理中'" class="rounded-full p-1 bg-green-300">{{ task.status }}</div>
                                         </td>
-                                        <td class="px-4 py-6 text-lg text-center">
+                                        <td class="px-4 py-6 text text-center">
                                             <div v-if="task.priority === '高'" class ="text-red-600 rounded">{{ task.priority }}</div>
                                             <div v-if="task.priority === '中'" class ="text-green-500 rounded">{{ task.priority }}</div>
                                             <div v-if="task.priority === '低'" class ="text-blue-500 rounded">{{ task.priority }}</div>
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ task.start_date }}
+                                            {{ formatDate(task.start_date) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ task.end_date }}
+                                            {{ formatDate(task.end_date) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ task.created_at }}
+                                            {{ formatDate(task.created_at) }}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </section>
-                <div class="card">
+                        <div class="card">
                     <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total"
                         :rowsPerPageOptions="rowsPerPageOption"></Paginator>
                 </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     </AuthenticatedLayout>

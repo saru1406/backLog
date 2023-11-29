@@ -133,7 +133,7 @@ class TaskRepository implements TaskRepositoryInterface
     ): void {
         $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
-        Task::find('id', $taskId)->update([
+        Task::find($taskId)->update([
             'user_id' => $params->getUserId(),
             'title' => $params->getTitle(),
             'content' => $params->getContents(),

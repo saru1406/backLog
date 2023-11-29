@@ -89,24 +89,20 @@ watch(filters, () => {
 const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
-const row2BarList = ref([
-    {
-        myBeginDate: "2023-11-15",
-        myEndDate: "2023-11-16",
-        ganttBarConfig: {
-            id: "another-unique-id-2",
-            hasHandles: true,
-            label: "Hey, look at me",
-            style: {
-                // arbitrary CSS styling for your bar
-                background: "#e09b69",
-                borderRadius: "20px",
-                color: "black"
-            },
-            class: "foo" // you can also add CSS classes to your bars!
-        }
-    }
-])
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+
+  // Dateインスタンスを作成
+  const date = new Date(dateString);
+
+  // 年月日を取得
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  // フォーマットされた文字列を返す
+  return `${year}/${month}/${day}`;
+};
 
 function createBarsArray(item) {
     return [{
@@ -141,18 +137,19 @@ function createBarsArray(item) {
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
 
-            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-12">
-                <div class="p-6 text-gray-900">
-                    <p>ボード</p>
-                    <div>
-                        <label>開始日</label>
-                        <VueDatePicker v-model="filters.start_date" :disabled-week-days="[6, 0]" locale="jp"
-                            format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
+            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-2">
+                <div class="px-6 pt-6 text-gray-900">
+                    <p>ガントチャート</p>
+                    <div class="flex flex-wrap m-2 items-center">
+                        <label>表示開始日</label>
+                        <div class="w-40 ml-1 mr-5">
+                            <VueDatePicker v-model="filters.start_date" :disabled-week-days="[6, 0]" locale="jp"
+                                format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
+                        </div>
                         <label>表示範囲</label>
                         <select v-model="filters.range"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-3">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
                             <option value=1>1カ月</option>
                             <option value=2>2カ月</option>
                             <option value=3>3カ月</option>
@@ -160,18 +157,18 @@ function createBarsArray(item) {
                         </select>
                         <label>グルーピング</label>
                         <select v-model="filters.group"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-3">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
+                            <option :value="null">全て</option>
                             <option value="担当者">担当者</option>
                             <option value="カテゴリー">カテゴリー</option>
                             <option value="親課題">親課題</option>
                         </select>
                         <label>状態</label>
                         <select v-model="filters.status"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1">
                             <option value="" disabled selected>選択してください</option>
-                            <option :value="null">未設定</option>
+                            <option :value="null">全て</option>
                             <option value="未対応">未対応</option>
                             <option value="処理中">処理中</option>
                             <option value="処理済み">処理済み</option>
@@ -183,7 +180,7 @@ function createBarsArray(item) {
                 <section class="text-gray-600 body-font">
                     <div class="container mx-auto">
                         <div class="lg:w-full mx-auto overflow-auto">
-                            <div v-for="task in tasks" :key="task.id" class="gantt-container bg-white p-10 my-10">
+                            <div v-for="task in tasks" :key="task.id" class="gantt-container bg-white px-10 pt-5 my-10 rounded ">
                                 {{ task.user_name }}
                                 <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
                                     :chart-end="`${task.end_date} 23:59`" precision="day" bar-start="myBeginDate"
@@ -221,20 +218,20 @@ function createBarsArray(item) {
                                             </tr>
                                         </thead>
                                         <tbody v-for="item in task.tasks">
-                                            <tr class="border-b border-gray-300 hover:bg-blue-200"
+                                            <tr class="border-b border-gray-300 hover:bg-blue-200 text-center"
                                                 @click="renderTaskShow(task)">
-                                                <td class="px-4 py-3 w-1/5">{{ item.title }}</td>
+                                                <td class="px-4 py-3 w-1/5 text-sm text-left">{{ item.title }}</td>
                                                 <!-- <td class="px-4 py-3">{{ task.user.name }}</td> -->
                                                 <td class="px-4 py-3">{{ item.status }}</td>
                                                 <td class="px-4 py-3 text-lg">{{ item.priority }}</td>
                                                 <td class="px-4 py-3">
-                                                    {{ item.start_date }}
+                                                    {{ formatDate(item.start_date) }}
                                                 </td>
                                                 <td class="px-4 py-3">
-                                                    {{ item.end_date }}
+                                                    {{ formatDate(item.end_date) }}
                                                 </td>
                                                 <td class="px-4 py-3">
-                                                    {{ item.created_at }}
+                                                    {{ formatDate(item.created_at) }}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -259,4 +256,5 @@ function createBarsArray(item) {
     width: 100%;
     min-width: 3000px;
     /* 必要に応じて調整 */
-}</style>
+}
+</style>

@@ -26,7 +26,8 @@ defineProps({
 </template>
 <style>
 .sidebar-container {
-    width: 20%;
+    max-width: 280px;
+    min-width: 280px;
     background:  #ffffff;
 }
 .sidebar-container h1 {

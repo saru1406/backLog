@@ -110,16 +110,16 @@ console.log(props.child_tasks)
                                 <tr class="border-b border-gray-300 hover:bg-blue-200"
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
-                                    <td class="px-4 py-3">{{ childTask.user.name }}</td>
-                                    <td class="px-4 py-3">{{ childTask.status }}</td>
-                                    <td class="px-4 py-3 text-lg">{{ childTask.priority }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">{{ childTask.user.name }}</td>
+                                    <td class="px-4 py-3 text-center">{{ childTask.status }}</td>
+                                    <td class="px-4 py-3 text-lg text-center">{{ childTask.priority }}</td>
+                                    <td class="px-4 py-3 text-center">
                                         {{ childTask.start_date }}
                                     </td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">
                                         {{ childTask.end_date }}
                                     </td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">
                                         {{ childTask.created_at }}
                                     </td>
                                 </tr>
