@@ -4,5 +4,12 @@ namespace App\Repositories;
 
 interface GptRepositoryInterface
 {
-    public function createChildTasks(string $taskTitle, string $taskContent);
+    /**
+     * GPTAPIで子タスクテキスト生成
+     *
+     * @param string $taskTitle
+     * @param string $taskContent
+     * @return string
+     */
+    public function createChildTasks(string $taskTitle, string $taskContent): string;
 }

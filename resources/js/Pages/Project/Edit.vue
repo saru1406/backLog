@@ -46,7 +46,7 @@ function store_project_user(){
                     </form>
                     <div class="p-6 text-gray-900">
                         <p>参加ユーザー</p>
-                        <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5">
+                        <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
                             <p class="pl-10">{{ project_user.name }}</p>
                             <hr>
                         </div>

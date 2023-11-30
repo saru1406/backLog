@@ -39,9 +39,6 @@ class FetchApiTaskRequest extends FormRequest
             'status' => ['nullable', 'string'],
             'priority' => ['nullable', 'string'],
             'is_pagination' => ['nullable', 'boolean'],
-            'start_date' => ['nullable', 'string'],
-            'group' => ['nullable', 'string'],
-            'range' => ['nullable', 'int']
         ];
     }
 
@@ -55,9 +52,6 @@ class FetchApiTaskRequest extends FormRequest
             status: $this->input('status'),
             priority: $this->input('priority'),
             isPagination: $this->input('is_pagination', true),
-            startDate: $this->input('start_date'),
-            group: $this->input('group'),
-            range: $this->input('range'),
         );
     }
 }

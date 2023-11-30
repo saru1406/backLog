@@ -26,6 +26,16 @@ interface ProjectServiceInterface
     public function getProjectNames(): Collection;
 
     /**
+     * プロジェクトにユーザーを追加
+     *
+     * @param integer $userId
+     * @param Project $project
+     * @return void
+     */
+    public function storeProjectUser(int $userId, Project $project): void;
+
+
+    /**
      * プロジェクトに紐づくユーザーを取得
      *
      * @param Project $project
@@ -40,4 +50,12 @@ interface ProjectServiceInterface
      * @return Collection
      */
     public function getProjectNotUsers(Collection $projectUsers): Collection;
+
+    /**
+     * プロジェクトに紐づくユーザを取得
+     *
+     * @param Project $project
+     * @return Collection
+     */
+    public function getUsers(Project $project): Collection;
 }

@@ -25,45 +25,21 @@ class ApiTaskParams
     private bool $isPagination;
 
     /**
-     * @var string|null
-     */
-    private ?string $startDate;
-
-    /**
-     * @var string|null
-     */
-    private ?string $group;
-
-    /**
-     * @var int|null
-     */
-    private ?int $range;
-
-    /**
      * @param integer|null $userId
      * @param string|null $status
      * @param string|null $priority
      * @param boolean $isPagination
-     * @param string|null $startDate
-     * @param string|null $group
-     * @param int|null $range
      */
     public function __construct(
         ?int $userId,
         ?string $status,
         ?string $priority,
         bool $isPagination,
-        ?string $startDate,
-        ?string $group,
-        ?int $range
     ) {
         $this->userId = $userId;
         $this->status = $status;
         $this->priority = $priority;
         $this->isPagination = $isPagination;
-        $this->startDate = $startDate;
-        $this->group = $group;
-        $this->range = $range;
     }
 
     /**

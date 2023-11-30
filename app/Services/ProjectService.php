@@ -43,6 +43,18 @@ class ProjectService implements ProjectServiceInterface
     }
 
     /**
+     * プロジェクトにユーザーを追加
+     *
+     * @param integer $userId
+     * @param Project $project
+     * @return void
+     */
+    public function storeProjectUser(int $userId, Project $project): void
+    {
+        $this->projectRepository->storeProjectUser($userId, $project);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getProjectUsers(Project $project): Collection
@@ -67,5 +79,13 @@ class ProjectService implements ProjectServiceInterface
         }
         $projectUserIds = $projectUsers->pluck('id');
         return $this->userRepository->getProjectNotUser($companyId, $projectUserIds);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUsers(Project $project): Collection
+    {
+        return $this->projectRepository->getUsers($project);
     }
 }

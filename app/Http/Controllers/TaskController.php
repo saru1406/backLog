@@ -53,12 +53,7 @@ class TaskController extends Controller
      */
     public function store(Project $project, StoreTaskRequest $request)
     {
-        $projectId = $project->id;
-
-        $this->taskRepository->storeTask(
-            $projectId,
-            $request->getParams()
-        );
+        $this->taskService->storeTask($project->id, $request->getParams());
     }
 
     /**
@@ -66,8 +61,8 @@ class TaskController extends Controller
      */
     public function show(Project $project, Task $task)
     {
-        $taskUser = $this->taskRepository->getUser($task);
-        $childTasks = $this->taskRepository->getChildTasks($task);
+        $taskUser = $this->taskService->getUser($task);
+        $childTasks = $this->taskService->getChildTasks($task);
 
         return Inertia::render('Task/Show', [
             'project' => $project,
@@ -82,7 +77,7 @@ class TaskController extends Controller
      */
     public function edit(Project $project, Task $task)
     {
-        $projectUsers = $this->projectRepository->getUsers($project);
+        $projectUsers = $this->projectService->getUsers($project);
 
         return Inertia::render('Task/Edit', [
             'project' => $project,
@@ -96,10 +91,7 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Project $project, Task $task)
     {
-        $this->taskRepository->updateTask(
-            $task->id,
-            $request->getParams()
-        );
+        $this->taskService->updateTask($task->id, $request->getParams());
     }
 
     /**

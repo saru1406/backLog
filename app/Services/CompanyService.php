@@ -4,12 +4,21 @@ namespace App\Services;
 
 use App\Models\Company;
 use App\Repositories\CompanyRepositoryInterface;
+use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyService implements CompanyServiceInterface
 {
-    public function __construct(private CompanyRepositoryInterface $companyRepository)
+    public function __construct(private CompanyRepositoryInterface $companyRepository, private UserRepositoryInterface $userRepository)
     {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function patchUserByCompanyId(int $userId, int $companyId): void
+    {
+        $this->userRepository->patchUserByCompanyId($userId, $companyId);
     }
 
     /**

@@ -144,16 +144,25 @@ class TaskRepository implements TaskRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getUser(Task $task): User
     {
         return $task->user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getTasksRelations(Task $task, array $relations): void
     {
         $task->load($relations);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getChildTasks(Task $task): Collection
     {
         return $task->childTasks()->with('user')->get();

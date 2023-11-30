@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Collection;
 interface CompanyServiceInterface
 {
     /**
+     * 企業情報をユーザに追加
+     *
+     * @param int $userId
+     * @param int $companyId
+     * @return void
+     */
+    public function patchUserByCompanyId(int $userId, int $companyId) : void;
+
+    /**
      * 企業情報を登録するべきか判定
      *
      * @return bool

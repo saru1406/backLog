@@ -11,6 +11,7 @@ use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
 use App\Services\ChildTaskServiceInterface;
+use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
 
@@ -18,7 +19,7 @@ class ChildTaskController extends Controller
 {
     public function __construct(
         private ChildTaskRepositoryInterface $childTaskRepository,
-        private ProjectRepositoryInterface $projectRepository,
+        private ProjectServiceInterface $projectService,
         private TaskRepositoryInterface $taskRepository,
         private ChildTaskServiceInterface $childTaskService
     ) {
@@ -37,7 +38,7 @@ class ChildTaskController extends Controller
      */
     public function create(Project $project, Task $task)
     {
-        $projectUsers = $this->projectRepository->getUsers($project);
+        $projectUsers = $this->projectService->getUsers($project);
 
         return Inertia::render('ChildTask/Create', [
             'task' => $task,
@@ -51,8 +52,7 @@ class ChildTaskController extends Controller
      */
     public function store(StoreChildTaskRequest $request, Project $project, Task $task)
     {
-        // dd($request->getStartDate());
-        $this->childTaskRepository->storeChildTask(
+        $this->childTaskService->storeChildTask(
             $project->id,
             $task->id,
             $request->getParams()
@@ -81,8 +81,8 @@ class ChildTaskController extends Controller
      */
     public function edit(Project $project, Task $task, ChildTask $childTask)
     {
-        $projectUsers = $this->projectRepository->getUsers($project);
-        $childTaskUser = $this->childTaskRepository->getChildTasksByUser($childTask);
+        $projectUsers = $this->projectService->getUsers($project);
+        $childTaskUser = $this->childTaskService->getChildTasksByUser($childTask);
 
         return Inertia::render('ChildTask/Edit', [
             'project' => $project,
@@ -98,7 +98,7 @@ class ChildTaskController extends Controller
      */
     public function update(UpdateChildTaskRequest $request, Project $project, Task $task, ChildTask $childTask)
     {
-        $this->childTaskRepository->updateChildTask(
+        $this->childTaskService->updateChildTask(
             $childTask->id,
             $request->getParams()
         );

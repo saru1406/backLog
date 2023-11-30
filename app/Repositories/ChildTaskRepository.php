@@ -30,15 +30,16 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getChildTasksByUser(ChildTask $childTasks): User
     {
         return $childTasks->user;
     }
 
-    public function updateChildTask(
-        int $childTaskId,
-        ChildTaskParams $params
-    ): void {
+    public function updateChildTask(int $childTaskId, ChildTaskParams $params): void
+    {
         $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
 
@@ -53,9 +54,11 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
         ]);
     }
 
-    public function storeChildTaskByGpt($projectId, $taskId, $userId, $childTask): void
+    /**
+     * {@inheritDoc}
+     */
+    public function storeChildTaskByGpt(int $projectId, int $taskId, int $userId, array $childTask): void
     {
-        // dd($childTask);
         ChildTask::create([
             'user_id' => $userId,
             'project_id' => $projectId,

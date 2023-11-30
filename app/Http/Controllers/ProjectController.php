@@ -96,7 +96,7 @@ class ProjectController extends Controller
 
     public function storeProjectUser(StoreProjectUserRequest $request, Project $project)
     {
-        $this->projectRepository->storeProjectUser($request->getUserId(), $project);
+        $this->projectService->storeProjectUser($request->getUserId(), $project);
     }
 
     public function board(Project $project)

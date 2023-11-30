@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use App\Services\CompanyServiceInterface;
+use App\Services\UserServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class CompanyController extends Controller
     public function __construct(
         private CompanyServiceInterface $companyService,
         private CompanyRepositoryInterface $companyRepository,
-        private UserRepositoryInterface $userRepository
+        private UserServiceInterface $useService
     ) {
     }
 
@@ -52,7 +53,7 @@ class CompanyController extends Controller
         DB::transaction(function () use ($request) {
             try {
                 $company = $this->companyService->storeCompany($request->getCompanyName());
-                $this->userRepository->patchUserByCompanyId(Auth::id(), $company->id);
+                $this->companyService->patchUserByCompanyId(Auth::id(), $company->id);
             } catch(Exception $e) {
                 // TODO: throw追記
                 Log::error($e->getMessage());

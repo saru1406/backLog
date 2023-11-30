@@ -76,7 +76,7 @@ interface TaskRepositoryInterface
      * 課題に紐づいている子タスク取得
      *
      * @param Task $task
-     * @return ChildTask
+     * @return Collection
      */
     public function getChildTasks(Task $task): Collection;
 }

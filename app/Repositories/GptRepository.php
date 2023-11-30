@@ -4,12 +4,13 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
 use OpenAI;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class GptRepository implements GptRepositoryInterface
 {
-    public function createChildTasks(string $taskTitle, string $taskContent)
+    /**
+     * {@inheritDoc}
+     */
+    public function createChildTasks(string $taskTitle, string $taskContent): string
     {
         // $client = OpenAI::factory()
         //     ->withApiKey($apiKey)

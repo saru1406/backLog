@@ -2,6 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\ChildTask;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
+use App\Repositories\ChildTaskParams;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\GptRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -10,15 +15,43 @@ class ChildTaskService implements ChildTaskServiceInterface
 {
     public function __construct(private ChildTaskRepositoryInterface $childTaskRepository, private GptRepositoryInterface $gptRepository) {}
 
+    /**
+     * {@inheritDoc}
+     */
+    public function storeChildTask(int $projectId, int $taskId, ChildTaskParams $params): void
+    {
+        return $this->childTaskRepository->storeChildTask($projectId, $taskId, $params);
+    }
 
-    public function createChildTaskByGpt(string $taskTitle, string $taskContent)
+    /**
+     * {@inheritDoc}
+     */
+    public function updateChildTask(int $childTaskId, ChildTaskParams $params): void
+    {
+        return $this->childTaskRepository->updateChildTask($childTaskId, $params);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildTasksByUser(ChildTask $childTask): User
+    {
+        return $this->childTaskRepository->getChildTasksByUser($childTask);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createChildTaskByGpt(string $taskTitle, string $taskContent): array
     {
         $childTasksGptText = $this->gptRepository->createChildTasks($taskTitle, $taskContent);
-        // dd($this->parseTasks($childTasksGptText));
         return $this->parseTasks($childTasksGptText);
     }
 
-    public function storeChildTasksByGpt($project, $task, $childTasks)
+    /**
+     * {@inheritDoc}
+     */
+    public function storeChildTasksByGpt(Project $project, Task $task, array $childTasks): void
     {
         $userId = Auth::id();
         foreach ($childTasks as $childTask) {
@@ -26,7 +59,13 @@ class ChildTaskService implements ChildTaskServiceInterface
         }
     }
 
-    private function parseTasks($text)
+    /**
+     * GPTテキスト出力を配列に加工
+     *
+     * @param string $text
+     * @return array
+     */
+    private function parseTasks(string $text): array
     {
         $childTasks = [];
         $lines = explode("\n", $text);
