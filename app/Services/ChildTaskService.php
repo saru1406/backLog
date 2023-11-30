@@ -49,6 +49,7 @@ class ChildTaskService implements ChildTaskServiceInterface
     public function createChildTaskByGpt(string $taskTitle, string $taskContent): array
     {
         $childTasksGptText = $this->gptRepository->createChildTasks($taskTitle, $taskContent);
+
         return $this->parseTasks($childTasksGptText);
     }
 

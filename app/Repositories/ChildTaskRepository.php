@@ -14,8 +14,8 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
         int $taskId,
         ChildTaskParams $params
     ): void {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d H:i:s');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d H:i:s');
+        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
+        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
 
         ChildTask::create([
             'user_id' => $params->getUserId(),

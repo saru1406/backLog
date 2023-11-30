@@ -17,25 +17,16 @@ class TaskApiController extends Controller
 
     public function fetchTasks(FetchApiTaskRequest $request, Project $project)
     {
-        $tasks = $this->taskRepository->searchTasksByParameters(
-            $project->id,
-            $request->getParams()
-        );
-
+        $tasks = $this->taskRepository->searchTasksByParameters($project->id, $request->getParams());
         Log::info("タスク数". $tasks->count());
+
         return response()->json($tasks);
     }
 
     public function fetchGant(FetchApiGantRequest $request, Project $project)
     {
-        $tasks = $this->taskRepository->gantTasksByParameters(
-            $project->id,
-            $request->getParams()
-        );
+        $tasks = $this->taskRepository->gantTasksByParameters($project->id, $request->getParams());
 
-        // Log::info("タスク数". $tasks->count());
-        $task = response()->json($tasks);
-        // Log::info("タスク",['task' => $task]);
-        return $task;
+        return response()->json($tasks);
     }
 }

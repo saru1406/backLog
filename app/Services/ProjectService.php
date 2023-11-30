@@ -60,6 +60,7 @@ class ProjectService implements ProjectServiceInterface
         if (!$companyId) {
             return collect([$user]);
         }
+
         return $this->projectRepository->getProjectUsers($project, $companyId);
     }
 
@@ -74,6 +75,7 @@ class ProjectService implements ProjectServiceInterface
             return collect([$user]);
         }
         $projectUserIds = $projectUsers->pluck('id');
+
         return $this->userRepository->getProjectNotUser($companyId, $projectUserIds);
     }
 

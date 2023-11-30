@@ -41,6 +41,7 @@ class CompanyService implements CompanyServiceInterface
     public function storeCompany(string $companyName): Company
     {
         $domain = $this->fetchDomain();
+
         return $this->companyRepository->storeCompany($companyName, $domain);
     }
 
@@ -53,6 +54,7 @@ class CompanyService implements CompanyServiceInterface
     {
         $user = Auth::user();
         $userEmail = $user->email;
+
         return explode('@', $userEmail)[1];
     }
 }
