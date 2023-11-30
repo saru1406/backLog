@@ -15,10 +15,8 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function storeTask(
-        int $projectId,
-        TaskParams $params
-    ): void {
+    public function storeTask(int $projectId, TaskParams $params): void
+    {
         $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::create([
@@ -36,10 +34,8 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function searchTasksByParameters(
-        int $projectId,
-        ApiTaskParams $params
-    ): Paginator|Collection {
+    public function searchTasksByParameters(int $projectId, ApiTaskParams $params): Paginator|Collection
+    {
         $query = Task::query();
         $query->where('project_id', $projectId);
 
@@ -74,10 +70,8 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function gantTasksByParameters(
-        int $projectId,
-        ApiGantParams $params
-    ): Collection {
+    public function gantTasksByParameters(int $projectId, ApiGantParams $params): Collection
+    {
         $query = Task::query();
         $query->where('project_id', $projectId);
 
@@ -127,10 +121,8 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function updateTask(
-        int $taskId,
-        TaskParams $params
-    ): void {
+    public function updateTask(int $taskId, TaskParams $params): void
+    {
         $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::find($taskId)->update([

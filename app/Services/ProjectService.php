@@ -43,11 +43,7 @@ class ProjectService implements ProjectServiceInterface
     }
 
     /**
-     * プロジェクトにユーザーを追加
-     *
-     * @param integer $userId
-     * @param Project $project
-     * @return void
+     * {@inheritDoc}
      */
     public function storeProjectUser(int $userId, Project $project): void
     {

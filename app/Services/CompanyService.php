@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyService implements CompanyServiceInterface
 {
-    public function __construct(private CompanyRepositoryInterface $companyRepository, private UserRepositoryInterface $userRepository)
-    {
+    public function __construct(
+        private CompanyRepositoryInterface $companyRepository,
+        private UserRepositoryInterface $userRepository
+    ) {
     }
 
     /**

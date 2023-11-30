@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
-use App\Repositories\CompanyRepositoryInterface;
-use App\Repositories\UserRepositoryInterface;
 use App\Services\CompanyServiceInterface;
 use App\Services\UserServiceInterface;
 use Exception;
@@ -19,7 +17,6 @@ class CompanyController extends Controller
 {
     public function __construct(
         private CompanyServiceInterface $companyService,
-        private CompanyRepositoryInterface $companyRepository,
         private UserServiceInterface $useService
     ) {
     }

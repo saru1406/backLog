@@ -13,7 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ChildTaskService implements ChildTaskServiceInterface
 {
-    public function __construct(private ChildTaskRepositoryInterface $childTaskRepository, private GptRepositoryInterface $gptRepository) {}
+    public function __construct(
+        private ChildTaskRepositoryInterface $childTaskRepository,
+        private GptRepositoryInterface $gptRepository
+    ) {
+    }
 
     /**
      * {@inheritDoc}

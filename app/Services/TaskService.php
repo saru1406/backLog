@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskParams;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Support\Collection;

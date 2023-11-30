@@ -17,10 +17,7 @@ interface TaskRepositoryInterface
      * @param TaskParams $params
      * @return void
      */
-    public function storeTask(
-        int $projectId,
-        TaskParams $params
-    ): void;
+    public function storeTask(int $projectId, TaskParams $params): void;
 
     /**
      * タスク検索
@@ -28,10 +25,7 @@ interface TaskRepositoryInterface
      * @param ApiTaskParams $params
      * @return Paginator|Collection
      */
-    public function searchTasksByParameters(
-        int $projectId,
-        ApiTaskParams $params
-    ): Paginator|Collection;
+    public function searchTasksByParameters(int $projectId, ApiTaskParams $params): Paginator|Collection;
 
     /**
      * ガント取得
@@ -39,10 +33,7 @@ interface TaskRepositoryInterface
      * @param ApiGantParams $params
      * @return Collection
      */
-    public function gantTasksByParameters(
-        int $projectId,
-        ApiGantParams $params
-    ): Collection;
+    public function gantTasksByParameters(int $projectId, ApiGantParams $params): Collection;
 
     /**
      * 課題を更新
@@ -51,10 +42,7 @@ interface TaskRepositoryInterface
      * @param TaskParams $params
      * @return void
      */
-    public function updateTask(
-        int $taskId,
-        TaskParams $params
-    ): void;
+    public function updateTask(int $taskId, TaskParams $params): void;
 
     /**
      * 課題に紐づいているユーザを取得

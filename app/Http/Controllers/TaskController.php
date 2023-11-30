@@ -6,8 +6,6 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
-use App\Repositories\ProjectRepository;
-use App\Repositories\TaskRepositoryInterface;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
@@ -17,8 +15,6 @@ class TaskController extends Controller
     public function __construct(
         private ProjectServiceInterface $projectService,
         private TaskServiceInterface $taskService,
-        private TaskRepositoryInterface $taskRepository,
-        private ProjectRepository $projectRepository,
     ) {
     }
 

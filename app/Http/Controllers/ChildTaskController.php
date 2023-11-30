@@ -7,9 +7,6 @@ use App\Http\Requests\UpdateChildTaskRequest;
 use App\Models\ChildTask;
 use App\Models\Project;
 use App\Models\Task;
-use App\Repositories\ChildTaskRepositoryInterface;
-use App\Repositories\ProjectRepositoryInterface;
-use App\Repositories\TaskRepositoryInterface;
 use App\Services\ChildTaskServiceInterface;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
@@ -18,10 +15,9 @@ use Inertia\Inertia;
 class ChildTaskController extends Controller
 {
     public function __construct(
-        private ChildTaskRepositoryInterface $childTaskRepository,
         private ProjectServiceInterface $projectService,
-        private TaskRepositoryInterface $taskRepository,
-        private ChildTaskServiceInterface $childTaskService
+        private ChildTaskServiceInterface $childTaskService,
+        private TaskServiceInterface $taskService,
     ) {
     }
 
@@ -64,8 +60,8 @@ class ChildTaskController extends Controller
      */
     public function show(Project $project, Task $task, ChildTask $childTask)
     {
-        $childTaskUser = $this->childTaskRepository->getChildTasksByUser($childTask);
-        $childTasks = $this->taskRepository->getChildTasks($task);
+        $childTaskUser = $this->childTaskService->getChildTasksByUser($childTask);
+        $childTasks = $this->taskService->getChildTasks($task);
 
         return Inertia::render('ChildTask/Show', [
             'project' => $project,
@@ -98,10 +94,7 @@ class ChildTaskController extends Controller
      */
     public function update(UpdateChildTaskRequest $request, Project $project, Task $task, ChildTask $childTask)
     {
-        $this->childTaskService->updateChildTask(
-            $childTask->id,
-            $request->getParams()
-        );
+        $this->childTaskService->updateChildTask($childTask->id, $request->getParams());
     }
 
     /**
