@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('priority')->nullable(true);
             $table->date('start_date')->nullable(true);
             $table->date('end_date')->nullable(true);
+            $table->string('branch_name')->nullable(true);
             $table->timestamps();
         });
     }

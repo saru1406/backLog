@@ -105,7 +105,7 @@ class ChildTaskController extends Controller
         //
     }
 
-    public function storeGpt(Project $project, Task $task)
+    public function storeChildTaskGpt(Project $project, Task $task)
     {
         $childTasksArray = $this->childTaskService->createChildTaskByGpt($task->title, $task->content);
         $this->childTaskService->storeChildTasksByGpt($project, $task, $childTasksArray);

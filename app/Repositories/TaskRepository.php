@@ -159,4 +159,14 @@ class TaskRepository implements TaskRepositoryInterface
     {
         return $task->childTasks()->with('user')->get();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeBranchTask(int $taskId, string $branchGptText): void
+    {
+        Task::find($taskId)->update([
+            'branch_name' => $branchGptText,
+        ]);
+    }
 }

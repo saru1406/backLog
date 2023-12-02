@@ -67,4 +67,13 @@ interface TaskRepositoryInterface
      * @return Collection
      */
     public function getChildTasks(Task $task): Collection;
+
+    /**
+     * タスクのブランチ名を保存
+     *
+     * @param int $taskId
+     * @param string $BranchGptText
+     * @return void
+     */
+    public function storeBranchTask(int $taskId, string $branchGptText) : void;
 }

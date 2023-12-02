@@ -34,8 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('projects', ProjectController::class);
 
     Route::resource('projects.tasks', TaskController::class);
+    Route::post('projects/{project}/tasks/{task}/create-branch-gpt', [TaskController::class, 'storeBranchGpt'])->name('projects.tasks.create-branch-gpt');
     Route::resource('projects.tasks.child-tasks', ChildTaskController::class);
-    Route::post('projects/{project}/tasks/{task}/child-tasks/store-gpt', [ChildTaskController::class, 'storeGpt'])->name('projects.tasks.child-tasks.store-gpt');
+    Route::post('projects/{project}/tasks/{task}/child-tasks/store-gpt', [ChildTaskController::class, 'storeChildTaskGpt'])->name('projects.tasks.child-tasks.store-gpt');
 
     Route::get('/projects/{project}/board', [ProjectController::class, 'board'])->name('projects.board');
     Route::get('/projects/{project}/gant', [ProjectController::class, 'gant'])->name('projects.gant');

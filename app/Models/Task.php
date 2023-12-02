@@ -18,7 +18,8 @@ class Task extends Model
         'status',
         'priority',
         'start_date',
-        'end_date'
+        'end_date',
+        'branch_name',
     ];
 
     public function user()

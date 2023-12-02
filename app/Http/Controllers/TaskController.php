@@ -97,4 +97,9 @@ class TaskController extends Controller
     {
         //
     }
+
+    public function storeBranchGpt(Project $project, Task $task)
+    {
+        $this->taskService->storeBranchTask($task);
+    }
 }

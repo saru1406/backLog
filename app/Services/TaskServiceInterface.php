@@ -42,4 +42,12 @@ interface TaskServiceInterface
      * @return void
      */
     public function updateTask(int $taskId, TaskParams $params): void;
+
+    /**
+     * ブランチ作成、保存
+     *
+     * @param Task $task
+     * @return void
+     */
+    public function storeBranchTask(Task $task): void;
 }

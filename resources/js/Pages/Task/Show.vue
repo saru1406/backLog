@@ -13,10 +13,23 @@ const props = defineProps({
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
 
-function store_gpt() {
+function storeChildTaskGpt() {
     try {
         // isLoading.value = true; // ローディング開始
         router.post(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/store-gpt`);
+        // 成功時の処理
+    } catch (error) {
+        // エラー処理
+        console.error('エラーが発生しました:', error);
+    } finally {
+        // isLoading.value = false; // ローディング終了
+    }
+}
+
+function storeBranchGpt() {
+    try {
+        // isLoading.value = true; // ローディング開始
+        router.post(`/projects/${props.project.id}/tasks/${props.task.id}/create-branch-gpt`);
         // 成功時の処理
     } catch (error) {
         // エラー処理
@@ -74,9 +87,10 @@ console.log(props.child_tasks)
                             :href="route('projects.tasks.child-tasks.create', { project: props.project, task: props.task })">
                         子課題を追加
                         </Link>
-                        <div @click="store_gpt" class="bg-green-500 text-white rounded p-1"
-                            :href="route('projects.tasks.child-tasks.store-gpt', { project: props.project, task: props.task })">
+                        <div @click="storeChildTaskGpt" class="bg-green-500 text-white rounded p-1">
                             GPTで子タスクを自動作成</div>
+                        <div @click="storeBranchGpt" class="bg-green-500 text-white rounded p-1">
+                            GPTでブランチ名を自動作成</div>
                         <table class="table-auto w-full text-left whitespace-no-wrap">
                             <thead>
                                 <tr>

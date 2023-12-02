@@ -7,9 +7,8 @@ interface GptRepositoryInterface
     /**
      * GPTAPIで子タスクテキスト生成
      *
-     * @param string $taskTitle
-     * @param string $taskContent
+     * @param string $message
      * @return string
      */
-    public function createChildTasks(string $taskTitle, string $taskContent): string;
+    public function createChildTasks(string $message): string;
 }
