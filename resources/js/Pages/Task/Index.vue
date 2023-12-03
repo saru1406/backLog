@@ -192,15 +192,17 @@ const isPastDate = (dateString) => {
                                 <thead class="shadow-lg text-green-700">
                                     <tr>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
+                                            class="px-1 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
                                             タスクNo</th>
                                         <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
+                                            class="px-2 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
                                             件名</th>
-                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-3 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             担当者</th>
                                         <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             状態</th>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                            種別</th>
                                         <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             優先度</th>
                                         <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
@@ -216,10 +218,10 @@ const isPastDate = (dateString) => {
                                 <tbody v-for="task in tasks" :key="task.id">
                                     <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm"
                                         @click="renderTaskShow(task)">
-                                        <td class="px-4 py-3 text-center">{{ task.id }}</td>
-                                        <td class="px-4 py-3 w-1/5 text-left">{{ task.title }}</td>
-                                        <td class="px-4 py-3 text-center">{{ task.user.name }}</td>
-                                        <td class="px-4 py-3 text-center">
+                                        <td class="px-1 py-3 text-center">{{ task.id }}</td>
+                                        <td class="px-2 py-3 w-1/5 text-left">{{ task.title }}</td>
+                                        <td class="px-3 py-3 text-center">{{ task.user.name }}</td>
+                                        <td class="px-6 py-3 text-center">
                                             <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">
                                                 {{ task.status }}
                                             </div>
@@ -233,7 +235,24 @@ const isPastDate = (dateString) => {
                                                 {{ task.status }}
                                             </div>
                                         </td>
-                                        <td class="px-4 py-6 text text-center">
+                                        <td class="px-6 py-3 text-center text-white">
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'" class="rounded-full p-1 bg-red-600">
+                                                    {{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '実装'" class="rounded-full p-1 bg-blue-600">
+                                                    {{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '改善'" class="rounded-full p-1 bg-pink-600">
+                                                    {{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                    class="rounded-full p-1 bg-slate-500">
+                                                    {{ task.type.name }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-6 text text-center font-semibold">
                                             <div v-if="task.priority === '高'" class="text-red-600">
                                                 {{ task.priority }}
                                             </div>

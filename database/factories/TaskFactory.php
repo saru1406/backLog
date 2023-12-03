@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Project;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,6 +27,9 @@ class TaskFactory extends Factory
             },
             'project_id' => function() {
                 return Project::inRandomOrder()->first()->id;
+            },
+            'type_id' => function() {
+                return Type::inRandomOrder()->first()->id;
             },
             'title' => fake()->realText(40),
             'content' => fake()->realText(),

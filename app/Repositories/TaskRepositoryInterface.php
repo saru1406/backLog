@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ChildTask;
 use App\Models\Task;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -76,4 +77,12 @@ interface TaskRepositoryInterface
      * @return void
      */
     public function storeBranchTask(int $taskId, string $branchGptText) : void;
+
+    /**
+     * タスクに紐づく種別取得
+     *
+     * @param Task $task
+     * @return Type|null
+     */
+    public function fetchType(Task $task): ?Type;
 }

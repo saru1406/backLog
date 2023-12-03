@@ -5,9 +5,14 @@ namespace App\Repositories;
 class TaskParams
 {
     /**
-     * @var integer
+     * @var int
      */
     private int $userId;
+
+    /**
+     * @var int|null
+     */
+    private ?int $typeId;
 
     /**
      * @var string
@@ -15,9 +20,9 @@ class TaskParams
     private string $title;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $contents;
+    private ?string $contents;
 
     /**
      * @var string
@@ -25,9 +30,9 @@ class TaskParams
     private string $status;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $priority;
+    private ?string $priority;
 
     /**
      * @var string|null
@@ -40,24 +45,27 @@ class TaskParams
     private ?string $endDate;
 
     /**
-     * @param integer $userId
+     * @param int $userId
+     * @param int|null $typeId
      * @param string $title
-     * @param string $contents
+     * @param string|null $contents
      * @param string $status
-     * @param string $priority
+     * @param string|null $priority
      * @param string|null $startDate
      * @param string|null $endDate
      */
     public function __construct(
         int $userId,
+        ?int $typeId,
         string $title,
-        string $contents,
+        ?string $contents,
         string $status,
-        string $priority,
+        ?string $priority,
         ?string $startDate,
         ?string $endDate
     ) {
         $this->userId = $userId;
+        $this->typeId = $typeId;
         $this->title = $title;
         $this->contents = $contents;
         $this->status = $status;
@@ -77,6 +85,16 @@ class TaskParams
     }
 
     /**
+     * 種別ID取得
+     *
+     * @return int|null
+     */
+    public function getTypeId(): ?int
+    {
+        return $this->typeId;
+    }
+
+    /**
      * タイトル取得
      *
      * @return string
@@ -89,9 +107,9 @@ class TaskParams
     /**
      * 内容取得
      *
-     * @return string
+     * @return string|null
      */
-    public function getContents(): string
+    public function getContents(): ?string
     {
         return $this->contents;
     }
@@ -109,9 +127,9 @@ class TaskParams
     /**
      * 優先度取得
      *
-     * @return string
+     * @return string|null
      */
-    public function getPriority(): string
+    public function getPriority(): ?string
     {
         return $this->priority;
     }

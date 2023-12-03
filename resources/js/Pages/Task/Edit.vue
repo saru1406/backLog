@@ -12,10 +12,12 @@ const props = defineProps({
     'project': Object,
     'project_users': Array,
     'task': Object,
+    'project_types': Object,
 })
 
 const form = reactive({
     user_id: props.task ? props.task.user_id : null,
+    type_id: props.task ? props.task.type_id : null,
     title: props.task ? props.task.title : null,
     content: props.task ? props.task.content : null,
     status: props.task ? props.task.status : null,
@@ -70,6 +72,14 @@ function updateTask() {
                                 <option value="低">低</option>
                                 <option value="中">中</option>
                                 <option value="高">高</option>
+                            </select>
+                            <label>種別</label>
+                            <select v-model="form.type_id"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectType in props.project_types" :key="projectType.id"
+                                    :value="projectType.id">
+                                    {{ projectType.name }}
+                                </option>
                             </select>
                         </div>
                         <div class="w-1/2 m-5">

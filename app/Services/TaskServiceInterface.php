@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Models\Type;
 use App\Models\User;
 use App\Repositories\TaskParams;
 use Illuminate\Support\Collection;
@@ -50,4 +51,12 @@ interface TaskServiceInterface
      * @return void
      */
     public function storeBranchTask(Task $task): void;
+
+    /**
+     * タスクに紐づく種別取得
+     *
+     * @param Task $task
+     * @return Type|null
+     */
+    public function fetchType(Task $task): ?Type;
 }

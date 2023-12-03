@@ -37,10 +37,12 @@ class TaskController extends Controller
     public function create(Project $project)
     {
         $projectUsers = $this->projectService->getProjectUsers($project);
+        $projectTypes = $this->projectService->fetchProjectTypes($project);
 
         return Inertia::render('Task/Create', [
             'project' => $project,
-            'project_users' => $projectUsers
+            'project_users' => $projectUsers,
+            'project_types'=> $projectTypes
         ]);
     }
 
@@ -60,6 +62,7 @@ class TaskController extends Controller
         $taskUser = $this->taskService->getUser($task);
         $childTasks = $this->taskService->getChildTasks($task);
         $projectUsers = $this->projectService->getProjectUsers($project);
+        $taskType = $this->taskService->fetchType($task);
 
         return Inertia::render('Task/Show', [
             'project' => $project,
@@ -67,6 +70,7 @@ class TaskController extends Controller
             'task_user' => $taskUser,
             'child_tasks' => $childTasks,
             'project_users' => $projectUsers,
+            'task_type' => $taskType,
         ]);
     }
 
@@ -76,12 +80,13 @@ class TaskController extends Controller
     public function edit(Project $project, Task $task)
     {
         $projectUsers = $this->projectService->getProjectUsers($project);
-
+        $projectTypes = $this->projectService->fetchProjectTypes($project);
 
         return Inertia::render('Task/Edit', [
             'project' => $project,
             'project_users' => $projectUsers,
             'task' => $task,
+            'project_types'=> $projectTypes,
         ]);
     }
 

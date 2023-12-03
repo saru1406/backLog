@@ -12,6 +12,7 @@ import Editor from 'primevue/editor';
 const props = defineProps({
     'project': Object,
     'project_users': Array,
+    'project_types': Array,
 })
 
 const form = reactive({
@@ -22,6 +23,7 @@ const form = reactive({
     priority: null,
     start_date: null,
     end_date: null,
+    type: null,
 })
 
 function storeTask() {
@@ -84,16 +86,24 @@ function storeTask() {
                                 <option value="中">中</option>
                                 <option value="高">高</option>
                             </select>
+                            <label>種別</label>
+                            <select v-model="form.type"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectType in props.project_types" :key="projectType.id"
+                                    :value="projectType.id">
+                                    {{ projectType.name }}
+                                </option>
+                            </select>
                         </div>
                         <div class="w-1/2 m-5">
                             <label>開始日</label>
-                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
-                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
+                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp"
+                                format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         </div>
                         <div class="w-1/2 m-5">
                             <label>終了日</label>
-                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
-                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
+                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp"
+                                format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
                         </div>
                     </div>
                     <div class="text-center">
@@ -108,4 +118,5 @@ function storeTask() {
 <style>
 .input-class::placeholder {
     opacity: 0.5;
-}</style>
+}
+</style>

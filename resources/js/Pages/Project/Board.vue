@@ -192,7 +192,23 @@ function storeBranchGpt(taskId) {
                             <div v-if="task.status === '未対応'">
                                 <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                        <div class="flex items-center text-center text-white text-xs my-1">
+                                            <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '実装'"
+                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '改善'"
+                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mx-3 mb-2 text-sm">
                                             {{ task.title }}
                                         </div>
@@ -206,7 +222,24 @@ function storeBranchGpt(taskId) {
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(childTask.id)">
-                                            <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                            <div class="flex items-center text-center text-white text-xs my-1">
+                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div v-if="task.type">
+                                                    <div v-if="task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="mx-3 mb-2 text-sm">
                                                 {{ childTask.title.title }}
                                             </div>
@@ -228,7 +261,23 @@ function storeBranchGpt(taskId) {
                             <div v-if="task.status === '処理中'">
                                 <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
+                                        <div class="flex items-center text-center text-white text-xs my-1">
+                                            <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '実装'"
+                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '改善'"
+                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mx-3 mb-2 text-sm">
                                             {{ task.title }}
                                         </div>
@@ -242,7 +291,24 @@ function storeBranchGpt(taskId) {
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(childTask.id)">
-                                            <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
+                                            <div class="flex items-center text-center text-white text-xs my-1">
+                                                <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
+                                                <div v-if="task.type">
+                                                    <div v-if="task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="mx-3 mb-2 text-sm">
                                                 {{ childTask.title.title }}
                                             </div>
@@ -263,7 +329,23 @@ function storeBranchGpt(taskId) {
                             <div v-if="task.status === '処理済み'">
                                 <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
+                                        <div class="flex items-center text-center text-white text-xs my-1">
+                                            <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '実装'"
+                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '改善'"
+                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mx-3 mb-2 text-sm">
                                             {{ task.title }}
                                         </div>
@@ -277,7 +359,24 @@ function storeBranchGpt(taskId) {
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(childTask.id)">
-                                            <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
+                                            <div class="flex items-center text-center text-white text-xs my-1">
+                                                <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
+                                                <div v-if="task.type">
+                                                    <div v-if="task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="mx-3 mb-2 text-sm">
                                                 {{ childTask.title }}
                                             </div>
@@ -298,7 +397,23 @@ function storeBranchGpt(taskId) {
                             <div v-if="task.status === '完了'">
                                 <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
                                     <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
+                                        <div class="flex items-center text-center text-white text-xs my-1">
+                                            <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '実装'"
+                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name === '改善'"
+                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                </div>
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mx-3 mb-2 text-sm">
                                             {{ task.title }}
                                         </div>
@@ -312,7 +427,24 @@ function storeBranchGpt(taskId) {
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(childTask.id)">
-                                            <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
+                                            <div class="flex items-center text-center text-white text-xs my-1">
+                                                <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
+                                                <div v-if="task.type">
+                                                    <div v-if="task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    </div>
+                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="mx-3 mb-2 text-sm">
                                                 {{ childTask.title.title }}
                                             </div>
@@ -352,18 +484,39 @@ function storeBranchGpt(taskId) {
                     <div>
                         <div class="my-5">
                             <label class="font-semibold m-3">優先度</label>
-                            <span v-if="selectedTask.priority === '高'" class="text-red-600 pl-10">
+                            <span v-if="selectedTask.priority === '高'" class="text-red-600 pl-10 font-semibold">
                                 {{ selectedTask.priority }}
                             </span>
-                            <span v-if="selectedTask.priority === '中'" class="text-green-500 pl-10">
+                            <span v-if="selectedTask.priority === '中'" class="text-green-500 pl-10 font-semibold">
                                 {{ selectedTask.priority }}
                             </span>
-                            <span v-if="selectedTask.priority === '低'" class="text-blue-500 pl-10">
+                            <span v-if="selectedTask.priority === '低'" class="text-blue-500 pl-10 font-semibold">
                                 {{ selectedTask.priority }}
                             </span>
                         </div>
                         <hr>
-                        <p class="font-semibold m-3">カテゴリー</p>
+                        <div class="my-5">
+                            <label class="m-3 font-semibold">種別</label>
+                            <span v-if="selectedTask.type">
+                                <span v-if="selectedTask.type.name === 'バグ'"
+                                    class="rounded-full py-2 px-4 bg-red-600 ml-10 text-white">
+                                    {{ selectedTask.type.name }}
+                                </span>
+                                <span v-if="selectedTask.type.name === '実装'"
+                                    class="rounded-full py-2 px-4 bg-blue-600 ml-10 text-white">
+                                    {{ selectedTask.type.name }}
+                                </span>
+                                <span v-if="selectedTask.type.name === '改善'"
+                                    class="rounded-full py-2 px-4 bg-pink-600 ml-10 text-white">
+                                    {{ selectedTask.type.name }}
+                                </span>
+                                <span
+                                    v-if="selectedTask.type.name !== '改善' && selectedTask.type.name !== '実装' && selectedTask.type.name !== 'バグ'"
+                                    class="rounded-full py-2 px-3 bg-slate-500 ml-10 text-white">
+                                    {{ selectedTask.type.name }}
+                                </span>
+                            </span>
+                        </div>
                         <hr>
                         <div class="my-5">
                             <label class="m-3 font-semibold">状態</label>

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Models\Type;
 use App\Models\User;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\TaskParams;
@@ -69,5 +70,13 @@ class TaskService implements TaskServiceInterface
         $branchGptText = $this->gptRepository->createChildTasks($message);
 
         $this->taskRepository->storeBranchTask($task->id, $branchGptText);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchType(Task $task): ?Type
+    {
+        return $this->taskRepository->fetchType($task);
     }
 }

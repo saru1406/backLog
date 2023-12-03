@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Task;
+use App\Models\Type;
 use App\Models\User;
 use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ class TaskRepository implements TaskRepositoryInterface
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::create([
             'user_id' => $params->getUserId(),
+            'type_id' => $params->getTypeId(),
             'project_id' => $projectId,
             'title' => $params->getTitle(),
             'content' => $params->getContents(),
@@ -61,10 +63,10 @@ class TaskRepository implements TaskRepositoryInterface
 
         if ($params->getIsPagination()) {
             Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
-            return $query->with(['user', 'childTasks'])->paginate(20);
+            return $query->with(['user', 'childTasks', 'type'])->paginate(20);
         }
         Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
-        return $query->with(['user', 'childTasks'])->get();
+        return $query->with(['user', 'childTasks', 'type'])->get();
     }
 
     /**
@@ -127,6 +129,7 @@ class TaskRepository implements TaskRepositoryInterface
         $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
         Task::find($taskId)->update([
             'user_id' => $params->getUserId(),
+            'type_id' => $params->getTypeId(),
             'title' => $params->getTitle(),
             'content' => $params->getContents(),
             'status' => $params->getStatus(),
@@ -168,5 +171,13 @@ class TaskRepository implements TaskRepositoryInterface
         Task::find($taskId)->update([
             'branch_name' => $branchGptText,
         ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchType(Task $task): ?Type
+    {
+        return $task->type;
     }
 }

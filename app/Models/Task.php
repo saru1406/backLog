@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends Model
@@ -13,6 +14,7 @@ class Task extends Model
     protected $fillable = [
         'user_id',
         'project_id',
+        'type_id',
         'title',
         'content',
         'status',
@@ -35,5 +37,10 @@ class Task extends Model
     public function childTasks(): HasMany
     {
         return $this->hasMany(ChildTask::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(Type::class);
     }
 }

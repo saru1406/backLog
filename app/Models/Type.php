@@ -25,4 +25,9 @@ class Type extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
 }

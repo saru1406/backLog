@@ -16,6 +16,7 @@ const props = defineProps({
     'task_user': Object,
     'child_tasks': Array,
     'project_users': Object,
+    'task_type': Object,
 })
 
 const showModal = ref(false);
@@ -131,21 +132,43 @@ const formatDate = (dateString) => {
                                 </span>
                             </div>
                             <hr>
-                            <p class="font-semibold m-3">カテゴリー</p>
+                            <div class="my-5">
+                                <label class="m-3 font-semibold">種別</label>
+                                <span v-if="props.task_type">
+                                    <span v-if="props.task_type.name === 'バグ'"
+                                        class="rounded-full py-2 px-6 bg-red-600 ml-10 text-white">
+                                        {{ props.task_type.name }}
+                                    </span>
+                                    <span v-if="props.task_type.name === '実装'"
+                                        class="rounded-full py-2 px-6 bg-blue-600 ml-10 text-white">
+                                        {{ props.task_type.name }}
+                                    </span>
+                                    <span v-if="props.task_type.name === '改善'"
+                                        class="rounded-full py-2 px-6 bg-pink-600 ml-10 text-white">
+                                        {{ props.task_type.name }}
+                                    </span>
+                                    <span
+                                        v-if="props.task_type.name !== '改善' && props.task_type.name !== '実装' && props.task_type.name !== 'バグ'"
+                                        class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white">
+                                        {{ props.task_type.name }}
+                                    </span>
+                                </span>
+                            </div>
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">状態</label>
-                                <span v-if="task.status === '完了'" class="rounded-full py-2 px-3 bg-slate-300 ml-10">
-                                    {{ task.status }}
+                                <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300 ml-10">
+                                    {{ props.task.status }}
                                 </span>
-                                <span v-if="task.status === '処理済み'" class="rounded-full py-2 px-3 bg-indigo-200 ml-10">
-                                    {{ task.status }}
+                                <span v-if="props.task.status === '処理済み'"
+                                    class="rounded-full py-2 px-6 bg-indigo-200 ml-10">
+                                    {{ props.task.status }}
                                 </span>
-                                <span v-if="task.status === '未対応'" class="rounded-full py-2 px-3 bg-orange-200 ml-10">
-                                    {{ task.status }}
+                                <span v-if="props.task.status === '未対応'" class="rounded-full py-2 px-6 bg-orange-200 ml-10">
+                                    {{ props.task.status }}
                                 </span>
-                                <span v-if="task.status === '処理中'" class="rounded-full py-2 px-3 bg-green-300 ml-10">
-                                    {{ task.status }}
+                                <span v-if="props.task.status === '処理中'" class="rounded-full py-2 px-6 bg-green-300 ml-10">
+                                    {{ props.task.status }}
                                 </span>
                             </div>
                             <hr>
@@ -275,6 +298,5 @@ const formatDate = (dateString) => {
                     <PrimaryButton>追加</PrimaryButton>
                 </div>
             </form>
-        </div>
-    </Modal>
-</template>
+    </div>
+</Modal></template>

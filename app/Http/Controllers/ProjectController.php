@@ -67,6 +67,7 @@ class ProjectController extends Controller
         $projectUsers = $this->projectService->getProjectUsers($project);
         $projectNotUsers = $this->projectService->getProjectNotUsers($projectUsers);
         $projectTypes = $this->projectService->fetchProjectTypes($project);
+        
         return Inertia::render('Project/Edit', [
             'project' => $project,
             'project_users' => $projectUsers,

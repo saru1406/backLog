@@ -24,10 +24,11 @@ class UpdateTaskRequest extends FormRequest
     {
         return [
             'user_id' => ['required', 'integer'],
+            'type_id' => ['nullable', 'integer'],
             'title' => ['required', 'max:255', 'string'],
-            'content' => ['required', 'max:255', 'string'],
+            'content' => ['nullable', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
-            'priority' => ['required', 'max:255', 'string'],
+            'priority' => ['nullable', 'max:255', 'string'],
             'start_date' => ['nullable', 'max:255', 'string'],
             'end_date' => ['nullable', 'max:255', 'string'],
         ];
@@ -40,6 +41,7 @@ class UpdateTaskRequest extends FormRequest
     {
         return new TaskParams(
             userId: $this->input('user_id'),
+            typeId: $this->input('type_id'),
             title: $this->input('title'),
             contents: $this->input('content'),
             status: $this->input('status'),
