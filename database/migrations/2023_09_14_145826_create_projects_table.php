@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->nullable();
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade')->comment('企業ID');
             $table->string('name');
             $table->boolean('is_display')->default(false);
             $table->timestamps();

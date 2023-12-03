@@ -13,7 +13,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function storeProject(?int $companyId, string $name, string $key): Project
+    public function storeProject(?int $companyId, string $name): Project
     {
         return Project::create([
             'company_id' => $companyId,
@@ -67,5 +67,13 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function getTasks(Project $project): Collection
     {
         return $project->tasks;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchProjectTypes(Project $project): Collection
+    {
+        return $project->types;
     }
 }

@@ -13,10 +13,9 @@ interface ProjectRepositoryInterface
      *
      * @param int|null $companyId
      * @param string $name
-     * @param string $key
      * @return Project
      */
-    public function storeProject(?int $companyId, string $name, string $key): Project;
+    public function storeProject(?int $companyId, string $name): Project;
 
     /**
      * プロジェクト名取得
@@ -66,4 +65,12 @@ interface ProjectRepositoryInterface
      * @return Collection
      */
     public function getTasks(Project $project): Collection;
+
+    /**
+     * プロジェクトに紐づく種別取得
+     *
+     * @param Project $project
+     * @return Collection
+     */
+    public function fetchProjectTypes(Project $project): Collection;
 }

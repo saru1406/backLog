@@ -12,11 +12,10 @@ interface ProjectServiceInterface
      * プロジェクト保存
      *
      * @param string $name
-     * @param string $key
-     * @param User $name
+     * @param User|null $name
      * @return void
      */
-    public function storeProject(string $name, string $key, ?User $user): void;
+    public function storeProject(string $name, ?User $user): void;
 
     /**
      * プロジェクト名取得
@@ -58,4 +57,12 @@ interface ProjectServiceInterface
      * @return Collection
      */
     public function getUsers(Project $project): Collection;
+
+    /**
+     * プロジェクトに紐づく種別を取得
+     *
+     * @param Project $project
+     * @return Collection
+     */
+    public function fetchProjectTypes(Project $project): Collection;
 }

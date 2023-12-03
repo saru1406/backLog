@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, watch, computed, onMounted } from 'vue';
 import axios from 'axios';
@@ -104,22 +104,37 @@ const openModalWithTask = (task) => {
     showModal.value = true;
 };
 
-const selectedTaskValue = computed(() => selectedTask.value);
+computed(() => selectedTask.value);
 
 const formatDate = (dateString) => {
-  if (!dateString) return '';
+    if (!dateString) return '';
 
-  // Dateインスタンスを作成
-  const date = new Date(dateString);
+    // Dateインスタンスを作成
+    const date = new Date(dateString);
 
-  // 年月日を取得
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+    // 年月日を取得
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
 
-  // フォーマットされた文字列を返す
-  return `${year}/${month}/${day}`;
+    // フォーマットされた文字列を返す
+    return `${year}/${month}/${day}`;
 };
+
+function storeBranchGpt(taskId) {
+    try {
+        // isLoading.value = true; // ローディング開始
+        router.post(`/projects/${props.project.id}/tasks/${taskId}/create-branch-gpt`);
+
+        // 成功時の処理
+    } catch (error) {
+        // エラー処理
+        console.error('エラーが発生しました:', error);
+    } finally {
+        fetchTasks(props.project, filters);
+    }
+}
+
 
 </script>
 
@@ -169,7 +184,8 @@ const formatDate = (dateString) => {
                     </select>
                 </div>
                 <div class="flex space-x-4">
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px" @drop="handleDrop('未対応')" @dragover="allowDrop($event)">
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                        @drop="handleDrop('未対応')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-orange-200 sticky top-0">未対応</h3>
                         <div v-for="(task, index) in tasks" :key="task.id">
                             <!-- <div v-for="childTask in tasks" :key="childTask.id"> -->
@@ -205,7 +221,8 @@ const formatDate = (dateString) => {
                             <!-- </div> -->
                         </div>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px" @drop="handleDrop('処理中')" @dragover="allowDrop($event)">
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                        @drop="handleDrop('処理中')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-green-300 sticky top-0">処理中</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '処理中'">
@@ -239,7 +256,8 @@ const formatDate = (dateString) => {
                             </div>
                         </div>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px" @drop="handleDrop('処理済み')" @dragover="allowDrop($event)">
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                        @drop="handleDrop('処理済み')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-indigo-200 sticky top-0">処理済み</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '処理済み'">
@@ -273,7 +291,8 @@ const formatDate = (dateString) => {
                             </div>
                         </div>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px" @drop="handleDrop('完了')" @dragover="allowDrop($event)">
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                        @drop="handleDrop('完了')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-slate-300 sticky top-0">完了</h3>
                         <div v-for="task in tasks" :key="task.id">
                             <div v-if="task.status === '完了'">
@@ -311,34 +330,122 @@ const formatDate = (dateString) => {
             </div>
         </div>
     </AuthenticatedLayout>
-    <Modal :show="showModal" @close="showModal = false">
+    <Modal :show="showModal" @close="showModal = false" :maxWidth="'3xl'">
         <div class="h-[850px] bg-gray-100">
             <div class="p-10">
                 <Link :href="route('projects.tasks.edit', { project: project, task: selectedTask })"
                     class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 編集</Link>
-                <label class="pl-5">開始日</label>{{ formatDate(selectedTaskValue.start_date) }}
-                <label class="pl-5">終了日</label>{{ formatDate(selectedTaskValue.end_date) }}
-                <div class="h-auto bg-white p-4">
+                <label class="pl-5">開始日</label>{{ formatDate(selectedTask.start_date) }}
+                <label class="pl-5">終了日</label>{{ formatDate(selectedTask.end_date) }}
+                <div class="h-auto bg-white p-4 rounded">
                     <div>
                         <p class="font-semibold p-5">タイトル</p>
-                        <p class="p-5">{{ selectedTaskValue.title }}</p>
+                        <p class="font-semibold p-5">{{ selectedTask.title }}</p>
                         <hr>
                     </div>
                     <div>
                         <p class="font-semibold p-5">詳細</p>
-                        <p class="p-5">{{ selectedTaskValue.content }}</p>
+                        <p class="p-5">{{ selectedTask.content }}</p>
                         <hr>
                     </div>
                     <div>
-                        <p class="font-semibold p-5">備考</p>
+                        <div class="my-5">
+                            <label class="font-semibold m-3">優先度</label>
+                            <span v-if="selectedTask.priority === '高'" class="text-red-600 pl-10">
+                                {{ selectedTask.priority }}
+                            </span>
+                            <span v-if="selectedTask.priority === '中'" class="text-green-500 pl-10">
+                                {{ selectedTask.priority }}
+                            </span>
+                            <span v-if="selectedTask.priority === '低'" class="text-blue-500 pl-10">
+                                {{ selectedTask.priority }}
+                            </span>
+                        </div>
                         <hr>
-                        <p class="m-3">優先度</p>{{ selectedTaskValue.priority }}
+                        <p class="font-semibold m-3">カテゴリー</p>
                         <hr>
-                        <p class="m-3">カテゴリー</p>
+                        <div class="my-5">
+                            <label class="m-3 font-semibold">状態</label>
+                            <span v-if="selectedTask.status === '完了'" class="rounded-full py-2 px-3 bg-slate-300 ml-10">
+                                {{ selectedTask.status }}
+                            </span>
+                            <span v-if="selectedTask.status === '処理済み'" class="rounded-full py-2 px-3 bg-indigo-200 ml-10">
+                                {{ selectedTask.status }}
+                            </span>
+                            <span v-if="selectedTask.status === '未対応'" class="rounded-full py-2 px-3 bg-orange-200 ml-10">
+                                {{ selectedTask.status }}
+                            </span>
+                            <span v-if="selectedTask.status === '処理中'" class="rounded-full py-2 px-3 bg-green-300 ml-10">
+                                {{ selectedTask.status }}
+                            </span>
+                        </div>
                         <hr>
-                        <p class="m-3">担当者</p>{{ selectedTaskValue.user.name }}
+                        <div class="my-5">
+                            <label class="m-3 font-semibold">担当者</label>
+                            <span class="pl-10">{{ selectedTask.user.name }}</span>
+                        </div>
+                        <hr>
+                        <div class="my-5">
+                            <label class="m-3 font-semibold">ブランチ名</label>
+                            <span class="pl-10">{{ selectedTask.branch_name }}</span>
+                            <button v-if="!selectedTask.branch_name" @click="storeBranchGpt(selectedTask.id)"
+                                class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                GPTでブランチ名を自動作成
+                            </button>
+                        </div>
                     </div>
+                </div>
+                <div class="h-auto mt-10 bg-white p-4 rounded">
+                    <div class="flex">
+                        <button @click="showModal = true"
+                            class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
+                            子課題を追加
+                        </button>
+                        <button v-if="!child_tasks || child_tasks.length === 0" @click="storeChildTaskGpt"
+                            class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 my-5">
+                            GPTで子課題を自動作成
+                        </button>
+                    </div>
+                    <div class="bg-gray-100 inline-flex px-4 pb-2 pt-4 rounded-t-lg text-sm font-medium">子課題一覧</div>
+                    <table class="table-auto w-full text-left whitespace-no-wrap text-sm shadow-lg">
+                        <thead class="text-green-700">
+                            <tr>
+                                <th
+                                    class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 rounded-tl rounded-bl text-center">
+                                    件名</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    担当者</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    状態</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    優先度</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    開始日</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    期限日</th>
+                                <th class="px-4 py-3 title-font tracking-wider font-medium text-sm bg-gray-100 text-center">
+                                    登録日</th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="childTask in props.child_tasks" :key="childTask.id">
+                            <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderChildTaskShow(childTask)">
+                                <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
+                                <td class="px-4 py-3 text-center">{{ childTask.user.name }}</td>
+                                <td class="px-4 py-3 text-center">{{ childTask.status }}</td>
+                                <td class="px-4 py-3 text-lg text-center">{{ childTask.priority }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(childTask.start_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(childTask.end_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(childTask.created_at) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -4,21 +4,26 @@ import { Head, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
     'project': Object,
     'project_users': Array,
-    'project_not_users': Array
+    'project_not_users': Array,
+    'project_types': Array,
 })
 
-const form = ref('')
+const user = ref('')
 
-// const form = reactive({
-//     user: null
-// })
+const type = ref('')
 
-function store_project_user(){
-    router.post(`/projects/${props.project.id}/user`, { user_id: form.value })
+function store_project_user() {
+    router.post(`/projects/${props.project.id}/user`, { user_id: user.value })
+}
+
+function store_project_type() {
+    router.post(`/projects/${props.project.id}/type`, { type_name: type.value })
+    type.value = ''
 }
 
 </script>
@@ -32,34 +37,46 @@ function store_project_user(){
         </template> -->
 
         <div class="flex w-full">
-            <SideMenu :project="project" class="h-screen"/>
+            <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
-                <div class="flex flex-col w-3/5 sm:px-6 lg:px-8 py-12">
-                    <p>プロジェクトに追加するユーザー</p>
-                    <form @submit.prevent="store_project_user">
-                        <select v-model="form" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option v-for="user in props.project_not_users" :key="user.id" :value="user.id">
-                                {{ user.name }}
-                            </option>
-                        </select>
-                        <PrimaryButton>追加</PrimaryButton>
-                    </form>
-                    <div class="p-6 text-gray-900">
-                        <p>参加ユーザー</p>
-                        <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
-                            <p class="pl-10">{{ project_user.name }}</p>
+            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8 py-12">
+                <p>プロジェクトに追加するユーザー</p>
+                <form @submit.prevent="store_project_user">
+                    <select v-model="user"
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                        <option v-for="user in props.project_not_users" :key="user.id" :value="user.id">
+                            {{ user.name }}
+                        </option>
+                    </select>
+                    <PrimaryButton>追加</PrimaryButton>
+                </form>
+                <div class="p-6 text-gray-900">
+                    <p>参加ユーザー</p>
+                    <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
+                        <p class="pl-10">{{ project_user.name }}</p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <!-- 右側のコンテナ -->
+            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8 py-12">
+                <div class="p-6 text-gray-900">
+                    <label>種別の追加</label>
+                    <div class="flex">
+                        <form @submit.prevent="store_project_type">
+                            <TextInput type="text" class="w-50 mr-5" v-model="type"></TextInput>
+                            <PrimaryButton>追加</PrimaryButton>
+                        </form>
+                    </div>
+                    <div class="mt-10">種別一覧</div>
+                    <div class="bg-white overflow-hidden shadow-sm pb-5 px-5 rounded-md">
+                        <div v-for="projectType in project_types">
+                            <p class="pl-10 pt-5">{{ projectType.name }}</p>
                             <hr>
                         </div>
                     </div>
                 </div>
-                <!-- 右側のコンテナ -->
-                <div class="flex flex-col w-2/5 sm:px-6 lg:px-8 py-12">
-                    <div class="p-6 text-gray-900">状態
-                        <div class="bg-white overflow-hidden shadow-sm border border-gray-200">
-                            <div class="p-6 text-gray-900 text-center">最近の更新中身</div>
-                        </div>
-                    </div>
-                </div>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>

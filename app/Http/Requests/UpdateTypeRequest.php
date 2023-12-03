@@ -3,16 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
-class StoreProjectRequest extends FormRequest
+class UpdateTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,17 +22,7 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','max:255','string'],
+            //
         ];
-    }
-
-    /**
-     * プロジェクト名取得
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->input('name');
     }
 }

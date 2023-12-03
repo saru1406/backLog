@@ -13,11 +13,11 @@ defineProps({
 
 const form = reactive({
     name: null,
-    key: null,
 });
 
 function storeProject() {
     router.post('/projects', form)
+    showModal.value = false
 }
 
 </script>
@@ -36,18 +36,12 @@ function storeProject() {
                 <div class="p-6 text-gray-900">
                     <p>プロジェクト一覧</p>
                     <button @click="showModal = true" class="text-blue-500">プロジェクト作成</button>
-                    <Modal :show="showModal" @close="showModal = false">
+                    <Modal :show="showModal" @close="showModal = false" :maxWidth="'xl'">
                         <h2 class="m-10 text-xl">プロジェクト追加</h2>
                         <form @submit.prevent="storeProject">
                             <div class="m-10">
                                 <p>プロジェクト名</p>
                                 <TextInput type="text" class="w-full" v-model="form.name"></TextInput>
-                                <!-- <textarea name="name" class="w-full" rows="1" v-model="form.name"></textarea> -->
-                            </div>
-                            <div class="m-10">
-                                <p>プロジェクトキー</p>
-                                <TextInput type="text" class="w-full" v-model="form.key"></TextInput>
-                                <!-- <textarea name="name" class="w-full" rows="1" v-model="form.key"></textarea> -->
                             </div>
                             <div class="m-5">
                                 <button class="flex mx-auto text-white bg-indigo-400 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-400 rounded text-lg">登録する</button>

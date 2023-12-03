@@ -69,9 +69,9 @@ onMounted(() => {
 
     // localStorageで保持したデータはstringになる為、"null"をnullに変換
     if (savedUserId === "null") { // 文字列"null"をチェック
-      filters.user_id = null; // 実際のnullをセット
+        filters.user_id = null; // 実際のnullをセット
     } else {
-      filters.user_id = savedUserId; // それ以外はそのままセット
+        filters.user_id = savedUserId; // それ以外はそのままセット
     }
 
     if (savedStatus === "null") {
@@ -111,20 +111,30 @@ const renderTaskShow = (task) =>
     router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
 const formatDate = (dateString) => {
-  if (!dateString) return '';
+    if (!dateString) return '';
 
-  // Dateインスタンスを作成
-  const date = new Date(dateString);
+    // Dateインスタンスを作成
+    const date = new Date(dateString);
 
-  // 年月日を取得
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+    // 年月日を取得
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
 
-  // フォーマットされた文字列を返す
-  return `${year}/${month}/${day}`;
+    // フォーマットされた文字列を返す
+    return `${year}/${month}/${day}`;
 };
 
+const isPastDate = (dateString) => {
+    if (!dateString) return false;
+
+    const date = new Date(dateString);
+    date.setHours(0, 0, 0, 0); // 時間を0時0分0秒0ミリ秒に設定
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 同じく現在日時も0時0分0秒0ミリ秒に設定
+
+    return date < today;
+};
 </script>
 
 <template>
@@ -187,47 +197,64 @@ const formatDate = (dateString) => {
                                         <th
                                             class="px-4 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
                                             件名</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             担当者</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             状態</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             優先度</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                            ブランチ名</th>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             開始日</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             期限日</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-sm text-center">
                                             登録日</th>
                                     </tr>
                                 </thead>
                                 <tbody v-for="task in tasks" :key="task.id">
-                                    <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm" @click="renderTaskShow(task)">
+                                    <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm"
+                                        @click="renderTaskShow(task)">
                                         <td class="px-4 py-3 text-center">{{ task.id }}</td>
                                         <td class="px-4 py-3 w-1/5 text-left">{{ task.title }}</td>
                                         <td class="px-4 py-3 text-center">{{ task.user.name }}</td>
                                         <td class="px-4 py-3 text-center">
-                                            <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">{{ task.status }}</div>
-                                            <div v-if="task.status === '処理済み'" class="rounded-full p-1 bg-indigo-200">{{ task.status }}</div>
-                                            <div v-if="task.status === '未対応'" class="rounded-full p-1 bg-orange-200">{{ task.status }}</div>
-                                            <div v-if="task.status === '処理中'" class="rounded-full p-1 bg-green-300">{{ task.status }}</div>
+                                            <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">
+                                                {{ task.status }}
+                                            </div>
+                                            <div v-if="task.status === '処理済み'" class="rounded-full p-1 bg-indigo-200">
+                                                {{ task.status }}
+                                            </div>
+                                            <div v-if="task.status === '未対応'" class="rounded-full p-1 bg-orange-200">
+                                                {{ task.status }}
+                                            </div>
+                                            <div v-if="task.status === '処理中'" class="rounded-full p-1 bg-green-300">
+                                                {{ task.status }}
+                                            </div>
                                         </td>
                                         <td class="px-4 py-6 text text-center">
-                                            <div v-if="task.priority === '高'" class ="text-red-600 rounded">{{ task.priority }}</div>
-                                            <div v-if="task.priority === '中'" class ="text-green-500 rounded">{{ task.priority }}</div>
-                                            <div v-if="task.priority === '低'" class ="text-blue-500 rounded">{{ task.priority }}</div>
+                                            <div v-if="task.priority === '高'" class="text-red-600">
+                                                {{ task.priority }}
+                                            </div>
+                                            <div v-if="task.priority === '中'" class="text-green-500">
+                                                {{ task.priority }}
+                                            </div>
+                                            <div v-if="task.priority === '低'" class="text-blue-500">
+                                                {{ task.priority }}
+                                            </div>
                                         </td>
+                                        <td class="px-4 py-3 text-center">{{ task.branch_name }}</td>
                                         <td class="px-4 py-3 text-center">
                                             {{ formatDate(task.start_date) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ formatDate(task.end_date) }}
+                                            <div v-if="isPastDate(task.end_date)" class="text-red-500">
+                                                {{ formatDate(task.end_date) }}
+                                            </div>
+                                            <div v-else>
+                                                {{ formatDate(task.end_date) }}
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 text-center">
                                             {{ formatDate(task.created_at) }}
@@ -237,9 +264,9 @@ const formatDate = (dateString) => {
                             </table>
                         </div>
                         <div class="card">
-                    <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total"
-                        :rowsPerPageOptions="rowsPerPageOption"></Paginator>
-                </div>
+                            <Paginator @page="onPageChange" :rows="20" :totalRecords="pagination.total"
+                                :rowsPerPageOptions="rowsPerPageOption"></Paginator>
+                        </div>
                     </div>
                 </section>
 
@@ -247,6 +274,4 @@ const formatDate = (dateString) => {
         </div>
     </AuthenticatedLayout>
 </template>
-<style>
-
-</style>
+<style></style>

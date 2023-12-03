@@ -45,10 +45,10 @@ function updateTask() {
             <div class="p-6 text-gray-900 w-full">
                 <form @submit.prevent="updateTask">
                     <div class="m-5">
-                        <p>課題の追加</p>
+                        <p>課題の編集</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                     </div>
-                    <div class="bg-white p-5 m-5">
+                    <div class="bg-white p-5 m-5 rounded">
                         <textarea v-model="form.content" rows="12" class="w-full sm:rounded-lg border-gray-300"
                             placeholder="課題の詳細"></textarea>
                         <div>
@@ -84,7 +84,7 @@ function updateTask() {
                         </div>
                     </div>
                     <div class="text-center">
-                        <PrimaryButton>追加</PrimaryButton>
+                        <PrimaryButton>更新</PrimaryButton>
                     </div>
                 </form>
             </div>

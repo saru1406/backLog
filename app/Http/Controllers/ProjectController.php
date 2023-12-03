@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\StoreProjectUserRequest;
 use App\Services\ProjectServiceInterface;
+use App\Services\TypeServiceInterface;
 use App\Services\UserServiceInterface;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -44,12 +45,8 @@ class ProjectController extends Controller
     public function store(Project $project, StoreProjectRequest $request)
     {
         $user = Auth::user();
-        $name = $request->getName();
-        $key = $request->getKey();
 
-        $this->projectService->storeProject($name, $key, $user);
-
-        return to_route('projects.index');
+        $this->projectService->storeProject($request->getName(), $user);
     }
 
     /**
@@ -69,10 +66,12 @@ class ProjectController extends Controller
     {
         $projectUsers = $this->projectService->getProjectUsers($project);
         $projectNotUsers = $this->projectService->getProjectNotUsers($projectUsers);
+        $projectTypes = $this->projectService->fetchProjectTypes($project);
         return Inertia::render('Project/Edit', [
             'project' => $project,
             'project_users' => $projectUsers,
-            'project_not_users'  => $projectNotUsers
+            'project_not_users'  => $projectNotUsers,
+            'project_types'=> $projectTypes
         ]);
     }
 

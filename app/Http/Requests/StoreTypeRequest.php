@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
-class StoreProjectRequest extends FormRequest
+class StoreTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,17 +22,17 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','max:255','string'],
+            'type_name' => ['required','string'],
         ];
     }
 
     /**
-     * プロジェクト名取得
+     * Type名取得
      *
      * @return string
      */
-    public function getName(): string
+    public function getTypeName(): string
     {
-        return $this->input('name');
+        return $this->input('type_name');
     }
 }

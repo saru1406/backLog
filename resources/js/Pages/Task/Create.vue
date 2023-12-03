@@ -56,7 +56,7 @@ function storeTask() {
                         <p>課題の追加</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                     </div>
-                    <div class="bg-white p-5 m-5">
+                    <div class="bg-white p-5 m-5 rounded">
                         <div class="card">
                             <Editor v-model="form.content" editorStyle="height: 320px" />
                         </div>

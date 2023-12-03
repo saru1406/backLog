@@ -59,12 +59,14 @@ class TaskController extends Controller
     {
         $taskUser = $this->taskService->getUser($task);
         $childTasks = $this->taskService->getChildTasks($task);
+        $projectUsers = $this->projectService->getProjectUsers($project);
 
         return Inertia::render('Task/Show', [
             'project' => $project,
             'task' => $task,
             'task_user' => $taskUser,
             'child_tasks' => $childTasks,
+            'project_users' => $projectUsers,
         ]);
     }
 
@@ -73,12 +75,13 @@ class TaskController extends Controller
      */
     public function edit(Project $project, Task $task)
     {
-        $projectUsers = $this->projectService->getUsers($project);
+        $projectUsers = $this->projectService->getProjectUsers($project);
+
 
         return Inertia::render('Task/Edit', [
             'project' => $project,
             'project_users' => $projectUsers,
-            'task' => $task
+            'task' => $task,
         ]);
     }
 
@@ -88,6 +91,8 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Project $project, Task $task)
     {
         $this->taskService->updateTask($task->id, $request->getParams());
+
+        return to_route('projects.tasks.show', [$project, $task]);
     }
 
     /**

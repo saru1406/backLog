@@ -12,6 +12,8 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepository;
 use App\Repositories\TaskRepositoryInterface;
+use App\Repositories\TypeRepository;
+use App\Repositories\TypeRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryInterface;
 use App\Services\ChildTaskService;
@@ -22,6 +24,8 @@ use App\Services\ProjectService;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskService;
 use App\Services\TaskServiceInterface;
+use App\Services\TypeService;
+use App\Services\TypeServiceInterface;
 use App\Services\UserService;
 use App\Services\UserServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -49,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ChildTaskServiceInterface::class, ChildTaskService::class);
 
         $this->app->bind(GptRepositoryInterface::class, GptRepository::class);
+
+        $this->app->bind(TypeRepositoryInterface::class, TypeRepository::class);
+        $this->app->bind(TypeServiceInterface::class, TypeService::class);
     }
 
     /**
