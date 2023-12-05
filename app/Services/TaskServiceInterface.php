@@ -2,14 +2,27 @@
 
 namespace App\Services;
 
-use App\Models\Task;
-use App\Models\Type;
-use App\Models\User;
 use App\Repositories\TaskParams;
 use Illuminate\Support\Collection;
 
 interface TaskServiceInterface
 {
+    /**
+     * indexに表示するデータ取得
+     *
+     * @param integer $projectId
+     * @return Collection
+     */
+    public function fetchViewDataIndex(int $projectId): Collection;
+
+    /**
+     * createに表示するデータ取得
+     *
+     * @param integer $projectId
+     * @return Collection
+     */
+    public function fetchViewDataCreate(int $projectId): Collection;
+
     /**
      * タスク保存
      *
@@ -17,23 +30,25 @@ interface TaskServiceInterface
      * @param TaskParams $params
      * @return void
      */
-    public function storeTask(int $projectId, TaskParams $params): void;
+    public function store(int $projectId, TaskParams $params): void;
 
     /**
-     * タスクに紐づくユーザ取得
+     * showに表示するデータ取得
      *
-     * @param Task $task
-     * @return User
-     */
-    public function getUser(Task $task): User;
-
-    /**
-     * タスクに紐づく子タスクを取得
-     *
-     * @param Task $task
+     * @param integer $projectId
+     * @param integer $taskId
      * @return Collection
      */
-    public function getChildTasks(Task $task): Collection;
+    public function fetchViewDataShow(int $projectId, int $taskId): Collection;
+
+    /**
+     * editに表示するデータ取得
+     *
+     * @param integer $projectId
+     * @param integer $taskId
+     * @return Collection
+     */
+    public function fetchViewDataEdit(int $projectId, int $taskId): Collection;
 
     /**
      * タスク更新
@@ -42,21 +57,13 @@ interface TaskServiceInterface
      * @param TaskParams $params
      * @return void
      */
-    public function updateTask(int $taskId, TaskParams $params): void;
+    public function update(int $taskId, TaskParams $params): void;
 
     /**
      * ブランチ作成、保存
      *
-     * @param Task $task
+     * @param int $taskId
      * @return void
      */
-    public function storeBranchTask(Task $task): void;
-
-    /**
-     * タスクに紐づく種別取得
-     *
-     * @param Task $task
-     * @return Type|null
-     */
-    public function fetchType(Task $task): ?Type;
+    public function storeBranchTask(int $taskId): void;
 }

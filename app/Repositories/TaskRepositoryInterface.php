@@ -2,23 +2,29 @@
 
 namespace App\Repositories;
 
-use App\Models\ChildTask;
 use App\Models\Task;
-use App\Models\Type;
-use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
 {
     /**
+     * タスク取得
+     *
+     * @param integer $taskId
+     * @param array $option
+     * @return Task
+     */
+    public function findOrFail(int $taskId, array $option = []): Task;
+
+    /**
      * タスク保存
      *
      * @param integer $projectId
-     * @param TaskParams $params
+     * @param array $params
      * @return void
      */
-    public function storeTask(int $projectId, TaskParams $params): void;
+    public function store(int $projectId, array $params): void;
 
     /**
      * タスク検索
@@ -40,34 +46,10 @@ interface TaskRepositoryInterface
      * 課題を更新
      *
      * @param integer $taskId
-     * @param TaskParams $params
+     * @param array $params
      * @return void
      */
-    public function updateTask(int $taskId, TaskParams $params): void;
-
-    /**
-     * 課題に紐づいているユーザを取得
-     *
-     * @param Task $task
-     * @return User
-     */
-    public function getUser(Task $task): User;
-
-    /**
-     * 課題に紐づいているデータ取得
-     *
-     * @param Task $task
-     * @return ChildTask
-     */
-    public function getTasksRelations(Task $task, array $relations): void;
-
-    /**
-     * 課題に紐づいている子タスク取得
-     *
-     * @param Task $task
-     * @return Collection
-     */
-    public function getChildTasks(Task $task): Collection;
+    public function update(int $taskId, array $params): void;
 
     /**
      * タスクのブランチ名を保存
@@ -77,12 +59,4 @@ interface TaskRepositoryInterface
      * @return void
      */
     public function storeBranchTask(int $taskId, string $branchGptText) : void;
-
-    /**
-     * タスクに紐づく種別取得
-     *
-     * @param Task $task
-     * @return Type|null
-     */
-    public function fetchType(Task $task): ?Type;
 }

@@ -2,53 +2,89 @@
 
 namespace App\Services;
 
-use App\Models\ChildTask;
-use App\Models\Project;
-use App\Models\Task;
-use App\Models\User;
 use App\Repositories\ChildTaskParams;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\GptRepositoryInterface;
+use App\Repositories\ProjectRepositoryInterface;
+use App\Repositories\TaskRepositoryInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ChildTaskService implements ChildTaskServiceInterface
 {
     public function __construct(
         private ChildTaskRepositoryInterface $childTaskRepository,
-        private GptRepositoryInterface $gptRepository
+        private GptRepositoryInterface $gptRepository,
+        private TaskRepositoryInterface $taskRepository,
+        private ProjectRepositoryInterface $projectRepository,
     ) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function storeChildTask(int $projectId, int $taskId, ChildTaskParams $params): void
+    public function fetchViewDataCreate($projectId, $taskId): Collection
     {
-        $this->childTaskRepository->storeChildTask($projectId, $taskId, $params);
+        $project = $this->projectRepository->findOrFail($projectId, ['users']);
+        $task = $this->taskRepository->findOrFail($taskId);
+
+        return collect(['project' => $project, 'task' => $task]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function updateChildTask(int $childTaskId, ChildTaskParams $params): void
+    public function store(int $projectId, int $taskId, ChildTaskParams $params): void
     {
-        $this->childTaskRepository->updateChildTask($childTaskId, $params);
+        $paramsArray = $params->toArray();
+        $paramsArray['project_id'] = $projectId;
+        $paramsArray['task_id'] = $taskId;
+
+        $this->childTaskRepository->store($paramsArray);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getChildTasksByUser(ChildTask $childTask): User
+    public function fetchViewDataShow(int $projectId, int $taskId, int $childTaskId): Collection
     {
-        return $this->childTaskRepository->getChildTasksByUser($childTask);
+        $project = $this->projectRepository->findOrFail($projectId);
+        $task = $this->taskRepository->findOrFail($taskId, ['child_task']);
+        $childTask = $this->childTaskRepository->findOrFail($childTaskId);
+        $childTasks = $this->childTaskRepository->fetchChildTasksByTaskId($task, ['user']);
+
+        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask, 'child_tasks'=> $childTasks]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createChildTaskByGpt(string $taskTitle, string $taskContent): array
+    public function fetchViewDataEdit(int $projectId, int $taskId, int $childTaskId): Collection
     {
-        $message = '親タスク:' . $taskTitle . ' 親タスク説明:' . $taskContent . '子タスクのタイトルと説明を箇条書きで生成してください。\n
+        $project = $this->projectRepository->findOrFail($projectId, ['users']);
+        $task = $this->taskRepository->findOrFail($taskId, ['child_task']);
+        $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user']);
+
+        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update(int $childTaskId, ChildTaskParams $params): void
+    {
+        $this->childTaskRepository->update($childTaskId, $params->toArray());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeChildTaskByGpt(int $projectId, int $taskId): void
+    {
+        $task = $this->taskRepository->findOrFail($taskId);
+        $userId = Auth::id();
+
+        $message = '親タスク:' . $task->title . ' 親タスク説明:' . $task->content . '子タスクのタイトルと説明を箇条書きで生成してください。\n
             Laravelを使用して実装するための子タスクを箇条書きで生成してください。各子タスクには、タスクのタイトルと具体的な実装手順を含めてください。\n
             例）\n
             - 子タスク1: お気に入り機能のUIを作成する\n
@@ -65,18 +101,10 @@ class ChildTaskService implements ChildTaskServiceInterface
                 - ログイン状態を管理し、お気に入り情報にアクセスできるユーザーを制限する';
 
         $childTasksGptText = $this->gptRepository->createChildTasks($message);
+        $childTasks = $this->parseTasks($childTasksGptText);
 
-        return $this->parseTasks($childTasksGptText);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function storeChildTasksByGpt(Project $project, Task $task, array $childTasks): void
-    {
-        $userId = Auth::id();
         foreach ($childTasks as $childTask) {
-            $this->childTaskRepository->storeChildTaskByGpt($project->id, $task->id, $userId, $childTask);
+            $this->childTaskRepository->storeChildTaskByGpt($projectId, $taskId, $userId, $childTask);
         }
     }
 

@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Task;
-use App\Models\Type;
-use App\Models\User;
 use App\Repositories\GptRepositoryInterface;
+use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskParams;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -15,45 +13,79 @@ class TaskService implements TaskServiceInterface
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private GptRepositoryInterface $gptRepository,
-    ) {}
-
-    /**
-     * {@inheritDoc}
-     */
-    public function storeTask(int $projectId, TaskParams $params): void
-    {
-        $this->taskRepository->storeTask($projectId, $params);
+        private ProjectServiceInterface $projectService,
+        private ProjectRepositoryInterface $projectRepository,
+    ) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUser(Task $task): User
+    public function fetchViewDataIndex(int $projectId): Collection
     {
-        return $this->taskRepository->getUser($task);
+        $project = $this->projectRepository->findOrFail($projectId, ['types']);
+        $projectUsers = $this->projectService->getProjectUsers($project);
+
+        return collect(['project'=> $project, 'project_users' => $projectUsers]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getChildTasks(Task $task): Collection
+    public function fetchViewDataCreate(int $projectId): Collection
     {
-        return $this->taskRepository->getChildTasks($task);
+        $project = $this->projectRepository->findOrFail($projectId, ['types']);
+        $projectUsers = $this->projectService->getProjectUsers($project);
+
+        return collect(['project'=> $project, 'project_users' => $projectUsers]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function updateTask(int $taskId, TaskParams $params): void
+    public function store(int $projectId, TaskParams $params): void
     {
-        $this->taskRepository->updateTask($taskId, $params);
+        $this->taskRepository->store($projectId, $params->toArray());
     }
 
     /**
      * {@inheritDoc}
      */
-    public function storeBranchTask(Task $task): void
+    public function fetchViewDataShow(int $projectId, int $taskId): Collection
     {
+        $project = $this->projectRepository->findOrFail($projectId);
+        $task = $this->taskRepository->findOrFail($taskId, ['user', 'child_tasks', 'types']);
+
+        return collect(['project' => $project, 'task'=> $task]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchViewDataEdit(int $projectId, int $taskId): Collection
+    {
+        $project = $this->projectRepository->findOrFail($projectId, ['types']);
+        $projectUsers = $this->projectService->getProjectUsers($project);
+        $task = $this->taskRepository->findOrFail($taskId, ['user']);
+
+        return collect(['project'=> $project, 'project_users' => $projectUsers, 'task'=> $task]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update(int $taskId, TaskParams $params): void
+    {
+        $this->taskRepository->update($taskId, $params->toArray());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeBranchTask(int $taskId): void
+    {
+        $task = $this->taskRepository->findOrFail($taskId);
+
         $message = 'タスクID:' . $task->id . ' タスク名:' . $task->title . ' タスク説明:' . $task->content . '\n
             タスク名、タスク説明からブランチ名にタスクIDを含めて簡潔に作成してください。\n
             回答に補足説明は不要です。必ずブランチ名のみの回答をしてください。\n
@@ -70,13 +102,5 @@ class TaskService implements TaskServiceInterface
         $branchGptText = $this->gptRepository->createChildTasks($message);
 
         $this->taskRepository->storeBranchTask($task->id, $branchGptText);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchType(Task $task): ?Type
-    {
-        return $this->taskRepository->fetchType($task);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
 use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
@@ -14,7 +13,7 @@ interface UserRepositoryInterface
      * @param Collection $projectUserIds
      * @return Collection
      */
-    public function getProjectNotUser(int $companyId, Collection $projectUserIds): Collection;
+    public function fetchProjectNotUser(int $companyId, Collection $projectUserIds): Collection;
 
     /**
      * 企業IDと紐づけ

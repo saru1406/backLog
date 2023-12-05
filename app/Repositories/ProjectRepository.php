@@ -11,20 +11,34 @@ use Illuminate\Support\Collection;
 class ProjectRepository implements ProjectRepositoryInterface
 {
     /**
+     * {@inheritDoc}
+     */
+    public function findOrFail(int $projectId, array $option = []): Project
+    {
+        return Project::with($option)->findOrFail($projectId);
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function storeProject(?int $companyId, string $name): Project
+    public function store(?int $companyId, ?int $userId, string $name): Project
     {
-        return Project::create([
+        $project = Project::create([
             'company_id' => $companyId,
             'name' => $name,
         ]);
+
+        if ($userId) {
+            $this->storeProjectUser($userId, $project);
+        }
+
+        return $project;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getProjectNames(?User $user): Collection
+    public function fetchProject(?User $user): Collection
     {
         return $user->projects()->select('projects.id', 'projects.name')->get();
     }
@@ -32,7 +46,7 @@ class ProjectRepository implements ProjectRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchProjectNameByCompanyId(int $companyId): Collection
+    public function fetchProjectByCompanyId(int $companyId): Collection
     {
         return Project::where('company_id', $companyId)->select('id', 'name')->get();
     }
@@ -51,29 +65,5 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function storeProjectUser(int $userId, Project $project): void
     {
         $project->users()->attach($userId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUsers(Project $project): Collection
-    {
-        return $project->users;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTasks(Project $project): Collection
-    {
-        return $project->tasks;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchProjectTypes(Project $project): Collection
-    {
-        return $project->types;
     }
 }

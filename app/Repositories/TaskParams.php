@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
+
 class TaskParams
 {
     /**
@@ -75,6 +77,25 @@ class TaskParams
     }
 
     /**
+     * 配列に変換
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->userId,
+            'type_id'=> $this->typeId,
+            'title'=> $this->title,
+            'content'=> $this->contents,
+            'status'=> $this->status,
+            'priority'=> $this->priority,
+            'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
+            'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
+        ];
+    }
+
+    /**
      * ユーザID取得
      *
      * @return int
@@ -141,7 +162,7 @@ class TaskParams
      */
     public function getStartDate(): ?string
     {
-        return $this->startDate;
+        return Carbon::parse($this->startDate)->format('Y-m-d');
     }
 
     /**
@@ -151,6 +172,6 @@ class TaskParams
      */
     public function getEndDate(): ?string
     {
-        return $this->endDate;
+        return Carbon::parse($this->endDate)->format('Y-m-d');
     }
 }

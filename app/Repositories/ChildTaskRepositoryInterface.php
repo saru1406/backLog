@@ -3,40 +3,45 @@
 namespace App\Repositories;
 
 use App\Models\ChildTask;
-use App\Models\User;
+use App\Models\Task;
+use Illuminate\Support\Collection;
 
 interface ChildTaskRepositoryInterface
 {
     /**
      * 子タスク保存
      *
-     * @param int $projectId
-     * @param int $taskId
-     * @param ChildTaskParams $params
+     * @param array $params
      * @return void
      */
-    public function storeChildTask(
-        int $projectId,
-        int $taskId,
-        ChildTaskParams $params
-    ): void;
+    public function store(array $params): void;
 
     /**
-     * 子タスクに紐づくユーザー取得
+     * 課題に紐づいている子タスク取得
      *
-     * @param ChildTask $childTasks
-     * @return User
+     * @param Task $task
+     * @param array $option
+     * @return Collection
      */
-    public function getChildTasksByUser(ChildTask $childTasks): User;
+    public function fetchChildTasksByTaskId(Task $task, array $option = []): Collection;
+
+    /**
+     * 子タスク取得
+     *
+     * @param integer $childTaskId
+     * @param array $option
+     * @return ChildTask
+     */
+    public function findOrFail(int $childTaskId, array $option = []): ChildTask;
 
     /**
      * 子タスク更新
      *
      * @param int $childTaskId
-     * @param ChildTaskParams $params
+     * @param array $params
      * @return void
      */
-    public function updateChildTask(int $childTaskId, ChildTaskParams $params): void;
+    public function update(int $childTaskId, array $params): void;
 
     /**
      * GPT生成データを保存

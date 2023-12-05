@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Models\User;
-use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TypeRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
@@ -16,44 +14,75 @@ class ProjectService implements ProjectServiceInterface
     public function __construct(
         private ProjectRepositoryInterface $projectRepository,
         private UserRepositoryInterface $userRepository,
-        private CompanyRepositoryInterface $companyRepository,
         private TypeRepositoryInterface $typeRepository
     ) {}
 
     /**
      * {@inheritDoc}
      */
-    public function getProjectNames(): Collection
+    public function fetchViewDataIndex(): Collection
     {
         $user = Auth::user();
         $companyId = $user->company_id;
         if ($companyId) {
-            return $this->projectRepository->fetchProjectNameByCompanyId($companyId);
+            return $this->projectRepository->fetchProjectByCompanyId($companyId);
         }
 
-        return $this->projectRepository->getProjectNames($user);
+        return $this->projectRepository->fetchProject($user);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function StoreProject(string $name, ?User $user): void
+    public function store(string $name): void
     {
-        $project = $this->projectRepository->storeProject($user->company_id, $name);
-        $this->projectRepository->storeProjectUser($user->id, $project);
+        $user = Auth::user();
+
+        $project = $this->projectRepository->store($user->company_id, $user->id, $name);
+
         $typeNames = ['実装', 'バグ', '改善'];
-
         foreach ($typeNames as $typeName) {
-            $this->typeRepository->store($project, $typeName);
+            $this->typeRepository->store($project->id, $typeName);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function storeProjectUser(int $userId, Project $project): void
+    public function fetchViewDataShow(int $projectId): Project
     {
+        return $this->projectRepository->findOrFail($projectId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchViewDataEdit(int $projectId): Collection
+    {
+        $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
+        $projectNotUsers = $this->fetchProjectNotAssignUsers($project->users);
+
+        return collect(['project' => $project, 'project_not_users' => $projectNotUsers]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeProjectUser(int $userId, int $projectId): void
+    {
+        $project = $this->projectRepository->findOrFail($projectId);
         $this->projectRepository->storeProjectUser($userId, $project);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchViewDataBoardGantt(int $projectId): Collection
+    {
+        $project = $this->projectRepository->findOrFail($projectId);
+        $projectUsers = $this->getProjectUsers($project);
+
+        return collect(['project' => $project, 'project_users' => $projectUsers]);
     }
 
     /**
@@ -73,7 +102,7 @@ class ProjectService implements ProjectServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getProjectNotUsers(Collection $projectUsers): Collection
+    public function fetchProjectNotAssignUsers(Collection $projectUsers): Collection
     {
         $user = Auth::user();
         $companyId = $user->company_id;
@@ -82,22 +111,6 @@ class ProjectService implements ProjectServiceInterface
         }
         $projectUserIds = $projectUsers->pluck('id');
 
-        return $this->userRepository->getProjectNotUser($companyId, $projectUserIds);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUsers(Project $project): Collection
-    {
-        return $this->projectRepository->getUsers($project);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchProjectTypes(Project $project): Collection
-    {
-        return $this->projectRepository->fetchProjectTypes($project);
+        return $this->userRepository->fetchProjectNotUser($companyId, $projectUserIds);
     }
 }

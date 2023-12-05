@@ -9,29 +9,39 @@ use Illuminate\Support\Collection;
 interface ProjectRepositoryInterface
 {
     /**
+     * プロジェクト取得
+     *
+     * @param integer $projectId
+     * @param array $option
+     * @return Project
+     */
+    public function findOrFail(int $projectId, array $option = []): Project;
+
+    /**
      * プロジェクト保存
      *
-     * @param int|null $companyId
+     * @param integer|null $companyId
+     * @param integer|null $userId
      * @param string $name
      * @return Project
      */
-    public function storeProject(?int $companyId, string $name): Project;
+    public function store(?int $companyId, ?int $userId, string $name): Project;
 
     /**
-     * プロジェクト名取得
+     * プロジェクト取得
      *
      * @param User|null $userId
      * @return Collection
      */
-    public function getProjectNames(?User $user): Collection;
+    public function fetchProject(?User $user): Collection;
 
     /**
-     * Companyに紐づくプロジェクト名取得
+     * Companyに紐づくプロジェクト取得
      *
      * @param int $companyId
      * @return Collection
      */
-    public function fetchProjectNameByCompanyId(int $companyId): Collection;
+    public function fetchProjectByCompanyId(int $companyId): Collection;
 
     /**
      * プロジェクトに紐づくユーザー取得
@@ -49,28 +59,4 @@ interface ProjectRepositoryInterface
      * @return void
      */
     public function storeProjectUser(int $userId, Project $project): void;
-
-    /**
-     * プロジェクトに紐づくユーザー取得
-     *
-     * @param Project $project
-     * @return Collection
-     */
-    public function getUsers(Project $project): Collection;
-
-    /**
-     * プロジェクトに紐づく課題取得
-     *
-     * @param Project $project
-     * @return Collection
-     */
-    public function getTasks(Project $project): Collection;
-
-    /**
-     * プロジェクトに紐づく種別取得
-     *
-     * @param Project $project
-     * @return Collection
-     */
-    public function fetchProjectTypes(Project $project): Collection;
 }

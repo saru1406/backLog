@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\Project;
-use App\Models\Task;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
@@ -21,95 +19,85 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Project $project)
+    public function index(int $projectId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
+        $data = $this->taskService->fetchViewDataIndex($projectId);
 
         return Inertia::render('Task/Index', [
-            'project' => $project,
-            'project_users' => $projectUsers
+            'project' => $data['project'],
+            'projectUsers' => $data['project_user']
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Project $project)
+    public function create(int $projectId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
-        $projectTypes = $this->projectService->fetchProjectTypes($project);
+        $data = $this->taskService->fetchViewDataCreate($projectId);
 
         return Inertia::render('Task/Create', [
-            'project' => $project,
-            'project_users' => $projectUsers,
-            'project_types'=> $projectTypes
+            'project' => $data['project'],
+            'projectUsers' => $data['project_user']
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Project $project, StoreTaskRequest $request)
+    public function store(int $projectId, StoreTaskRequest $request)
     {
-        $this->taskService->storeTask($project->id, $request->getParams());
+        $this->taskService->store($projectId, $request->getParams());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project, Task $task)
+    public function show(int $projectId, int $taskId)
     {
-        $taskUser = $this->taskService->getUser($task);
-        $childTasks = $this->taskService->getChildTasks($task);
-        $projectUsers = $this->projectService->getProjectUsers($project);
-        $taskType = $this->taskService->fetchType($task);
+        $data = $this->taskService->fetchViewDataShow($projectId, $taskId);
 
         return Inertia::render('Task/Show', [
-            'project' => $project,
-            'task' => $task,
-            'task_user' => $taskUser,
-            'child_tasks' => $childTasks,
-            'project_users' => $projectUsers,
-            'task_type' => $taskType,
+            'project' => $data['project'],
+            'task' => $data['task'],
+            'childTasks' => $data['child_tasks'],
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project, Task $task)
+    public function edit(int $projectId, int $taskId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
-        $projectTypes = $this->projectService->fetchProjectTypes($project);
+        $data = $this->taskService->fetchViewDataEdit($projectId, $taskId);
 
         return Inertia::render('Task/Edit', [
-            'project' => $project,
-            'project_users' => $projectUsers,
-            'task' => $task,
-            'project_types'=> $projectTypes,
+            'project' => $data['project'],
+            'projectUsers' => $data['project_users'],
+            'task' => $data['task'],
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Project $project, Task $task)
+    public function update(UpdateTaskRequest $request, int $projectId, int $taskId)
     {
-        $this->taskService->updateTask($task->id, $request->getParams());
+        $this->taskService->update($taskId, $request->getParams());
 
-        return to_route('projects.tasks.show', [$project, $task]);
+        return to_route('projects.tasks.show', [$projectId, $taskId]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(int $taskId)
     {
         //
     }
 
-    public function storeBranchGpt(Project $project, Task $task)
+    public function storeBranchGpt(int $projectId, int $taskId)
     {
-        $this->taskService->storeBranchTask($task);
+        $this->taskService->storeBranchTask($taskId);
     }
 }

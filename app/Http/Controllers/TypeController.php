@@ -33,9 +33,9 @@ class TypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Project $project, StoreTypeRequest $request)
+    public function store(int $projectId, StoreTypeRequest $request)
     {
-        $this->typeService->store($project, $request->getTypeName());
+        $this->typeService->store($projectId, $request->getTypeName());
     }
 
     /**

@@ -6,7 +6,6 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Services\CompanyServiceInterface;
-use App\Services\UserServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +16,7 @@ class CompanyController extends Controller
 {
     public function __construct(
         private CompanyServiceInterface $companyService,
-        private UserServiceInterface $useService
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -47,15 +44,15 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            try {
+        try {
+            DB::transaction(function () use ($request) {
                 $company = $this->companyService->storeCompany($request->getCompanyName());
                 $this->companyService->patchUserByCompanyId(Auth::id(), $company->id);
-            } catch(Exception $e) {
-                // TODO: throw追記
-                Log::error($e->getMessage());
-            }
-        });
+            });
+        } catch(Exception $e) {
+            // TODO: throw追記
+            Log::error($e->getMessage());
+        }
 
         return to_route('projects.index');
     }

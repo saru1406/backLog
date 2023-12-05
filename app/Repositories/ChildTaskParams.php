@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Carbon;
+
 class ChildTaskParams
 {
     /**
@@ -67,6 +69,24 @@ class ChildTaskParams
     }
 
     /**
+     * 配列に変換
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'user_id' => $this->userId,
+            'title'=> $this->title,
+            'content'=> $this->contents,
+            'status'=> $this->status,
+            'priority'=> $this->priority,
+            'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
+            'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
+        ];
+    }
+
+    /**
      * ユーザID取得
      *
      * @return int
@@ -123,7 +143,7 @@ class ChildTaskParams
      */
     public function getStartDate(): ?string
     {
-        return $this->startDate;
+        return Carbon::parse($this->startDate)->format('Y-m-d');
     }
 
     /**
@@ -133,6 +153,6 @@ class ChildTaskParams
      */
     public function getEndDate(): ?string
     {
-        return $this->endDate;
+        return Carbon::parse($this->endDate)->format('Y-m-d');
     }
 }

@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Task;
-use App\Models\Type;
-use App\Models\User;
 use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -16,21 +14,17 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function storeTask(int $projectId, TaskParams $params): void
+    public function findOrFail(int $taskId, array $option = []): Task
     {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
-        Task::create([
-            'user_id' => $params->getUserId(),
-            'type_id' => $params->getTypeId(),
-            'project_id' => $projectId,
-            'title' => $params->getTitle(),
-            'content' => $params->getContents(),
-            'status' => $params->getStatus(),
-            'priority' => $params->getPriority(),
-            'start_date' => $startDate,
-            'end_date' => $endDate
-        ]);
+        return Task::with($option)->findOrFail($taskId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(int $projectId, array $params): void
+    {
+        Task::create($params);
     }
 
     /**
@@ -123,44 +117,9 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function updateTask(int $taskId, TaskParams $params): void
+    public function update(int $taskId, array $params): void
     {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
-        Task::find($taskId)->update([
-            'user_id' => $params->getUserId(),
-            'type_id' => $params->getTypeId(),
-            'title' => $params->getTitle(),
-            'content' => $params->getContents(),
-            'status' => $params->getStatus(),
-            'priority' => $params->getPriority(),
-            'start_date' => $startDate,
-            'end_date' => $endDate
-        ]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUser(Task $task): User
-    {
-        return $task->user;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTasksRelations(Task $task, array $relations): void
-    {
-        $task->load($relations);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getChildTasks(Task $task): Collection
-    {
-        return $task->childTasks()->with('user')->get();
+        Task::find($taskId)->update($params);
     }
 
     /**
@@ -171,13 +130,5 @@ class TaskRepository implements TaskRepositoryInterface
         Task::find($taskId)->update([
             'branch_name' => $branchGptText,
         ]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchType(Task $task): ?Type
-    {
-        return $task->type;
     }
 }

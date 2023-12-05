@@ -3,55 +3,42 @@
 namespace App\Repositories;
 
 use App\Models\ChildTask;
-use App\Models\User;
+use App\Models\Task;
 use App\Repositories\ChildTaskRepositoryInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class ChildTaskRepository implements ChildTaskRepositoryInterface
 {
-    public function storeChildTask(
-        int $projectId,
-        int $taskId,
-        ChildTaskParams $params
-    ): void {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
-
-        ChildTask::create([
-            'user_id' => $params->getUserId(),
-            'project_id' => $projectId,
-            'task_id' => $taskId,
-            'title' => $params->getTitle(),
-            'content' => $params->getContents(),
-            'status' => $params->getStatus(),
-            'priority' => $params->getPriority(),
-            'start_date' => $startDate,
-            'end_date' => $endDate
-        ]);
+    /**
+     * {@inheritDoc}
+     */
+    public function store(array $params): void
+    {
+        ChildTask::create($params);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getChildTasksByUser(ChildTask $childTasks): User
+    public function fetchChildTasksByTaskId(Task $task, array $option = []): Collection
     {
-        return $childTasks->user;
+        return $task->childTasks()->with($option)->get();
     }
 
-    public function updateChildTask(int $childTaskId, ChildTaskParams $params): void
+    /**
+     * {@inheritDoc}
+     */
+    public function findOrFail(int $childTaskId, array $option = []): ChildTask
     {
-        $startDate = Carbon::parse($params->getStartDate())->format('Y-m-d');
-        $endDate = Carbon::parse($params->getEndDate())->format('Y-m-d');
+        return ChildTask::with($option)->findOrFail($childTaskId);
+    }
 
-        ChildTask::find($childTaskId)->update([
-            'user_id' => $params->getUserId(),
-            'title' => $params->getTitle(),
-            'content' => $params->getContents(),
-            'status' => $params->getStatus(),
-            'priority' => $params->getPriority(),
-            'start_date' => $startDate,
-            'end_date' => $endDate
-        ]);
+    /**
+     * {@inheritDoc}
+     */
+    public function update(int $childTaskId, array $params): void
+    {
+        ChildTask::findOrFail($childTaskId)->update($params);
     }
 
     /**

@@ -6,16 +6,12 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\StoreProjectUserRequest;
 use App\Services\ProjectServiceInterface;
-use App\Services\TypeServiceInterface;
-use App\Services\UserServiceInterface;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     public function __construct(
         private ProjectServiceInterface $projectService,
-        private UserServiceInterface $userService,
     ) {
     }
 
@@ -24,36 +20,28 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projectNames = $this->projectService->getProjectNames();
+        $project = $this->projectService->fetchViewDataIndex();
 
         return Inertia::render('Project/Index', [
-            'projects' => $projectNames
+            'projects' => $project
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(StoreProjectRequest $request)
-    {
-        // return Inertia::render('Project/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Project $project, StoreProjectRequest $request)
+    public function store(StoreProjectRequest $request)
     {
-        $user = Auth::user();
-
-        $this->projectService->storeProject($request->getName(), $user);
+        $this->projectService->store($request->getName());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(int $projectId)
     {
+        $project = $this->projectService->fetchViewDataShow($projectId);
+
         return Inertia::render('Project/Show', [
             'project' => $project
         ]);
@@ -62,17 +50,13 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(int $projectId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
-        $projectNotUsers = $this->projectService->getProjectNotUsers($projectUsers);
-        $projectTypes = $this->projectService->fetchProjectTypes($project);
-        
+        $data = $this->projectService->fetchViewDataEdit($projectId);
+
         return Inertia::render('Project/Edit', [
-            'project' => $project,
-            'project_users' => $projectUsers,
-            'project_not_users'  => $projectNotUsers,
-            'project_types'=> $projectTypes
+            'project' => $data['project'],
+            'projectNotUsers'  => $data['project_not_users'],
         ]);
     }
 
@@ -92,28 +76,28 @@ class ProjectController extends Controller
         //
     }
 
-    public function storeProjectUser(StoreProjectUserRequest $request, Project $project)
+    public function storeProjectUser(StoreProjectUserRequest $request, int $projectId)
     {
-        $this->projectService->storeProjectUser($request->getUserId(), $project);
+        $this->projectService->storeProjectUser($request->getUserId(), $projectId);
     }
 
-    public function board(Project $project)
+    public function board(int $projectId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
+        $data = $this->projectService->fetchViewDataBoardGantt($projectId);
 
         return Inertia::render('Project/Board', [
-            'project' => $project,
-            'project_users' => $projectUsers
+            'project' => $data['project'],
+            'projectUsers' => $data['project_user']
         ]);
     }
 
-    public function gant(Project $project)
+    public function gant(int $projectId)
     {
-        $projectUsers = $this->projectService->getProjectUsers($project);
+        $data = $this->projectService->fetchViewDataBoardGantt($projectId);
 
         return Inertia::render('Project/Gant', [
-            'project' => $project,
-            'project_users' => $projectUsers
+            'project' => $data['project'],
+            'projectUsers' => $data['project_user']
         ]);
     }
 }

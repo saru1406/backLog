@@ -24,12 +24,4 @@ class CompanyRepository implements CompanyRepositoryInterface
             'domain' => $domain
         ]);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isCompanyByuserId(int $userId): bool
-    {
-        return Company::where('user_id', $userId)->exists();
-    }
 }

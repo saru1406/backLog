@@ -5,20 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChildTaskRequest;
 use App\Http\Requests\UpdateChildTaskRequest;
 use App\Models\ChildTask;
-use App\Models\Project;
-use App\Models\Task;
 use App\Services\ChildTaskServiceInterface;
-use App\Services\ProjectServiceInterface;
-use App\Services\TaskServiceInterface;
 use Inertia\Inertia;
 
 class ChildTaskController extends Controller
 {
-    public function __construct(
-        private ProjectServiceInterface $projectService,
-        private ChildTaskServiceInterface $childTaskService,
-        private TaskServiceInterface $taskService,
-    ) {
+    public function __construct(private ChildTaskServiceInterface $childTaskService)
+    {
     }
 
     /**
@@ -32,69 +25,59 @@ class ChildTaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Project $project, Task $task)
+    public function create(int $projectId, int $taskId)
     {
-        $projectUsers = $this->projectService->getUsers($project);
+        $data = $this->childTaskService->fetchViewDataCreate($projectId, $taskId);
 
         return Inertia::render('ChildTask/Create', [
-            'task' => $task,
-            'project' => $project,
-            'project_users' => $projectUsers
+            'task' => $data['task'],
+            'project' => $data['project'],
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChildTaskRequest $request, Project $project, Task $task)
+    public function store(StoreChildTaskRequest $request, int $projectId, int $taskId)
     {
-        $this->childTaskService->storeChildTask(
-            $project->id,
-            $task->id,
-            $request->getParams()
-        );
+        $this->childTaskService->store($projectId, $taskId, $request->getParams());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project, Task $task, ChildTask $childTask)
+    public function show(int $projectId, int $taskId, int $childTaskId)
     {
-        $childTaskUser = $this->childTaskService->getChildTasksByUser($childTask);
-        $childTasks = $this->taskService->getChildTasks($task);
+        $data = $this->childTaskService->fetchViewDataShow($projectId, $taskId, $childTaskId);
 
         return Inertia::render('ChildTask/Show', [
-            'project' => $project,
-            'task' => $task,
-            'child_task_user' => $childTaskUser,
-            'child_task' => $childTask,
-            'child_tasks' => $childTasks,
+            'project' => $data['project'],
+            'task' => $data['task'],
+            'childTask' => $data['child_task'],
+            'childTasks' => $data['child_tasks'],
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project, Task $task, ChildTask $childTask)
+    public function edit(int $projectId, int $taskId, int $childTaskId)
     {
-        $projectUsers = $this->projectService->getUsers($project);
-        $childTaskUser = $this->childTaskService->getChildTasksByUser($childTask);
+        $data = $this->childTaskService->fetchViewDataEdit($projectId, $taskId, $childTaskId);
 
         return Inertia::render('ChildTask/Edit', [
-            'project' => $project,
-            'project_users' => $projectUsers,
-            'task' => $task,
-            'child_task' => $childTask,
-            'child_task_user' => $childTaskUser,
+            'project' => $data['project'],
+            'task' => $data['task'],
+            'childTask' => $data['child_task'],
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChildTaskRequest $request, Project $project, Task $task, ChildTask $childTask)
+    public function update(UpdateChildTaskRequest $request, int $childTaskId)
     {
-        $this->childTaskService->updateChildTask($childTask->id, $request->getParams());
+        $this->childTaskService->update($childTaskId, $request->getParams());
     }
 
     /**
@@ -105,9 +88,8 @@ class ChildTaskController extends Controller
         //
     }
 
-    public function storeChildTaskGpt(Project $project, Task $task)
+    public function storeChildTaskGpt(int $projecId, int $taskId)
     {
-        $childTasksArray = $this->childTaskService->createChildTaskByGpt($task->title, $task->content);
-        $this->childTaskService->storeChildTasksByGpt($project, $task, $childTasksArray);
+        $this->childTaskService->storeChildTaskByGpt($projecId, $taskId);
     }
 }

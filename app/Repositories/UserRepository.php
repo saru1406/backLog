@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Company;
-use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -12,7 +10,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getProjectNotUser(int $companyId, Collection $projectUserIds): Collection
+    public function fetchProjectNotUser(int $companyId, Collection $projectUserIds): Collection
     {
         return User::where('company_id', $companyId)->whereNotIn('id', $projectUserIds)->get();
     }
