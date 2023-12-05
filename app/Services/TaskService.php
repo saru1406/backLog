@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskParams;
@@ -21,23 +22,17 @@ class TaskService implements TaskServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchViewDataIndex(int $projectId): Collection
+    public function fetchViewDataIndex(int $projectId): Project
     {
-        $project = $this->projectRepository->findOrFail($projectId, ['types']);
-        $projectUsers = $this->projectService->getProjectUsers($project);
-
-        return collect(['project'=> $project, 'project_users' => $projectUsers]);
+        return $this->projectRepository->findOrFail($projectId, ['users', 'types']);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fetchViewDataCreate(int $projectId): Collection
+    public function fetchViewDataCreate(int $projectId): Project
     {
-        $project = $this->projectRepository->findOrFail($projectId, ['types']);
-        $projectUsers = $this->projectService->getProjectUsers($project);
-
-        return collect(['project'=> $project, 'project_users' => $projectUsers]);
+        return $this->projectRepository->findOrFail($projectId, ['users', 'types']);
     }
 
     /**
@@ -45,7 +40,9 @@ class TaskService implements TaskServiceInterface
      */
     public function store(int $projectId, TaskParams $params): void
     {
-        $this->taskRepository->store($projectId, $params->toArray());
+        $paramsArray = $params->toArray();
+        $paramsArray['project_id'] = $projectId;
+        $this->taskRepository->store($paramsArray);
     }
 
     /**
@@ -53,8 +50,8 @@ class TaskService implements TaskServiceInterface
      */
     public function fetchViewDataShow(int $projectId, int $taskId): Collection
     {
-        $project = $this->projectRepository->findOrFail($projectId);
-        $task = $this->taskRepository->findOrFail($taskId, ['user', 'child_tasks', 'types']);
+        $project = $this->projectRepository->findOrFail($projectId, ['users']);
+        $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user', 'type']);
 
         return collect(['project' => $project, 'task'=> $task]);
     }
@@ -64,11 +61,10 @@ class TaskService implements TaskServiceInterface
      */
     public function fetchViewDataEdit(int $projectId, int $taskId): Collection
     {
-        $project = $this->projectRepository->findOrFail($projectId, ['types']);
-        $projectUsers = $this->projectService->getProjectUsers($project);
+        $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
         $task = $this->taskRepository->findOrFail($taskId, ['user']);
 
-        return collect(['project'=> $project, 'project_users' => $projectUsers, 'task'=> $task]);
+        return collect(['project'=> $project, 'task'=> $task]);
     }
 
     /**

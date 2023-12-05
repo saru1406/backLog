@@ -83,21 +83,19 @@ class ProjectController extends Controller
 
     public function board(int $projectId)
     {
-        $data = $this->projectService->fetchViewDataBoardGantt($projectId);
+        $project = $this->projectService->fetchViewDataBoardGantt($projectId);
 
         return Inertia::render('Project/Board', [
-            'project' => $data['project'],
-            'projectUsers' => $data['project_user']
+            'project' => $project,
         ]);
     }
 
     public function gant(int $projectId)
     {
-        $data = $this->projectService->fetchViewDataBoardGantt($projectId);
+        $project = $this->projectService->fetchViewDataBoardGantt($projectId);
 
         return Inertia::render('Project/Gant', [
-            'project' => $data['project'],
-            'projectUsers' => $data['project_user']
+            'project' => $project,
         ]);
     }
 }

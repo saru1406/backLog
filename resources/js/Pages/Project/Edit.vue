@@ -2,15 +2,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
     'project': Object,
-    'project_users': Array,
-    'project_not_users': Array,
-    'project_types': Array,
+    'projectNotUsers': Array,
 })
 
 const user = ref('')
@@ -44,7 +42,7 @@ function store_project_type() {
                 <form @submit.prevent="store_project_user">
                     <select v-model="user"
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                        <option v-for="user in props.project_not_users" :key="user.id" :value="user.id">
+                        <option v-for="user in props.projectNotUsers" :key="user.id" :value="user.id">
                             {{ user.name }}
                         </option>
                     </select>
@@ -52,9 +50,11 @@ function store_project_type() {
                 </form>
                 <div class="p-6 text-gray-900">
                     <p>参加ユーザー</p>
-                    <div v-for="project_user in project_users" class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
-                        <p class="pl-10">{{ project_user.name }}</p>
-                        <hr>
+                    <div class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
+                        <div v-for="projectUser in props.project.users">
+                            <p class="pl-10 pt-5">{{ projectUser.name }}</p>
+                            <hr>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@ function store_project_type() {
                     </div>
                     <div class="mt-10">種別一覧</div>
                     <div class="bg-white overflow-hidden shadow-sm pb-5 px-5 rounded-md">
-                        <div v-for="projectType in project_types">
+                        <div v-for="projectType in props.project.types">
                             <p class="pl-10 pt-5">{{ projectType.name }}</p>
                             <hr>
                         </div>

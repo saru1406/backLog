@@ -49,11 +49,10 @@ class ChildTaskService implements ChildTaskServiceInterface
     public function fetchViewDataShow(int $projectId, int $taskId, int $childTaskId): Collection
     {
         $project = $this->projectRepository->findOrFail($projectId);
-        $task = $this->taskRepository->findOrFail($taskId, ['child_task']);
-        $childTask = $this->childTaskRepository->findOrFail($childTaskId);
-        $childTasks = $this->childTaskRepository->fetchChildTasksByTaskId($task, ['user']);
+        $task = $this->taskRepository->findOrFail($taskId, ['childTasks', 'childTasks.user']);
+        $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user']);
 
-        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask, 'child_tasks'=> $childTasks]);
+        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask]);
     }
 
     /**

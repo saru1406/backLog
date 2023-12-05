@@ -11,8 +11,7 @@ import Editor from 'primevue/editor';
 
 const props = defineProps({
     'project': Object,
-    'project_users': Array,
-    'project_types': Array,
+    'projectUsers': Array,
 })
 
 const form = reactive({
@@ -74,7 +73,7 @@ function storeTask() {
                             <label>担当者</label>
                             <select v-model="form.user_id"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.project_users" :key="projectUser.id"
+                                <option v-for="projectUser in props.project.users" :key="projectUser.id"
                                     :value="projectUser.id">
                                     {{ projectUser.name }}
                                 </option>
@@ -89,7 +88,7 @@ function storeTask() {
                             <label>種別</label>
                             <select v-model="form.type"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectType in props.project_types" :key="projectType.id"
+                                <option v-for="projectType in props.project.types" :key="projectType.id"
                                     :value="projectType.id">
                                     {{ projectType.name }}
                                 </option>

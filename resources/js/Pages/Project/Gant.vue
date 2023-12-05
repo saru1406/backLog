@@ -9,7 +9,6 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps({
     'project': Object,
-    'project_users': Array
 })
 
 const tasks = ref([]);

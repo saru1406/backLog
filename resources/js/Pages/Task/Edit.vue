@@ -10,9 +10,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps({
     'project': Object,
-    'project_users': Array,
     'task': Object,
-    'project_types': Object,
 })
 
 const form = reactive({
@@ -63,7 +61,7 @@ function updateTask() {
                             </select>
                             <label>担当者</label>
                             <select v-model="form.user_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.project_users" :key="projectUser.id" :value="projectUser.id">
+                                <option v-for="projectUser in props.project.users" :key="projectUser.id" :value="projectUser.id">
                                     {{ projectUser.name }}
                                 </option>
                             </select>
@@ -76,7 +74,7 @@ function updateTask() {
                             <label>種別</label>
                             <select v-model="form.type_id"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectType in props.project_types" :key="projectType.id"
+                                <option v-for="projectType in props.project.types" :key="projectType.id"
                                     :value="projectType.id">
                                     {{ projectType.name }}
                                 </option>

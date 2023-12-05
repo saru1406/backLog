@@ -10,7 +10,6 @@ const showModal = ref(false);
 
 const props = defineProps({
     'project': Object,
-    'project_users': Array
 })
 
 
@@ -158,7 +157,7 @@ function storeBranchGpt(taskId) {
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
                         <option value="" disabled selected>選択してください</option>
                         <option :value="null">全て</option>
-                        <option v-for="projectUser in props.project_users" :value="projectUser.id">
+                        <option v-for="projectUser in props.project.users" :value="projectUser.id">
                             {{ projectUser.name }}
                         </option>
                     </select>

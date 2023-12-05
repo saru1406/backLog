@@ -52,9 +52,9 @@ interface ProjectServiceInterface
      * ボードに表示するデータ取得
      *
      * @param integer $projectId
-     * @return Collection
+     * @return Project
      */
-    public function fetchViewDataBoardGantt(int $projectId): Collection;
+    public function fetchViewDataBoardGantt(int $projectId): Project;
 
 
     /**

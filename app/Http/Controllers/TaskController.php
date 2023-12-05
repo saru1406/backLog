@@ -21,11 +21,10 @@ class TaskController extends Controller
      */
     public function index(int $projectId)
     {
-        $data = $this->taskService->fetchViewDataIndex($projectId);
+        $project = $this->taskService->fetchViewDataIndex($projectId);
 
         return Inertia::render('Task/Index', [
-            'project' => $data['project'],
-            'projectUsers' => $data['project_user']
+            'project' => $project,
         ]);
     }
 
@@ -34,11 +33,10 @@ class TaskController extends Controller
      */
     public function create(int $projectId)
     {
-        $data = $this->taskService->fetchViewDataCreate($projectId);
+        $project = $this->taskService->fetchViewDataCreate($projectId);
 
         return Inertia::render('Task/Create', [
-            'project' => $data['project'],
-            'projectUsers' => $data['project_user']
+            'project' => $project,
         ]);
     }
 
@@ -60,7 +58,7 @@ class TaskController extends Controller
         return Inertia::render('Task/Show', [
             'project' => $data['project'],
             'task' => $data['task'],
-            'childTasks' => $data['child_tasks'],
+            'childTasks' => $data['task']['childTasks'],
         ]);
     }
 
@@ -73,7 +71,6 @@ class TaskController extends Controller
 
         return Inertia::render('Task/Edit', [
             'project' => $data['project'],
-            'projectUsers' => $data['project_users'],
             'task' => $data['task'],
         ]);
     }

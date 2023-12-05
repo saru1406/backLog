@@ -22,7 +22,7 @@ class TaskRepository implements TaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function store(int $projectId, array $params): void
+    public function store(array $params): void
     {
         Task::create($params);
     }

@@ -20,11 +20,10 @@ interface TaskRepositoryInterface
     /**
      * タスク保存
      *
-     * @param integer $projectId
      * @param array $params
      * @return void
      */
-    public function store(int $projectId, array $params): void;
+    public function store(array $params): void;
 
     /**
      * タスク検索

@@ -13,10 +13,7 @@ import Editor from 'primevue/editor';
 const props = defineProps({
     'project': Object,
     'task': Object,
-    'task_user': Object,
-    'child_tasks': Array,
-    'project_users': Object,
-    'task_type': Object,
+    'childTasks': Array,
 })
 
 const showModal = ref(false);
@@ -134,23 +131,23 @@ const formatDate = (dateString) => {
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">種別</label>
-                                <span v-if="props.task_type">
-                                    <span v-if="props.task_type.name === 'バグ'"
+                                <span v-if="props.task.type">
+                                    <span v-if="props.task.type.name === 'バグ'"
                                         class="rounded-full py-2 px-6 bg-red-600 ml-10 text-white">
-                                        {{ props.task_type.name }}
+                                        {{ props.task.type.name }}
                                     </span>
-                                    <span v-if="props.task_type.name === '実装'"
+                                    <span v-if="props.task.type.name === '実装'"
                                         class="rounded-full py-2 px-6 bg-blue-600 ml-10 text-white">
-                                        {{ props.task_type.name }}
+                                        {{ props.task.type.name }}
                                     </span>
-                                    <span v-if="props.task_type.name === '改善'"
+                                    <span v-if="props.task.type.name === '改善'"
                                         class="rounded-full py-2 px-6 bg-pink-600 ml-10 text-white">
-                                        {{ props.task_type.name }}
+                                        {{ props.task.type.name }}
                                     </span>
                                     <span
-                                        v-if="props.task_type.name !== '改善' && props.task_type.name !== '実装' && props.task_type.name !== 'バグ'"
+                                        v-if="props.task.type.name !== '改善' && props.task.type.name !== '実装' && props.task.type.name !== 'バグ'"
                                         class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white">
-                                        {{ props.task_type.name }}
+                                        {{ props.task.type.name }}
                                     </span>
                                 </span>
                             </div>
@@ -174,7 +171,7 @@ const formatDate = (dateString) => {
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">担当者</label>
-                                <span class="pl-10">{{ props.task_user.name }}</span>
+                                <span class="pl-10">{{ props.task.user.name }}</span>
                             </div>
                             <hr>
                             <div class="my-5">
@@ -193,7 +190,7 @@ const formatDate = (dateString) => {
                                 class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
                                 子課題を追加
                             </button>
-                            <button v-if="!child_tasks || child_tasks.length === 0" @click="storeChildTaskGpt"
+                            <button v-if="!props.childTasks || props.childTasks.length === 0" @click="storeChildTaskGpt"
                                 class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 my-5">
                                 GPTで子課題を自動作成
                             </button>
@@ -225,7 +222,7 @@ const formatDate = (dateString) => {
                                         登録日</th>
                                 </tr>
                             </thead>
-                            <tbody v-for="childTask in props.child_tasks" :key="childTask.id">
+                            <tbody v-for="childTask in props.childTasks" :key="childTask.id">
                                 <tr class="border-b border-gray-300 hover:bg-blue-200"
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
@@ -270,7 +267,7 @@ const formatDate = (dateString) => {
                         <label>担当者</label>
                         <select v-model="form.user_id"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option v-for="projectUser in props.project_users" :key="projectUser.id"
+                            <option v-for="projectUser in props.project.users" :key="projectUser.id"
                                 :value="projectUser.id">
                                 {{ projectUser.name }}
                             </option>

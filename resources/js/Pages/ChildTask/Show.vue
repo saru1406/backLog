@@ -6,15 +6,12 @@ import SideMenu from '@/Components/SideMenu.vue'
 const props = defineProps({
     'project': Object,
     'task': Object,
-    'child_task_user': Object,
-    'child_task': Object,
-    'child_tasks': Array
+    'childTask': Object,
 })
 
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
 
-console.log(props.child_tasks)
 </script>
 
 <template>
@@ -30,12 +27,12 @@ console.log(props.child_tasks)
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
                 <div class="p-10">
-                    <p class="font-semibold">{{ props.child_task.title }}</p>
-                    <Link :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: child_task })"
+                    <p class="font-semibold">{{ props.childTask.title }}</p>
+                    <Link :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: childTask })"
                         class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     編集</Link>
-                    <label class="pl-5">開始日</label>{{ props.child_task.start_date }}
-                    <label class="pl-5">終了日</label>{{ props.child_task.end_date }}
+                    <label class="pl-5">開始日</label>{{ props.childTask.start_date }}
+                    <label class="pl-5">終了日</label>{{ props.childTask.end_date }}
                     <div class="h-auto bg-white p-4">
                         <div>
                             <p class="font-semibold p-5">概要</p>
@@ -43,17 +40,17 @@ console.log(props.child_tasks)
                         </div>
                         <div>
                             <p class="font-semibold p-5">詳細</p>
-                            <p class="p-5">{{ props.child_task.content }}</p>
+                            <p class="p-5">{{ props.childTask.content }}</p>
                             <hr>
                         </div>
                         <div>
                             <p class="font-semibold p-5">備考</p>
                             <hr>
-                            <p class="m-3">優先度</p>{{ props.child_task.priority }}
+                            <p class="m-3">優先度</p>{{ props.childTask.priority }}
                             <hr>
                             <p class="m-3">カテゴリー</p>
                             <hr>
-                            <p class="m-3">担当者</p>{{ props.child_task_user.name }}
+                            <p class="m-3">担当者</p>{{ props.childTask.user.name }}
                         </div>
                     </div>
                     <!-- TODOモーダルでcreate画面表示する -->
@@ -89,7 +86,7 @@ console.log(props.child_tasks)
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="childTask in props.child_tasks" :key="childTask.id">
+                            <tbody v-for="childTask in props.task.child_tasks" :key="childTask.id">
                                 <tr class="border-b border-gray-300 hover:bg-blue-200"
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>

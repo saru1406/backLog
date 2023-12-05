@@ -54,7 +54,6 @@ class ChildTaskController extends Controller
             'project' => $data['project'],
             'task' => $data['task'],
             'childTask' => $data['child_task'],
-            'childTasks' => $data['child_tasks'],
         ]);
     }
 

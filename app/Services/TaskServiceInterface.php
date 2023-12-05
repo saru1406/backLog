@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Repositories\TaskParams;
 use Illuminate\Support\Collection;
 
@@ -11,17 +12,17 @@ interface TaskServiceInterface
      * indexに表示するデータ取得
      *
      * @param integer $projectId
-     * @return Collection
+     * @return Project
      */
-    public function fetchViewDataIndex(int $projectId): Collection;
+    public function fetchViewDataIndex(int $projectId): Project;
 
     /**
      * createに表示するデータ取得
      *
      * @param integer $projectId
-     * @return Collection
+     * @return Project
      */
-    public function fetchViewDataCreate(int $projectId): Collection;
+    public function fetchViewDataCreate(int $projectId): Project;
 
     /**
      * タスク保存

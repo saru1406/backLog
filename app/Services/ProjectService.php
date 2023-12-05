@@ -77,12 +77,9 @@ class ProjectService implements ProjectServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchViewDataBoardGantt(int $projectId): Collection
+    public function fetchViewDataBoardGantt(int $projectId): Project
     {
-        $project = $this->projectRepository->findOrFail($projectId);
-        $projectUsers = $this->getProjectUsers($project);
-
-        return collect(['project' => $project, 'project_users' => $projectUsers]);
+        return $this->projectRepository->findOrFail($projectId, ['users']);
     }
 
     /**
