@@ -21,16 +21,13 @@ class TaskFactory extends Factory
     {
         $startDate = fake()->dateTimeBetween('now', '+1 year');
         $endDate = fake()->dateTimeBetween($startDate, '+1 year +1 month');
+        $user = User::inRandomOrder()->first()->id;
+
         return [
-            'user_id' => function() {
-                return User::inRandomOrder()->first()->id;
-            },
-            'project_id' => function() {
-                return Project::inRandomOrder()->first()->id;
-            },
-            'type_id' => function() {
-                return Type::inRandomOrder()->first()->id;
-            },
+            'user_id' => $user,
+            'creator_id' => $user,
+            'project_id' =>  Project::inRandomOrder()->first()->id,
+            'type_id' => Type::inRandomOrder()->first()->id,
             'title' => fake()->realText(40),
             'content' => fake()->realText(),
             'status' => fake()->randomElement(['未対応', '処理中', '処理済み', '完了']),

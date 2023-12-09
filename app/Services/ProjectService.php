@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Project;
 use App\Repositories\ProjectRepositoryInterface;
+use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\TypeRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -14,8 +15,10 @@ class ProjectService implements ProjectServiceInterface
     public function __construct(
         private ProjectRepositoryInterface $projectRepository,
         private UserRepositoryInterface $userRepository,
-        private TypeRepositoryInterface $typeRepository
-    ) {}
+        private TypeRepositoryInterface $typeRepository,
+        private TaskRepositoryInterface $taskRepository,
+    ) {
+    }
 
     /**
      * {@inheritDoc}
@@ -51,7 +54,7 @@ class ProjectService implements ProjectServiceInterface
      */
     public function fetchViewDataShow(int $projectId): Project
     {
-        return $this->projectRepository->findOrFail($projectId);
+        return $this->projectRepository->findOrFail($projectId, ['tasks']);
     }
 
     /**

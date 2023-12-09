@@ -50,7 +50,7 @@ function store_project_type() {
                 </form>
                 <div class="p-6 text-gray-900">
                     <p>参加ユーザー</p>
-                    <div class="bg-white overflow-hidden shadow-sm p-5 rounded-md">
+                    <div class="bg-white overflow-hidden shadow-sm pb-5 px-5 rounded-md">
                         <div v-for="projectUser in props.project.users">
                             <p class="pl-10 pt-5">{{ projectUser.name }}</p>
                             <hr>

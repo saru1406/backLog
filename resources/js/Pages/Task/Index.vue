@@ -4,7 +4,6 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
-import Modal from '@/Components/Modal.vue';
 import Paginator from 'primevue/paginator';
 
 const props = defineProps({
@@ -20,7 +19,6 @@ const pagination = reactive({
     last_page: null,
     total: null,
 })
-console.log(pagination)
 
 const filters = reactive({
     user_id: null,

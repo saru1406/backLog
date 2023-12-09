@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -16,6 +17,16 @@ interface TaskRepositoryInterface
      * @return Task
      */
     public function findOrFail(int $taskId, array $option = []): Task;
+
+    /**
+     * タスクページネーションで取得
+     *
+     * @param Project $project
+     * @param array $option
+     * @param integer $perPage
+     * @return Paginator
+     */
+    public function findOrFailByPaginate(Project $project, array $option = [], int $perPage = 10): Paginator;
 
     /**
      * タスク保存

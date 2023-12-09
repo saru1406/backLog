@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use App\Models\Task;
 use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
@@ -17,6 +18,14 @@ class TaskRepository implements TaskRepositoryInterface
     public function findOrFail(int $taskId, array $option = []): Task
     {
         return Task::with($option)->findOrFail($taskId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findOrFailByPaginate(Project $project, array $option = [], int $perPage = 10): Paginator
+    {
+        return $project->tasks()->with($option)->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     /**
@@ -56,11 +65,12 @@ class TaskRepository implements TaskRepositoryInterface
         }
 
         if ($params->getIsPagination()) {
+            $query->orderBy('created_at', 'desc');
             Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
             return $query->with(['user', 'childTasks', 'type'])->paginate(20);
         }
         Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
-        return $query->with(['user', 'childTasks', 'type'])->get();
+        return $query->with(['user', 'childTasks', 'childTasks.user' , 'type'])->get();
     }
 
     /**
@@ -77,7 +87,7 @@ class TaskRepository implements TaskRepositoryInterface
         // $startDate,$endDateの範囲内にある全てのタスク取得
         $query->where(function ($query) use ($startDate, $endDate) {
             $query->whereBetween('start_date', [$startDate, $endDate])
-                  ->orWhereBetween('end_date', [$startDate, $endDate]);
+                ->orWhereBetween('end_date', [$startDate, $endDate]);
         });
 
         if (in_array($params->getStatus(), ['未対応', '処理中', '処理済み', '完了'])) {
@@ -91,7 +101,7 @@ class TaskRepository implements TaskRepositoryInterface
         }
         Log::info('エンドデータ', ['test' => $params->getStartDate()]);
 
-        if($params->getGroup()) {
+        if ($params->getGroup()) {
             $query->where('start_date', '>=', $params->getGroup());
         }
 
@@ -101,7 +111,7 @@ class TaskRepository implements TaskRepositoryInterface
         });
 
         // 各ユーザーIDのグループにユーザー名を追加
-        $groupedTasks = $groupedTasks->map(function ($tasks, $userId) use($startDate, $endDate) {
+        $groupedTasks = $groupedTasks->map(function ($tasks, $userId) use ($startDate, $endDate) {
             return [
                 'user_id' => $userId,
                 'user_name' => $tasks->first()->user->name,

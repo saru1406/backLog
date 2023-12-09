@@ -31,13 +31,23 @@ const handleDragStart = (task) => {
 const handleDrop = (status) => {
     if (draggedTask.value) {
         draggedTask.value.status = status;
-        // ここでAPI呼び出しをしてサーバー側のデータも更新できます。
+        updateTask(draggedTask.value.id, status)
         draggedTask.value = null;
     }
 };
 
 const allowDrop = (event) => {
     event.preventDefault();
+};
+
+const updateTask = async (taskId ,status) => {
+    try {
+        let url = ` /api/projects/${props.project.id}/tasks/${taskId}/update`;
+        const params = new URLSearchParams();
+        const response = await axios.patch(url, { status: status });
+    } catch (error) {
+        console.error('APIエラー: ', error);
+    }
 };
 
 const fetchTasks = async (project, filters) => {
