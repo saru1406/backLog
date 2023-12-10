@@ -25,6 +25,7 @@
         "quill": "^1.3.7",
         "three": "^0.134.0",
         "troisjs": "^0.3.4",
-        "vue-ganttastic": "^0.9.34"
+        "vue-ganttastic": "^0.9.34",
+        "vuedraggable": "^4.1.0"
     }
 }

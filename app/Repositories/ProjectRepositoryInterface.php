@@ -59,4 +59,12 @@ interface ProjectRepositoryInterface
      * @return void
      */
     public function storeProjectUser(int $userId, Project $project): void;
+
+    /**
+     * プロジェクトの削除
+     *
+     * @param integer $projectId
+     * @return void
+     */
+    public function destroy(int $projectId): void;
 }

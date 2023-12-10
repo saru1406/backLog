@@ -5,6 +5,7 @@ import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, watch, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
+import draggable from 'vuedraggable';
 
 const showModal = ref(false);
 
@@ -40,7 +41,7 @@ const allowDrop = (event) => {
     event.preventDefault();
 };
 
-const updateTask = async (taskId ,status) => {
+const updateTask = async (taskId, status) => {
     try {
         let url = ` /api/projects/${props.project.id}/tasks/${taskId}/update`;
         const params = new URLSearchParams();
@@ -196,276 +197,302 @@ function storeBranchGpt(taskId) {
                     <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
                         @drop="handleDrop('未対応')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-orange-200 sticky top-0">未対応</h3>
-                        <div v-for="(task, index) in tasks" :key="task.id">
-                            <!-- <div v-for="childTask in tasks" :key="childTask.id"> -->
-                            <div v-if="task.status === '未対応'">
-                                <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
-                                    <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="flex items-center text-center text-white text-xs my-1">
-                                            <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                            <div v-if="task.type">
-                                                <div v-if="task.type.name === 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '実装'"
-                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '改善'"
-                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mx-3 mb-2 text-sm">
-                                            {{ task.title }}
-                                        </div>
-                                        <div class="mx-3">
-                                            担当者: {{ task.user.name }}<br />
-                                            期限: {{ formatDate(task.end_date) }}
-                                        </div>
-                                    </button>
-                                </div>
-                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                        <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
+                            <template #item="{element}">
+                                <div v-if="element.status === '未対応'">
+                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                                <div v-if="task.type">
-                                                    <div v-if="task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                <div v-if="element.type">
+                                                    <div v-if="element.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '実装'"
-                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '改善'"
-                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ element.type.name
                                                         }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mx-3 mb-2 text-sm">
-                                                {{ childTask.title.title }}
+                                                {{ element.title }}
                                             </div>
                                             <div class="mx-3">
-                                                <!-- 担当者: {{ childTask.user.name }}<br /> -->
-                                                期限: {{ formatDate(childTask.end_date) }}
+                                                担当者: {{ element.user.name }}<br />
+                                                期限: {{ formatDate(element.end_date) }}
                                             </div>
                                         </button>
                                     </div>
+                                    <div v-for="childTask in element.child_tasks" :key="childTask.id">
+                                        <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                                            draggable="true">
+                                            <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                                <div class="flex items-center text-center text-white text-xs my-1">
+                                                    <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                    <div v-if="element.type">
+                                                        <div v-if="element.type.name === 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                            }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '実装'"
+                                                            class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '改善'"
+                                                            class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
+                                                                element.type.name
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-3 mb-2 text-sm">
+                                                    {{ childTask.title.title }}
+                                                </div>
+                                                <div class="mx-3">
+                                                    期限: {{ formatDate(childTask.end_date) }}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- </div> -->
-                        </div>
+                            </template>
+                        </draggable>
                     </div>
                     <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
                         @drop="handleDrop('処理中')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-green-300 sticky top-0">処理中</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <div v-if="task.status === '処理中'">
-                                <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
-                                    <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="flex items-center text-center text-white text-xs my-1">
-                                            <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
-                                            <div v-if="task.type">
-                                                <div v-if="task.type.name === 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '実装'"
-                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '改善'"
-                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mx-3 mb-2 text-sm">
-                                            {{ task.title }}
-                                        </div>
-                                        <div class="mx-3">
-                                            担当者: {{ task.user.name }}<br />
-                                            期限: {{ formatDate(task.end_date) }}
-                                        </div>
-                                    </button>
-                                </div>
-                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                        <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
+                            <template #item="{element}">
+                                <div v-if="element.status === '処理中'">
+                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
-                                                <div v-if="task.type">
-                                                    <div v-if="task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div v-if="element.type">
+                                                    <div v-if="element.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '実装'"
-                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '改善'"
-                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ element.type.name
                                                         }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mx-3 mb-2 text-sm">
-                                                {{ childTask.title.title }}
+                                                {{ element.title }}
                                             </div>
                                             <div class="mx-3">
-                                                <!-- 担当者: {{ childTask.user.name }}<br /> -->
-                                                期限: {{ formatDate(childTask.end_date) }}
+                                                担当者: {{ element.user.name }}<br />
+                                                期限: {{ formatDate(element.end_date) }}
                                             </div>
                                         </button>
                                     </div>
+                                    <div v-for="childTask in element.child_tasks" :key="childTask.id">
+                                        <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                                            draggable="true">
+                                            <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                                <div class="flex items-center text-center text-white text-xs my-1">
+                                                    <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                    <div v-if="element.type">
+                                                        <div v-if="element.type.name === 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                            }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '実装'"
+                                                            class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '改善'"
+                                                            class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
+                                                                element.type.name
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-3 mb-2 text-sm">
+                                                    {{ childTask.title.title }}
+                                                </div>
+                                                <div class="mx-3">
+                                                    期限: {{ formatDate(childTask.end_date) }}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </template>
+                        </draggable>
                     </div>
                     <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
                         @drop="handleDrop('処理済み')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-indigo-200 sticky top-0">処理済み</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <div v-if="task.status === '処理済み'">
-                                <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
-                                    <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="flex items-center text-center text-white text-xs my-1">
-                                            <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
-                                            <div v-if="task.type">
-                                                <div v-if="task.type.name === 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '実装'"
-                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '改善'"
-                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mx-3 mb-2 text-sm">
-                                            {{ task.title }}
-                                        </div>
-                                        <div class="mx-3">
-                                            担当者: {{ task.user.name }}<br />
-                                            期限: {{ formatDate(task.end_date) }}
-                                        </div>
-                                    </button>
-                                </div>
-                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                        <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
+                            <template #item="{element}">
+                                <div v-if="element.status === '処理済み'">
+                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
-                                                <div v-if="task.type">
-                                                    <div v-if="task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div v-if="element.type">
+                                                    <div v-if="element.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '実装'"
-                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '改善'"
-                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ element.type.name
                                                         }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mx-3 mb-2 text-sm">
-                                                {{ childTask.title }}
+                                                {{ element.title }}
                                             </div>
                                             <div class="mx-3">
-                                                <!-- 担当者: {{ childTask.user.name }}<br /> -->
-                                                期限: {{ formatDate(childTask.end_date) }}
+                                                担当者: {{ element.user.name }}<br />
+                                                期限: {{ formatDate(element.end_date) }}
                                             </div>
                                         </button>
                                     </div>
+                                    <div v-for="childTask in element.child_tasks" :key="childTask.id">
+                                        <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                                            draggable="true">
+                                            <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                                <div class="flex items-center text-center text-white text-xs my-1">
+                                                    <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                    <div v-if="element.type">
+                                                        <div v-if="element.type.name === 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                            }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '実装'"
+                                                            class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '改善'"
+                                                            class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
+                                                                element.type.name
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-3 mb-2 text-sm">
+                                                    {{ childTask.title.title }}
+                                                </div>
+                                                <div class="mx-3">
+                                                    期限: {{ formatDate(childTask.end_date) }}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </template>
+                        </draggable>
                     </div>
                     <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
                         @drop="handleDrop('完了')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-slate-300 sticky top-0">完了</h3>
-                        <div v-for="task in tasks" :key="task.id">
-                            <div v-if="task.status === '完了'">
-                                <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(task)" draggable="true">
-                                    <button class="text-left" @click="openModalWithTask(task)">
-                                        <div class="flex items-center text-center text-white text-xs my-1">
-                                            <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
-                                            <div v-if="task.type">
-                                                <div v-if="task.type.name === 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '実装'"
-                                                    class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name === '改善'"
-                                                    class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
-                                                </div>
-                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                    class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mx-3 mb-2 text-sm">
-                                            {{ task.title }}
-                                        </div>
-                                        <div class="mx-3">
-                                            担当者: {{ task.user.name }}<br />
-                                            期限: {{ formatDate(task.end_date) }}
-                                        </div>
-                                    </button>
-                                </div>
-                                <div v-for="childTask in task.child_tasks" :key="childTask.id">
-                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                        <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
+                            <template #item="{element}">
+                                <div v-if="element.status === '完了'">
+                                    <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
-                                                <div v-if="task.type">
-                                                    <div v-if="task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ task.type.name }}
+                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div v-if="element.type">
+                                                    <div v-if="element.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '実装'"
-                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '実装'"
+                                                        class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name === '改善'"
-                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ task.type.name }}
+                                                    <div v-if="element.type.name === '改善'"
+                                                        class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{ element.type.name }}
                                                     </div>
-                                                    <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ task.type.name
+                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{ element.type.name
                                                         }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mx-3 mb-2 text-sm">
-                                                {{ childTask.title.title }}
+                                                {{ element.title }}
                                             </div>
                                             <div class="mx-3">
-                                                <!-- 担当者: {{ childTask.user.name }}<br /> -->
-                                                期限: {{ formatDate(childTask.end_date) }}
+                                                担当者: {{ element.user.name }}<br />
+                                                期限: {{ formatDate(element.end_date) }}
                                             </div>
                                         </button>
                                     </div>
+                                    <div v-for="childTask in element.child_tasks" :key="childTask.id">
+                                        <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(childTask)"
+                                            draggable="true">
+                                            <button class="text-left" @click="openModalWithTask(childTask.id)">
+                                                <div class="flex items-center text-center text-white text-xs my-1">
+                                                    <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                    <div v-if="element.type">
+                                                        <div v-if="element.type.name === 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                            }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '実装'"
+                                                            class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name === '改善'"
+                                                            class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
+                                                                element.type.name }}
+                                                        </div>
+                                                        <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                            class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
+                                                                element.type.name
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-3 mb-2 text-sm">
+                                                    {{ childTask.title.title }}
+                                                </div>
+                                                <div class="mx-3">
+                                                    期限: {{ formatDate(childTask.end_date) }}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </template>
+                        </draggable>
                     </div>
                 </div>
             </div>
@@ -613,3 +640,8 @@ function storeBranchGpt(taskId) {
         </div>
     </Modal>
 </template>
+<style>
+.dragClass {
+    opacity: 1 !important;
+}
+</style>

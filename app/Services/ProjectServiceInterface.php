@@ -72,4 +72,12 @@ interface ProjectServiceInterface
      * @return Collection
      */
     public function fetchProjectNotAssignUsers(Collection $projectUsers): Collection;
+
+    /**
+     * プロジェクトの削除
+     *
+     * @param integer $projectId
+     * @return void
+     */
+    public function destroy(int $projectId): void;
 }

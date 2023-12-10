@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { ref } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -22,6 +22,10 @@ function store_project_user() {
 function store_project_type() {
     router.post(`/projects/${props.project.id}/type`, { type_name: type.value })
     type.value = ''
+}
+
+function deleteProject() {
+    router.delete(`/projects/${props.project.id}`)
 }
 
 </script>
@@ -71,10 +75,21 @@ function store_project_type() {
                     <div class="mt-10">種別一覧</div>
                     <div class="bg-white overflow-hidden shadow-sm pb-5 px-5 rounded-md">
                         <div v-for="projectType in props.project.types">
-                            <p class="pl-10 pt-5">{{ projectType.name }}</p>
+                            <div class="flex items-center py-2">
+                                <p class="pl-10">{{ projectType.name }}</p>
+                                <span
+                                    class="ml-52 inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    削除
+                                </span>
+                            </div>
                             <hr>
                         </div>
+
                     </div>
+                </div>
+                <div @click="deleteProject"
+                    class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    プロジェクト削除
                 </div>
             </div>
         </div>

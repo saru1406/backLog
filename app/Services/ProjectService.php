@@ -113,4 +113,12 @@ class ProjectService implements ProjectServiceInterface
 
         return $this->userRepository->fetchProjectNotUser($companyId, $projectUserIds);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $projectId): void
+    {
+        $this->projectRepository->destroy($projectId);
+    }
 }

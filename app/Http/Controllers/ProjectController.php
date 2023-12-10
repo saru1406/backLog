@@ -71,9 +71,11 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(int $projectId)
     {
-        //
+        $this->projectService->destroy($projectId);
+
+        return to_route('projects.index');
     }
 
     public function storeProjectUser(StoreProjectUserRequest $request, int $projectId)
