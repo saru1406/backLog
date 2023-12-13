@@ -59,14 +59,14 @@ function storeTask() {
                         <p>課題の追加</p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                     </div>
-                    <div class="bg-white p-5 m-5 rounded">
+                    <div class="bg-white p-5 m-5 rounded border border-gray-200">
                         <div class="card">
                             <Editor v-model="form.content" editorStyle="height: 320px" />
                         </div>
                         <table class="w-full text-sm">
                             <tbody>
                                 <tr>
-                                    <td class="border-b border-gray-300 py-16 pl-8 text-left">状態</td>
+                                    <td class="border-b border-gray-300 py-16 pl-8 text-left">状態<span class="text-red-500 text-lg">*</span></td>
                                     <td class="border-b border-gray-300">
                                         <select v-model="form.status"
                                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
@@ -77,7 +77,7 @@ function storeTask() {
                                         </select>
                                     </td>
                                     <td class="w-1/12"></td>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300">担当者</td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span class="text-red-500 text-lg">*</span></td>
                                     <td class="border-b border-gray-300">
                                         <select v-model="form.user_id"
                                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">

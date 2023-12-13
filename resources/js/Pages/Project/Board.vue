@@ -6,12 +6,41 @@ import { reactive, ref, watch, computed, onMounted } from 'vue';
 import axios from 'axios';
 import Modal from '@/Components/Modal.vue';
 import draggable from 'vuedraggable';
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import Editor from 'primevue/editor';
+import TextInput from '@/Components/TextInput.vue'
 
 const showModal = ref(false);
+
+const showChildModal = ref(false);
 
 const props = defineProps({
     'project': Object,
 })
+
+const form = reactive({
+    user_id: null,
+    title: null,
+    content: null,
+    status: null,
+    priority: null,
+    start_date: null,
+    end_date: null,
+})
+
+function storeChildTask() {
+    router.post(`/projects/${props.project.id}/tasks/${selectedTask.value.id}/child-tasks`, form)
+    // 保存が成功した後にフォームをリセット
+    form.user_id = null;
+    form.title = null;
+    form.content = null;
+    form.status = null;
+    form.priority = null;
+    form.start_date = null;
+    form.end_date = null;
+}
 
 
 const tasks = ref([]);
@@ -194,7 +223,7 @@ function storeBranchGpt(taskId) {
                     </select>
                 </div>
                 <div class="flex space-x-4">
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px border border-gray-200"
                         @drop="handleDrop('未対応')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-orange-200 sticky top-0">未対応</h3>
                         <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
@@ -269,7 +298,7 @@ function storeBranchGpt(taskId) {
                             </template>
                         </draggable>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px border border-gray-200"
                         @drop="handleDrop('処理中')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-green-300 sticky top-0">処理中</h3>
                         <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
@@ -344,7 +373,7 @@ function storeBranchGpt(taskId) {
                             </template>
                         </draggable>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px border border-gray-200"
                         @drop="handleDrop('処理済み')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-indigo-200 sticky top-0">処理済み</h3>
                         <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
@@ -419,7 +448,7 @@ function storeBranchGpt(taskId) {
                             </template>
                         </draggable>
                     </div>
-                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px"
+                    <div class="rounded px-4 py-2 text-gray-900 bg-white overflow-y-auto min-h-730px max-h-730px min-w-375px border border-gray-200"
                         @drop="handleDrop('完了')" @dragover="allowDrop($event)">
                         <h3 class="text-center rounded-full p-1 bg-slate-300 sticky top-0">完了</h3>
                         <draggable v-model="tasks" item-key="id" class="space-y-4" drag-class="dragClass" :options="{ forceFallback: true }">
@@ -499,14 +528,9 @@ function storeBranchGpt(taskId) {
         </div>
     </AuthenticatedLayout>
     <Modal :show="showModal" @close="showModal = false" :maxWidth="'3xl'">
-        <div class="h-[850px] bg-gray-100">
+        <div class="bg-gray-100">
             <div class="p-10">
-                <Link :href="route('projects.tasks.edit', { project: project, task: selectedTask })"
-                    class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                編集</Link>
-                <label class="pl-5">開始日</label>{{ formatDate(selectedTask.start_date) }}
-                <label class="pl-5">終了日</label>{{ formatDate(selectedTask.end_date) }}
-                <div class="h-auto bg-white p-4 rounded">
+                <div class="h-auto bg-white p-4 rounded border border-gray-200">
                     <div>
                         <p class="font-semibold p-5">タイトル</p>
                         <p class="font-semibold p-5">{{ selectedTask.title }}</p>
@@ -517,77 +541,101 @@ function storeBranchGpt(taskId) {
                         <p class="p-5">{{ selectedTask.content }}</p>
                         <hr>
                     </div>
-                    <div>
-                        <div class="my-5">
-                            <label class="font-semibold m-3">優先度</label>
-                            <span v-if="selectedTask.priority === '高'" class="text-red-600 pl-10 font-semibold">
-                                {{ selectedTask.priority }}
-                            </span>
-                            <span v-if="selectedTask.priority === '中'" class="text-green-500 pl-10 font-semibold">
-                                {{ selectedTask.priority }}
-                            </span>
-                            <span v-if="selectedTask.priority === '低'" class="text-blue-500 pl-10 font-semibold">
-                                {{ selectedTask.priority }}
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="my-5">
-                            <label class="m-3 font-semibold">種別</label>
-                            <span v-if="selectedTask.type">
-                                <span v-if="selectedTask.type.name === 'バグ'"
-                                    class="rounded-full py-2 px-4 bg-red-600 ml-10 text-white">
-                                    {{ selectedTask.type.name }}
-                                </span>
-                                <span v-if="selectedTask.type.name === '実装'"
-                                    class="rounded-full py-2 px-4 bg-blue-600 ml-10 text-white">
-                                    {{ selectedTask.type.name }}
-                                </span>
-                                <span v-if="selectedTask.type.name === '改善'"
-                                    class="rounded-full py-2 px-4 bg-pink-600 ml-10 text-white">
-                                    {{ selectedTask.type.name }}
-                                </span>
-                                <span
-                                    v-if="selectedTask.type.name !== '改善' && selectedTask.type.name !== '実装' && selectedTask.type.name !== 'バグ'"
-                                    class="rounded-full py-2 px-3 bg-slate-500 ml-10 text-white">
-                                    {{ selectedTask.type.name }}
-                                </span>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="my-5">
-                            <label class="m-3 font-semibold">状態</label>
-                            <span v-if="selectedTask.status === '完了'" class="rounded-full py-2 px-3 bg-slate-300 ml-10">
-                                {{ selectedTask.status }}
-                            </span>
-                            <span v-if="selectedTask.status === '処理済み'" class="rounded-full py-2 px-3 bg-indigo-200 ml-10">
-                                {{ selectedTask.status }}
-                            </span>
-                            <span v-if="selectedTask.status === '未対応'" class="rounded-full py-2 px-3 bg-orange-200 ml-10">
-                                {{ selectedTask.status }}
-                            </span>
-                            <span v-if="selectedTask.status === '処理中'" class="rounded-full py-2 px-3 bg-green-300 ml-10">
-                                {{ selectedTask.status }}
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="my-5">
-                            <label class="m-3 font-semibold">担当者</label>
-                            <span class="pl-10">{{ selectedTask.user.name }}</span>
-                        </div>
-                        <hr>
-                        <div class="my-5">
-                            <label class="m-3 font-semibold">ブランチ名</label>
-                            <span class="pl-10">{{ selectedTask.branch_name }}</span>
-                            <button v-if="!selectedTask.branch_name" @click="storeBranchGpt(selectedTask.id)"
-                                class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                GPTでブランチ名を自動作成
-                            </button>
+                    <table class="w-full text-sm">
+                            <tbody>
+                                <tr>
+                                    <td class="border-b border-gray-300 py-8 pl-8 text-left w-1/6">状態</td>
+                                    <td class="border-b border-gray-300 w-80">
+                                        <span v-if="selectedTask.status === '完了'"
+                                            class="rounded-full py-2 px-6 bg-slate-300">
+                                            {{ selectedTask.status }}
+                                        </span>
+                                        <span v-if="selectedTask.status === '処理済み'"
+                                            class="rounded-full py-2 px-6 bg-indigo-200">
+                                            {{ selectedTask.status }}
+                                        </span>
+                                        <span v-if="selectedTask.status === '未対応'"
+                                            class="rounded-full py-2 px-6 bg-orange-200">
+                                            {{ selectedTask.status }}
+                                        </span>
+                                        <span v-if="selectedTask.status === '処理中'"
+                                            class="rounded-full py-2 px-6 bg-green-300">
+                                            {{ selectedTask.status }}
+                                        </span>
+                                    </td>
+                                    <td class="w-1/12"></td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 w-1/6">担当者</td>
+                                    <td class="border-b border-gray-300 w-80">{{ selectedTask.user.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
+                                    <td v-if="selectedTask.priority === '高'"
+                                        class="text-lg text-red-600 border-b border-gray-300">
+                                        {{ selectedTask.priority }}
+                                    </td>
+                                    <td v-if="selectedTask.priority === '中'"
+                                        class="text-lg text-green-500 border-b border-gray-300">
+                                        {{ selectedTask.priority }}
+                                    </td>
+                                    <td v-if="selectedTask.priority === '低'"
+                                        class="text-lg text-blue-500 border-b border-gray-300">
+                                        {{ selectedTask.priority }}
+                                    </td>
+                                    <td class="w-1/12"></td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300">種別</td>
+                                    <td v-if="selectedTask.type" class="border-b border-gray-300">
+                                        <span v-if="selectedTask.type.name === 'バグ'"
+                                            class="rounded-full py-2 px-6 bg-red-600 text-white text-xs">
+                                            {{ selectedTask.type.name }}
+                                        </span>
+                                        <span v-if="selectedTask.type.name === '実装'"
+                                            class="rounded-full py-2 px-6 bg-blue-600 text-white text-xs">
+                                            {{ selectedTask.type.name }}
+                                        </span>
+                                        <span v-if="selectedTask.type.name === '改善'"
+                                            class="rounded-full py-2 px-6 bg-pink-600 text-white text-xs">
+                                            {{ selectedTask.type.name }}
+                                        </span>
+                                        <span
+                                            v-if="selectedTask.type.name !== '改善' && selectedTask.type.name !== '実装' && selectedTask.type.name !== 'バグ'"
+                                            class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white text-xs">
+                                            {{ selectedTask.type.name }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
+                                    <td class="border-b border-gray-300">
+                                        <span class="">{{ selectedTask.branch_name }}</span>
+                                        <button v-if="!selectedTask.branch_name" @click="storeBranchGpt"
+                                            class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            GPTでブランチ名を自動作成
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8">開始日</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(selectedTask.start_date) }}</td>
+                                    <td class="w-1/12"></td>
+                                    <td class="pl-8 text-left border-b border-gray-300">終了日</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(selectedTask.end_date) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <div class="flex justify-end my-5">
+                        <Link :href="route('projects.tasks.edit', { project: project, task: selectedTask })"
+                            class="mx-6 inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        編集
+                        </Link>
+                        <div @click="deleteTask" style="cursor: pointer;"
+                            class="text-right inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            タスク削除
                         </div>
                     </div>
-                </div>
-                <div class="h-auto mt-10 bg-white p-4 rounded">
+                <div class="h-auto mt-10 bg-white p-4 rounded border border-gray-200">
                     <div class="flex">
-                        <button @click="showModal = true"
+                        <button @click="showChildModal = true"
                             class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
                             子課題を追加
                         </button>
@@ -638,6 +686,57 @@ function storeBranchGpt(taskId) {
                 </div>
             </div>
         </div>
+    </Modal>
+    <Modal :show="showChildModal" @close="showChildModal = false" :maxWidth="'xl'">
+        <div class="p-6 text-gray-900 w-full">
+                <form @submit.prevent="storeChildTask">
+                    <div class="m-5">
+                        <p>子課題の追加</p>
+                        <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
+                    </div>
+                    <div class="bg-white p-5 m-5">
+                        <div class="card">
+                            <Editor v-model="form.content" editorStyle="height: 320px" />
+                        </div>
+                        <div>
+                            <label>状態</label>
+                            <select v-model="form.status"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option value="未対応">未対応</option>
+                                <option value="処理中">処理中</option>
+                                <option value="処理済み">処理済み</option>
+                                <option value="完了">完了</option>
+                            </select>
+                            <label>担当者</label>
+                            <select v-model="form.user_id"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectUser in props.project.users" :key="projectUser.id"
+                                    :value="projectUser.id">
+                                    {{ projectUser.name }}
+                                </option>
+                            </select>
+                            <label>優先度</label>
+                            <select v-model="form.priority"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option value="低">低</option>
+                                <option value="中">中</option>
+                                <option value="高">高</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2 m-5">
+                            <label>開始日</label>
+                            <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" />
+                        </div>
+                        <div class="w-1/2 m-5">
+                            <label>終了日</label>
+                            <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" />
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <PrimaryButton>追加</PrimaryButton>
+                    </div>
+                </form>
+            </div>
     </Modal>
 </template>
 <style>

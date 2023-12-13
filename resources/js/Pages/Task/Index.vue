@@ -183,8 +183,8 @@ const isPastDate = (dateString) => {
                     </div>
 
                 </div>
-                <section class="text-gray-600 body-font ">
-                    <div class="container border bg-white">
+                <section class="text-gray-600 body-font pb-10">
+                    <div class="container border bg-white rounded">
                         <div class="lg:w-full mx-auto overflow-auto">
                             <table class="table-auto w-full text-left whitespace-no-wrap">
                                 <thead class="shadow-lg text-green-700">

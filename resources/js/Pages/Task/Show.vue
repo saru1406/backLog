@@ -102,13 +102,11 @@ function deleteTask() {
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
-                <div class="p-10">
-                    <label class="pl-5">開始日</label>{{ props.task.start_date }}
-                    <label class="pl-5">終了日</label>{{ props.task.end_date }}
-                    <div class="h-auto bg-white p-4 rounded">
+                <div class="p-5">
+                    <div class="h-auto bg-white p-10 rounded border border-gray-200">
                         <div>
-                            <p class="font-semibold p-5">タイトル</p>
-                            <p class="font-semibold p-5 text-sm">{{ props.task.title }}</p>
+                            <p class="font-semibold pl-5">タイトル</p>
+                            <p class="font-semibold px-5 pt-8 pb-5 text-sm">{{ props.task.title }}</p>
                             <hr>
                         </div>
                         <div>
@@ -116,85 +114,100 @@ function deleteTask() {
                             <p class="p-5 text-sm">{{ props.task.content }}</p>
                             <hr>
                         </div>
-                        <div>
-                            <div class="my-5">
-                                <label class="font-semibold m-3">優先度</label>
-                                <span v-if="task.priority === '高'" class="text-red-600 pl-10">
-                                    {{ task.priority }}
-                                </span>
-                                <span v-if="task.priority === '中'" class="text-green-500 pl-10">
-                                    {{ task.priority }}
-                                </span>
-                                <span v-if="task.priority === '低'" class="text-blue-500 pl-10">
-                                    {{ task.priority }}
-                                </span>
-                            </div>
-                            <hr>
-                            <div class="my-5">
-                                <label class="m-3 font-semibold">種別</label>
-                                <span v-if="props.task.type">
-                                    <span v-if="props.task.type.name === 'バグ'"
-                                        class="rounded-full py-2 px-6 bg-red-600 ml-10 text-white text-xs">
-                                        {{ props.task.type.name }}
-                                    </span>
-                                    <span v-if="props.task.type.name === '実装'"
-                                        class="rounded-full py-2 px-6 bg-blue-600 ml-10 text-white text-xs">
-                                        {{ props.task.type.name }}
-                                    </span>
-                                    <span v-if="props.task.type.name === '改善'"
-                                        class="rounded-full py-2 px-6 bg-pink-600 ml-10 text-white text-xs">
-                                        {{ props.task.type.name }}
-                                    </span>
-                                    <span
-                                        v-if="props.task.type.name !== '改善' && props.task.type.name !== '実装' && props.task.type.name !== 'バグ'"
-                                        class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white text-xs">
-                                        {{ props.task.type.name }}
-                                    </span>
-                                </span>
-                            </div>
-                            <hr>
-                            <div class="my-5">
-                                <label class="m-3 font-semibold">状態</label>
-                                <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300 ml-10 text-xs">
-                                    {{ props.task.status }}
-                                </span>
-                                <span v-if="props.task.status === '処理済み'" class="rounded-full py-2 px-6 bg-indigo-200 ml-10 text-xs">
-                                    {{ props.task.status }}
-                                </span>
-                                <span v-if="props.task.status === '未対応'" class="rounded-full py-2 px-6 bg-orange-200 ml-10 text-xs">
-                                    {{ props.task.status }}
-                                </span>
-                                <span v-if="props.task.status === '処理中'" class="rounded-full py-2 px-6 bg-green-300 ml-10 text-xs">
-                                    {{ props.task.status }}
-                                </span>
-                            </div>
-                            <hr>
-                            <div class="my-5">
-                                <label class="m-3 font-semibold">担当者</label>
-                                <span class="pl-10 text-sm">{{ props.task.user.name }}</span>
-                            </div>
-                            <hr>
-                            <div class="my-5">
-                                <label class="m-3 font-semibold">ブランチ名</label>
-                                <span class="pl-10">{{ props.task.branch_name }}</span>
-                                <button v-if="!task.branch_name" @click="storeBranchGpt"
-                                    class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    GPTでブランチ名を自動作成
-                                </button>
-                            </div>
-                        </div>
+                        <table class="w-full text-sm">
+                            <tbody>
+                                <tr>
+                                    <td class="border-b border-gray-300 py-8 pl-8 text-left w-1/6">状態</td>
+                                    <td class="border-b border-gray-300 w-80">
+                                        <span v-if="props.task.status === '完了'"
+                                            class="rounded-full py-2 px-6 bg-slate-300">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '処理済み'"
+                                            class="rounded-full py-2 px-6 bg-indigo-200">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '未対応'"
+                                            class="rounded-full py-2 px-6 bg-orange-200">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '処理中'"
+                                            class="rounded-full py-2 px-6 bg-green-300">
+                                            {{ props.task.status }}
+                                        </span>
+                                    </td>
+                                    <td class="w-1/12"></td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 w-1/6">担当者</td>
+                                    <td class="border-b border-gray-300 w-80">{{ props.task.user.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
+                                    <td v-if="task.priority === '高'"
+                                        class="text-lg text-red-600 border-b border-gray-300">
+                                        {{ task.priority }}
+                                    </td>
+                                    <td v-if="task.priority === '中'"
+                                        class="text-lg text-green-500 border-b border-gray-300">
+                                        {{ task.priority }}
+                                    </td>
+                                    <td v-if="task.priority === '低'"
+                                        class="text-lg text-blue-500 border-b border-gray-300">
+                                        {{ task.priority }}
+                                    </td>
+                                    <td class="w-1/12"></td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300">種別</td>
+                                    <td v-if="props.task.type" class="border-b border-gray-300">
+                                        <span v-if="props.task.type.name === 'バグ'"
+                                            class="rounded-full py-2 px-6 bg-red-600 text-white text-xs">
+                                            {{ props.task.type.name }}
+                                        </span>
+                                        <span v-if="props.task.type.name === '実装'"
+                                            class="rounded-full py-2 px-6 bg-blue-600 text-white text-xs">
+                                            {{ props.task.type.name }}
+                                        </span>
+                                        <span v-if="props.task.type.name === '改善'"
+                                            class="rounded-full py-2 px-6 bg-pink-600 text-white text-xs">
+                                            {{ props.task.type.name }}
+                                        </span>
+                                        <span
+                                            v-if="props.task.type.name !== '改善' && props.task.type.name !== '実装' && props.task.type.name !== 'バグ'"
+                                            class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white text-xs">
+                                            {{ props.task.type.name }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
+                                    <td class="border-b border-gray-300">
+                                        <span class="">{{ props.task.branch_name }}</span>
+                                        <button v-if="!props.task.branch_name" @click="storeBranchGpt"
+                                            class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            GPTでブランチ名を自動作成
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8">開始日</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.start_date) }}</td>
+                                    <td class="w-1/12"></td>
+                                    <td class="pl-8 text-left border-b border-gray-300">終了日</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.end_date) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
                     <div class="flex justify-end my-5">
                         <Link :href="route('projects.tasks.edit', { project: project, task: task })"
                             class="mx-6 inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            編集
+                        編集
                         </Link>
                         <div @click="deleteTask" style="cursor: pointer;"
                             class="text-right inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             タスク削除
                         </div>
                     </div>
-                    <div class="h-auto mt-10 bg-white p-4 rounded">
+                    <div class="h-auto mt-10 bg-white p-4 rounded border border-gray-200">
                         <div class="flex">
                             <button @click="showModal = true"
                                 class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">

@@ -179,7 +179,7 @@ function createBarsArray(item) {
                 <section class="text-gray-600 body-font">
                     <div class="container mx-auto">
                         <div class="lg:w-full mx-auto overflow-auto">
-                            <div v-for="task in tasks" :key="task.id" class="gantt-container bg-white px-10 pt-5 my-10 rounded ">
+                            <div v-for="task in tasks" :key="task.id" class="gantt-container bg-white px-10 pt-5 my-10 rounded border border-gray-200">
                                 {{ task.user_name }}
                                 <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
                                     :chart-end="`${task.end_date} 23:59`" precision="day" bar-start="myBeginDate"
