@@ -39,6 +39,11 @@ class TaskParams
     /**
      * @var string|null
      */
+    private ?string $branchName;
+
+    /**
+     * @var string|null
+     */
     private ?string $startDate;
 
     /**
@@ -53,6 +58,7 @@ class TaskParams
      * @param string|null $contents
      * @param string $status
      * @param string|null $priority
+     * @param string|null $branchName
      * @param string|null $startDate
      * @param string|null $endDate
      */
@@ -63,6 +69,7 @@ class TaskParams
         ?string $contents,
         string $status,
         ?string $priority,
+        ?string $branchName,
         ?string $startDate,
         ?string $endDate
     ) {
@@ -72,6 +79,7 @@ class TaskParams
         $this->contents = $contents;
         $this->status = $status;
         $this->priority = $priority;
+        $this->branchName = $branchName;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
@@ -90,6 +98,7 @@ class TaskParams
             'content'=> $this->contents,
             'status'=> $this->status,
             'priority'=> $this->priority,
+            'branch_name' => $this->branchName,
             'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
             'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
         ];
@@ -153,6 +162,16 @@ class TaskParams
     public function getPriority(): ?string
     {
         return $this->priority;
+    }
+
+    /**
+     * ブランチ名取得
+     *
+     * @return string|null
+     */
+    public function getBranchName(): ?string
+    {
+        return $this->branchName;
     }
 
     /**

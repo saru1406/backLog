@@ -21,11 +21,21 @@ class Type extends Model
         'project_id'
     ];
 
+    /**
+     * プロジェクトに紐づけ
+     *
+     * @return BelongsTo
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);

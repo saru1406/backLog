@@ -53,4 +53,12 @@ interface ChildTaskRepositoryInterface
      * @return void
      */
     public function storeChildTaskByGpt(int $projectId, int $taskId, int $userId, array $childTask): void;
+
+    /**
+     * 子タスク削除
+     *
+     * @param integer $childTaskId
+     * @return void
+     */
+    public function destroy(int $childTaskId): void;
 }

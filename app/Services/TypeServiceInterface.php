@@ -12,4 +12,12 @@ interface TypeServiceInterface
      * @return void
      */
     public function store(int $projectId, string $typeName): void;
+
+    /**
+     * Type削除
+     *
+     * @param integer $typeId
+     * @return void
+     */
+    public function destroy(int $typeId): void;
 }

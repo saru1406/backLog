@@ -14,6 +14,7 @@ class Task extends Model
     protected $fillable = [
         'user_id',
         'project_id',
+        'creator_id',
         'type_id',
         'title',
         'content',
@@ -24,21 +25,41 @@ class Task extends Model
         'branch_name',
     ];
 
-    public function user()
+    /**
+     * ユーザーに紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->BelongsTo(User::class);
     }
 
-    public function project()
+    /**
+     * プロジェクトに紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function project(): BelongsTo
     {
         return $this->BelongsTo(Project::class);
     }
 
+    /**
+     * 子タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function childTasks(): HasMany
     {
         return $this->hasMany(ChildTask::class);
     }
 
+    /**
+     * 種別に紐づけ
+     *
+     * @return BelongsTo
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);

@@ -80,4 +80,13 @@ interface ProjectServiceInterface
      * @return void
      */
     public function destroy(int $projectId): void;
+
+    /**
+     * プロジェクトに紐づくユーザー削除
+     *
+     * @param integer $projectId
+     * @param integer $userId
+     * @return void
+     */
+    public function destroyUser(int $projectId, int $userId): void;
 }

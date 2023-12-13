@@ -18,4 +18,12 @@ class TypeService implements TypeServiceInterface
     {
         $this->typeRepository->store($projectId, $typeName);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $typeId): void
+    {
+        $this->typeRepository->destroy($typeId);
+    }
 }

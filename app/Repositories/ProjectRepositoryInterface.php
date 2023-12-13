@@ -67,4 +67,13 @@ interface ProjectRepositoryInterface
      * @return void
      */
     public function destroy(int $projectId): void;
+
+    /**
+     * プロジェクトに紐づくユーザー削除
+     *
+     * @param Project $project
+     * @param integer $userId
+     * @return void
+     */
+    public function destroyUser(Project $project, int $userId): void;
 }

@@ -33,6 +33,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::resource('projects', ProjectController::class);
+    Route::delete('projects/{project}/user/{user}', [ProjectController::class, 'destroyUser']);
 
     Route::resource('projects.type', TypeController::class);
 

@@ -46,21 +46,41 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    /**
+     * タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
 
+    /**
+     * 子タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function childTasks(): HasMany
     {
         return $this->hasMany(ChildTask::class);
     }
 
+    /**
+     * プロジェクトに紐づけ
+     *
+     * @return BelongsToMany
+     */
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
 
+    /**
+     * 企業に紐づけ
+     *
+     * @return BelongsTo
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);

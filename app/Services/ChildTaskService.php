@@ -144,4 +144,12 @@ class ChildTaskService implements ChildTaskServiceInterface
 
         return $childTasks;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $childTaskId): void
+    {
+        $this->childTaskRepository->destroy($childTaskId);
+    }
 }

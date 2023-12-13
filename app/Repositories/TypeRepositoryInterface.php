@@ -12,4 +12,12 @@ interface TypeRepositoryInterface
      * @return void
      */
     public function store(int $project, string $typeName): void;
+
+    /**
+     * Type削除
+     *
+     * @param integer $typeId
+     * @return void
+     */
+    public function destroy(int $typeId): void;
 }

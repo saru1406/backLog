@@ -8,6 +8,7 @@ use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskParams;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService implements TaskServiceInterface
 {
@@ -42,6 +43,7 @@ class TaskService implements TaskServiceInterface
     {
         $paramsArray = $params->toArray();
         $paramsArray['project_id'] = $projectId;
+        $paramsArray['creator_id'] = Auth::id();
         $this->taskRepository->store($paramsArray);
     }
 
@@ -98,5 +100,13 @@ class TaskService implements TaskServiceInterface
         $branchGptText = $this->gptRepository->createChildTasks($message);
 
         $this->taskRepository->storeBranchTask($task->id, $branchGptText);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $taskId): void
+    {
+        $this->taskRepository->destroy($taskId);
     }
 }

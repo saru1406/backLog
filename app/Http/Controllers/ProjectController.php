@@ -78,6 +78,11 @@ class ProjectController extends Controller
         return to_route('projects.index');
     }
 
+    public function destroyUser(int $projectId, int $userId)
+    {
+        $this->projectService->destroyUser($projectId, $userId);
+    }
+
     public function storeProjectUser(StoreProjectUserRequest $request, int $projectId)
     {
         $this->projectService->storeProjectUser($request->getUserId(), $projectId);

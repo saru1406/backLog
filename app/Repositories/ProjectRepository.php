@@ -74,4 +74,12 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         Project::findOrFail($projectId)->delete();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroyUser(Project $project, int $userId): void
+    {
+        $project->users()->detach($userId);
+    }
 }

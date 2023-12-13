@@ -33,10 +33,11 @@ class TaskController extends Controller
      */
     public function create(int $projectId)
     {
-        $project = $this->taskService->fetchViewDataCreate($projectId);
+        $data = $this->taskService->fetchViewDataCreate($projectId);
 
         return Inertia::render('Task/Create', [
-            'project' => $project,
+            'project' => $data['project'],
+            'currentUser' => $data['current_user'],
         ]);
     }
 
@@ -88,9 +89,11 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $taskId)
+    public function destroy(int $projectId, int $taskId)
     {
-        //
+        $this->taskService->destroy($taskId);
+
+        return to_route('projects.tasks.index', [$projectId]);
     }
 
     public function storeBranchGpt(int $projectId, int $taskId)

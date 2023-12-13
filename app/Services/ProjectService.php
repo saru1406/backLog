@@ -121,4 +121,13 @@ class ProjectService implements ProjectServiceInterface
     {
         $this->projectRepository->destroy($projectId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroyUser(int $projectId, int $userId): void
+    {
+        $project = $this->projectRepository->findOrFail($projectId);
+        $this->projectRepository->destroyUser($project, $userId);
+    }
 }

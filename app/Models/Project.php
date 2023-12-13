@@ -18,26 +18,51 @@ class Project extends Model
         'is_display',
     ];
 
+    /**
+     * Undocumented function
+     *
+     * @return BelongsToMany
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
+    /**
+     * タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
 
+    /**
+     * 子タスクに紐づけ
+     *
+     * @return HasMany
+     */
     public function childTasks(): HasMany
     {
         return $this->hasMany(ChildTask::class);
     }
 
+    /**
+     * 企業に紐づけ
+     *
+     * @return BelongsTo
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * 種別に紐づけ
+     *
+     * @return HasMany
+     */
     public function types(): HasMany
     {
         return $this->hasMany(Type::class);

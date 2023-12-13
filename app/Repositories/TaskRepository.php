@@ -141,4 +141,12 @@ class TaskRepository implements TaskRepositoryInterface
             'branch_name' => $branchGptText,
         ]);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $taskId): void
+    {
+        Task::findOrFail($taskId)->delete();
+    }
 }

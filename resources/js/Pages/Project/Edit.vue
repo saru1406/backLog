@@ -28,6 +28,14 @@ function deleteProject() {
     router.delete(`/projects/${props.project.id}`)
 }
 
+function deleteType(typeId) {
+    router.delete(`/projects/${props.project.id}/type/${typeId}`)
+}
+
+function deleteUser(userId) {
+    router.delete(`/projects/${props.project.id}/user/${userId}`)
+}
+
 </script>
 
 <template>
@@ -55,10 +63,24 @@ function deleteProject() {
                 <div class="p-6 text-gray-900">
                     <p>参加ユーザー</p>
                     <div class="bg-white overflow-hidden shadow-sm pb-5 px-5 rounded-md">
-                        <div v-for="projectUser in props.project.users">
-                            <p class="pl-10 pt-5">{{ projectUser.name }}</p>
-                            <hr>
-                        </div>
+                        <table>
+                            <thead class="text-green-700">
+                                <tr>
+                                    <th
+                                        class="px-1 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
+                                        メンバー</th>
+                                    <th
+                                        class="px-2 py-3 title-font tracking-wider font-medium text-sm rounded-tl rounded-bl text-center">
+                                        削除</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="projectUser in props.project.users">
+                                <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm">
+                                    <td class="px-1 py-3 text-center">{{ projectUser.name }}</td>
+                                    <td style="cursor: pointer;" @click="deleteUser(projectUser.id)" class="px-2 py-3 w-1/6 text-center">x</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -77,14 +99,13 @@ function deleteProject() {
                         <div v-for="projectType in props.project.types">
                             <div class="flex items-center py-2">
                                 <p class="pl-10">{{ projectType.name }}</p>
-                                <span
+                                <span @click="deleteType(projectType.id)" style="cursor: pointer;"
                                     class="ml-52 inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                     削除
                                 </span>
                             </div>
                             <hr>
                         </div>
-
                     </div>
                 </div>
                 <div @click="deleteProject"

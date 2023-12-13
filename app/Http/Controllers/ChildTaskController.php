@@ -82,9 +82,11 @@ class ChildTaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChildTask $childTask)
+    public function destroy(int $projectId, int $taskId, int $childTaskId)
     {
-        //
+        $this->childTaskService->destroy($childTaskId);
+
+        return to_route('projects.tasks.show', [$projectId, $taskId]);
     }
 
     public function storeChildTaskGpt(int $projecId, int $taskId)

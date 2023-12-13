@@ -84,6 +84,10 @@ const formatDate = (dateString) => {
     return `${year}/${month}/${day}`;
 };
 
+function deleteTask() {
+    router.delete(`/projects/${props.project.id}/tasks/${props.task.id}`)
+}
+
 </script>
 
 <template>
@@ -99,20 +103,17 @@ const formatDate = (dateString) => {
             <!-- 左側のコンテナ -->
             <div class="p-6 text-gray-900 w-full">
                 <div class="p-10">
-                    <Link :href="route('projects.tasks.edit', { project: project, task: task })"
-                        class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    編集</Link>
                     <label class="pl-5">開始日</label>{{ props.task.start_date }}
                     <label class="pl-5">終了日</label>{{ props.task.end_date }}
                     <div class="h-auto bg-white p-4 rounded">
                         <div>
                             <p class="font-semibold p-5">タイトル</p>
-                            <p class="font-semibold p-5">{{ props.task.title }}</p>
+                            <p class="font-semibold p-5 text-sm">{{ props.task.title }}</p>
                             <hr>
                         </div>
                         <div>
                             <p class="font-semibold p-5">詳細</p>
-                            <p class="p-5">{{ props.task.content }}</p>
+                            <p class="p-5 text-sm">{{ props.task.content }}</p>
                             <hr>
                         </div>
                         <div>
@@ -133,20 +134,20 @@ const formatDate = (dateString) => {
                                 <label class="m-3 font-semibold">種別</label>
                                 <span v-if="props.task.type">
                                     <span v-if="props.task.type.name === 'バグ'"
-                                        class="rounded-full py-2 px-6 bg-red-600 ml-10 text-white">
+                                        class="rounded-full py-2 px-6 bg-red-600 ml-10 text-white text-xs">
                                         {{ props.task.type.name }}
                                     </span>
                                     <span v-if="props.task.type.name === '実装'"
-                                        class="rounded-full py-2 px-6 bg-blue-600 ml-10 text-white">
+                                        class="rounded-full py-2 px-6 bg-blue-600 ml-10 text-white text-xs">
                                         {{ props.task.type.name }}
                                     </span>
                                     <span v-if="props.task.type.name === '改善'"
-                                        class="rounded-full py-2 px-6 bg-pink-600 ml-10 text-white">
+                                        class="rounded-full py-2 px-6 bg-pink-600 ml-10 text-white text-xs">
                                         {{ props.task.type.name }}
                                     </span>
                                     <span
                                         v-if="props.task.type.name !== '改善' && props.task.type.name !== '実装' && props.task.type.name !== 'バグ'"
-                                        class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white">
+                                        class="rounded-full py-2 px-6 bg-slate-500 ml-10 text-white text-xs">
                                         {{ props.task.type.name }}
                                     </span>
                                 </span>
@@ -154,34 +155,43 @@ const formatDate = (dateString) => {
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">状態</label>
-                                <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300 ml-10">
+                                <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300 ml-10 text-xs">
                                     {{ props.task.status }}
                                 </span>
-                                <span v-if="props.task.status === '処理済み'"
-                                    class="rounded-full py-2 px-6 bg-indigo-200 ml-10">
+                                <span v-if="props.task.status === '処理済み'" class="rounded-full py-2 px-6 bg-indigo-200 ml-10 text-xs">
                                     {{ props.task.status }}
                                 </span>
-                                <span v-if="props.task.status === '未対応'" class="rounded-full py-2 px-6 bg-orange-200 ml-10">
+                                <span v-if="props.task.status === '未対応'" class="rounded-full py-2 px-6 bg-orange-200 ml-10 text-xs">
                                     {{ props.task.status }}
                                 </span>
-                                <span v-if="props.task.status === '処理中'" class="rounded-full py-2 px-6 bg-green-300 ml-10">
+                                <span v-if="props.task.status === '処理中'" class="rounded-full py-2 px-6 bg-green-300 ml-10 text-xs">
                                     {{ props.task.status }}
                                 </span>
                             </div>
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">担当者</label>
-                                <span class="pl-10">{{ props.task.user.name }}</span>
+                                <span class="pl-10 text-sm">{{ props.task.user.name }}</span>
                             </div>
                             <hr>
                             <div class="my-5">
                                 <label class="m-3 font-semibold">ブランチ名</label>
                                 <span class="pl-10">{{ props.task.branch_name }}</span>
                                 <button v-if="!task.branch_name" @click="storeBranchGpt"
-                                    class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                     GPTでブランチ名を自動作成
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end my-5">
+                        <Link :href="route('projects.tasks.edit', { project: project, task: task })"
+                            class="mx-6 inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            編集
+                        </Link>
+                        <div @click="deleteTask" style="cursor: pointer;"
+                            class="text-right inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            タスク削除
                         </div>
                     </div>
                     <div class="h-auto mt-10 bg-white p-4 rounded">
@@ -295,5 +305,6 @@ const formatDate = (dateString) => {
                     <PrimaryButton>追加</PrimaryButton>
                 </div>
             </form>
-    </div>
-</Modal></template>
+        </div>
+    </Modal>
+</template>

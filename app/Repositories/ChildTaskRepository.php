@@ -58,4 +58,12 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             'end_date' => null
         ]);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy(int $childTaskId): void
+    {
+        ChildTask::findOrFail($childTaskId)->delete();
+    }
 }

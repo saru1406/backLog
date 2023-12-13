@@ -67,4 +67,12 @@ interface TaskServiceInterface
      * @return void
      */
     public function storeBranchTask(int $taskId): void;
+
+    /**
+     * タスク削除
+     *
+     * @param integer $taskId
+     * @return void
+     */
+    public function destroy(int $taskId): void;
 }

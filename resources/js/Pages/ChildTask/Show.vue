@@ -12,6 +12,10 @@ const props = defineProps({
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
 
+function deleteChildTask() {
+    router.delete(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${props.childTask.id}`)
+}
+
 </script>
 
 <template>
@@ -28,9 +32,6 @@ const renderChildTaskShow = (childTask) =>
             <div class="p-6 text-gray-900 w-full">
                 <div class="p-10">
                     <p class="font-semibold">{{ props.childTask.title }}</p>
-                    <Link :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: childTask })"
-                        class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    編集</Link>
                     <label class="pl-5">開始日</label>{{ props.childTask.start_date }}
                     <label class="pl-5">終了日</label>{{ props.childTask.end_date }}
                     <div class="h-auto bg-white p-4">
@@ -53,9 +54,21 @@ const renderChildTaskShow = (childTask) =>
                             <p class="m-3">担当者</p>{{ props.childTask.user.name }}
                         </div>
                     </div>
+                    <div class="flex justify-end my-5">
+                        <Link
+                        :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: childTask })"
+                            class="mx-6 inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        編集</Link>
+                        <div @click="deleteChildTask" style="cursor: pointer;"
+                            class="text-right inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            タスク削除
+                        </div>
+                    </div>
                     <!-- TODOモーダルでcreate画面表示する -->
                     <div class="h-auto mt-10 bg-white p-4">
-                        <Link :href="route('projects.tasks.child-tasks.create', { project: props.project, task: props.task })">子課題を追加
+                        <Link
+                            :href="route('projects.tasks.child-tasks.create', { project: props.project, task: props.task })">
+                        子課題を追加
                         </Link>
                         <table class="table-auto w-full text-left whitespace-no-wrap">
                             <thead>
@@ -109,5 +122,4 @@ const renderChildTaskShow = (childTask) =>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
-</template>
+    </AuthenticatedLayout></template>

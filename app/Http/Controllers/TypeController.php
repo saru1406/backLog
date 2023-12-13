@@ -65,8 +65,8 @@ class TypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Type $type)
+    public function destroy(int $projectId, int $typeId)
     {
-        //
+        $this->typeService->destroy($typeId);
     }
 }
