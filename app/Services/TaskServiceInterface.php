@@ -20,9 +20,9 @@ interface TaskServiceInterface
      * createに表示するデータ取得
      *
      * @param integer $projectId
-     * @return Project
+     * @return Collection
      */
-    public function fetchViewDataCreate(int $projectId): Project;
+    public function fetchViewDataCreate(int $projectId): Collection;
 
     /**
      * タスク保存

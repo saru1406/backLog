@@ -31,9 +31,12 @@ class TaskService implements TaskServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchViewDataCreate(int $projectId): Project
+    public function fetchViewDataCreate(int $projectId): Collection
     {
-        return $this->projectRepository->findOrFail($projectId, ['users', 'types']);
+        $currentUser = Auth::user();
+        $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
+
+        return collect(['current_user' => $currentUser, 'project' => $project]);
     }
 
     /**
