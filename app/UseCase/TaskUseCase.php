@@ -26,5 +26,4 @@ class TaskUseCase
         $status = ['status' => $status];
         $this->taskRepository->update($taskId, $status);
     }
-
 }

@@ -16,7 +16,6 @@ class ProjectApiController extends Controller
     public function newTasks(int $projectId): JsonResponse
     {
         $tasks = $this->projectUsecase->fetchNewTasks($projectId);
-        Log::info($tasks);
 
         return response()->json($tasks);
     }

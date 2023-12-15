@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ChildTaskApiController;
 use App\Http\Controllers\API\ProjectApiController;
 use App\Http\Controllers\API\TaskApiController;
 use Illuminate\Http\Request;
@@ -21,7 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/projects/{project}/tasks', [TaskApiController::class, 'fetchTasks']);
+    Route::get('/projects/{project}/child-tasks', [ChildTaskApiController::class, 'fetchChildTasks']);
     Route::get('/projects/{project}/gant', [TaskApiController::class, 'fetchGant']);
     Route::get('/projects/{project}/new-tasks', [ProjectApiController::class, 'newTasks']);
     Route::patch('/projects/{project}/tasks/{tasks}/update', [TaskApiController::class,'updateTaskStatus']);
+    Route::patch('/projects/{project}/child-tasks/{childTasks}/update', [ChildTaskApiController::class,'updateChildTaskStatus']);
 });

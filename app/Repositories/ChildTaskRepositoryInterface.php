@@ -61,4 +61,6 @@ interface ChildTaskRepositoryInterface
      * @return void
      */
     public function destroy(int $childTaskId): void;
+
+    public function searchChildTasksByParameters(int $projectId, ApiTaskParams $params): Collection;
 }
