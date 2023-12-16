@@ -105,7 +105,13 @@ function deleteTask() {
                 <div class="p-5">
                     <div class="h-auto bg-white p-10 rounded border border-gray-200">
                         <div>
-                            <p class="font-semibold pl-5">タイトル</p>
+                            <div class="flex">
+                                <p class="font-semibold pl-5">タイトル</p>
+                                <p class="ml-auto">
+                                    登録者： {{ props.task.creator.name }}<br>
+                                    登録日時： {{ formatDate(props.task.creator.created_at) }}
+                                </p>
+                            </div>
                             <p class="font-semibold px-5 pt-8 pb-5 text-sm">{{ props.task.title }}</p>
                             <hr>
                         </div>
@@ -119,8 +125,7 @@ function deleteTask() {
                                 <tr>
                                     <td class="border-b border-gray-300 py-8 pl-8 text-left w-1/6">状態</td>
                                     <td class="border-b border-gray-300 w-80">
-                                        <span v-if="props.task.status === '完了'"
-                                            class="rounded-full py-2 px-6 bg-slate-300">
+                                        <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
                                             {{ props.task.status }}
                                         </span>
                                         <span v-if="props.task.status === '処理済み'"
@@ -142,16 +147,14 @@ function deleteTask() {
                                 </tr>
                                 <tr>
                                     <td class="py-3 pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
-                                    <td v-if="task.priority === '高'"
-                                        class="text-lg text-red-600 border-b border-gray-300">
+                                    <td v-if="task.priority === '高'" class="text-lg text-red-600 border-b border-gray-300">
                                         {{ task.priority }}
                                     </td>
                                     <td v-if="task.priority === '中'"
                                         class="text-lg text-green-500 border-b border-gray-300">
                                         {{ task.priority }}
                                     </td>
-                                    <td v-if="task.priority === '低'"
-                                        class="text-lg text-blue-500 border-b border-gray-300">
+                                    <td v-if="task.priority === '低'" class="text-lg text-blue-500 border-b border-gray-300">
                                         {{ task.priority }}
                                     </td>
                                     <td class="w-1/12"></td>
@@ -188,10 +191,12 @@ function deleteTask() {
                                 </tr>
                                 <tr>
                                     <td class="pl-8 text-left border-b border-gray-300 py-8">開始日</td>
-                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.start_date) }}</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.start_date) }}
+                                    </td>
                                     <td class="w-1/12"></td>
                                     <td class="pl-8 text-left border-b border-gray-300">終了日</td>
-                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.end_date) }}</td>
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.task.end_date) }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

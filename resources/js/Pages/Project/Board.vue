@@ -309,25 +309,25 @@ function deleteTask(taskId) {
                                 <div v-if="element.status === '未対応'">
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(element.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                                <div v-if="element.type">
-                                                    <div v-if="element.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                <div v-if="element.task.type">
+                                                    <div v-if="element.task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
                                                         }}
                                                     </div>
-                                                    <div v-if="element.type.name === '実装'"
+                                                    <div v-if="element.task.type.name === '実装'"
                                                         class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name === '改善'"
+                                                    <div v-if="element.task.type.name === '改善'"
                                                         class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                    <div v-if="element.task.type.name !== '改善' && element.task.type.name !== '実装' && element.task.type.name !== 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
-                                                            element.type.name
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                 </div>
@@ -395,25 +395,25 @@ function deleteTask(taskId) {
                                 <div v-if="element.status === '処理中'">
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(element.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                                <div v-if="element.type">
-                                                    <div v-if="element.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                <div v-if="element.task.type">
+                                                    <div v-if="element.task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
                                                         }}
                                                     </div>
-                                                    <div v-if="element.type.name === '実装'"
+                                                    <div v-if="element.task.type.name === '実装'"
                                                         class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name === '改善'"
+                                                    <div v-if="element.task.type.name === '改善'"
                                                         class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                    <div v-if="element.task.type.name !== '改善' && element.task.type.name !== '実装' && element.task.type.name !== 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
-                                                            element.type.name
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                 </div>
@@ -481,25 +481,25 @@ function deleteTask(taskId) {
                                 <div v-if="element.status === '処理済み'">
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(element.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                                <div v-if="element.type">
-                                                    <div v-if="element.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                <div v-if="element.task.type">
+                                                    <div v-if="element.task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
                                                         }}
                                                     </div>
-                                                    <div v-if="element.type.name === '実装'"
+                                                    <div v-if="element.task.type.name === '実装'"
                                                         class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name === '改善'"
+                                                    <div v-if="element.task.type.name === '改善'"
                                                         class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                    <div v-if="element.task.type.name !== '改善' && element.task.type.name !== '実装' && element.task.type.name !== 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
-                                                            element.type.name
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                 </div>
@@ -567,25 +567,25 @@ function deleteTask(taskId) {
                                 <div v-if="element.status === '完了'">
                                     <div class="border mt-3 shadow rounded" @dragstart="handleDragStart(element)"
                                         draggable="true">
-                                        <button class="text-left" @click="openModalWithTask(element.id)">
+                                        <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
-                                                <div v-if="element.type">
-                                                    <div v-if="element.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
+                                                <div v-if="element.task.type">
+                                                    <div v-if="element.task.type.name === 'バグ'"
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
                                                         }}
                                                     </div>
-                                                    <div v-if="element.type.name === '実装'"
+                                                    <div v-if="element.task.type.name === '実装'"
                                                         class="rounded-full px-3 py-1 bg-blue-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name === '改善'"
+                                                    <div v-if="element.task.type.name === '改善'"
                                                         class="rounded-full px-3 py-1 bg-pink-600 ml-5">{{
-                                                            element.type.name }}
+                                                            element.task.type.name }}
                                                     </div>
-                                                    <div v-if="element.type.name !== '改善' && element.type.name !== '実装' && element.type.name !== 'バグ'"
+                                                    <div v-if="element.task.type.name !== '改善' && element.task.type.name !== '実装' && element.task.type.name !== 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-slate-500 ml-5">{{
-                                                            element.type.name
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                 </div>

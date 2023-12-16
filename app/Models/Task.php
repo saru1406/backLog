@@ -64,4 +64,14 @@ class Task extends Model
     {
         return $this->belongsTo(Type::class);
     }
+
+    /**
+     * ユーザーに紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->BelongsTo(User::class);
+    }
 }

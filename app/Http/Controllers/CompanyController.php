@@ -32,6 +32,7 @@ class CompanyController extends Controller
     public function create()
     {
         $isDomain = $this->companyService->isCompanyInfoRegistered();
+        Log::info('ドメイン',[$isDomain]);
         if ($isDomain) {
             return to_route('projects.index');
         }

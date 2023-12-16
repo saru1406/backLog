@@ -25,7 +25,6 @@ class ChildTaskApiController extends Controller
 
     public function updateChildTaskStatus(UpdateApiChildTaskStatuRequest $request, int $projectId , int $childTaskId)
     {
-        Log::info('来たよ');
         $this->childTaskUseCase->updateChildTaskStatus($childTaskId, $request->getStatus());
     }
 }

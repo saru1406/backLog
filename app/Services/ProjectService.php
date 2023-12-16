@@ -28,7 +28,7 @@ class ProjectService implements ProjectServiceInterface
         $user = Auth::user();
         $companyId = $user->company_id;
         if ($companyId) {
-            return $this->projectRepository->fetchProjectByCompanyId($companyId);
+            return $user->projects;
         }
 
         return $this->projectRepository->fetchProject($user);

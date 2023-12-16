@@ -31,6 +31,9 @@ function storeProject() {
         </template>
 
         <div class="py-12 flex w-full">
+            <div v-if="errorMessage" class="error-message">
+                    {{ errorMessage }}
+                </div>
             <!-- 左側のコンテナ -->
             <div class="flex flex-col w-1/2 sm:px-6 lg:px-8">
                 <div class="p-6 text-gray-900">

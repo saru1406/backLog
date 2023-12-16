@@ -24,4 +24,12 @@ class CompanyRepository implements CompanyRepositoryInterface
             'domain' => $domain
         ]);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchCompanyByDomain(string $domain): Company
+    {
+        return Company::where('domain', $domain)->firstOrFail();
+    }
 }

@@ -22,4 +22,12 @@ interface CompanyRepositoryInterface
      * @return Company
      */
     public function storeCompany(string $companyName, string $domain): Company;
+
+    /**
+     * ドメインから企業情報取得
+     *
+     * @param string $domain
+     * @return Company
+     */
+    public function fetchCompanyByDomain(string $domain): Company;
 }

@@ -93,6 +93,6 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             Log::info('優先度', ['priority' => $params->getPriority()]);
         }
 
-        return $query->with(['user'])->get();
+        return $query->with(['user', 'task.type'])->get();
     }
 }

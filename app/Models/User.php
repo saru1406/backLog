@@ -85,4 +85,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Company::class);
     }
+
+    /**
+     * タスク作成者に紐づけ
+     *
+     * @return HasMany
+     */
+    public function creators()
+    {
+        return $this->hasMany(Task::class);
+    }
 }
