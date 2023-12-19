@@ -157,6 +157,7 @@ function deleteTask() {
                                     <td v-if="task.priority === '低'" class="text-lg text-blue-500 border-b border-gray-300">
                                         {{ task.priority }}
                                     </td>
+                                    <td v-if="!task.priority" class="text-lg text-red-600 border-b border-gray-300"></td>
                                     <td class="w-1/12"></td>
                                     <td class="py-3 pl-8 text-left border-b border-gray-300">種別</td>
                                     <td v-if="props.task.type" class="border-b border-gray-300">
@@ -178,6 +179,7 @@ function deleteTask() {
                                             {{ props.task.type.name }}
                                         </span>
                                     </td>
+                                    <td v-if="!props.task.type" class="border-b border-gray-300"></td>
                                 </tr>
                                 <tr>
                                     <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>

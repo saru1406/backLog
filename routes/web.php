@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
+    
     Route::middleware(['project'])->group(function () {
         Route::resource('projects', ProjectController::class)->except(['index', 'store']);
         Route::delete('projects/{project}/user/{user}', [ProjectController::class, 'destroyUser']);

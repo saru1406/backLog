@@ -7,7 +7,7 @@ defineProps({
 
 <template>
     <div class="sidebar-container">
-        <h1 class="text-xl">Sidebar.vue</h1>
+        <!-- <h1 class="text-xl">Sidebar.vue</h1> -->
         <div>
             <nav class="nav-list-wrapper">
                 <ul class="nav-list">
@@ -16,8 +16,6 @@ defineProps({
                     <li class="nav-list-item"><Link :href="route('projects.tasks.index', {project: project})">課題</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.board', {project: project})">ボード</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.gant', {project: project})">ガントチャート</Link></li>
-                    <li class="nav-list-item"><a href="#">Wiki</a></li>
-                    <li class="nav-list-item"><a href="#">ファイル</a></li>
                     <li class="nav-list-item"><Link :href="route('projects.edit', {project: project})">プロジェクト設定</Link></li>
                 </ul>
             </nav>
