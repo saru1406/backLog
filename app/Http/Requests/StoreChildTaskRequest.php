@@ -25,9 +25,10 @@ class StoreChildTaskRequest extends FormRequest
         return [
             'user_id' => ['required', 'integer'],
             'title' => ['required', 'max:255', 'string'],
-            'content' => ['required', 'max:255', 'string'],
+            'content' => ['nullable', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
-            'priority' => ['required', 'max:255', 'string'],
+            'priority' => ['nullable', 'max:255', 'string'],
+            'branch_name' => ['nullable', 'max:255', 'string'],
             'start_date' => ['nullable', 'max:255', 'string'],
             'end_date' => ['nullable', 'max:255', 'string'],
         ];
@@ -44,6 +45,7 @@ class StoreChildTaskRequest extends FormRequest
             contents: $this->input('content'),
             status: $this->input('status'),
             priority: $this->input('priority'),
+            branchName: $this->input('branch_name'),
             startDate: $this->input('start_date'),
             endDate: $this->input('end_date'),
         );

@@ -26,6 +26,7 @@ const form = reactive({
     content: null,
     status: null,
     priority: null,
+    branch_name: null,
     start_date: null,
     end_date: null,
 })
@@ -38,6 +39,7 @@ function storeChildTask(TaskId) {
     form.content = null;
     form.status = null;
     form.priority = null;
+    form.branch_name = null;
     form.start_date = null;
     form.end_date = null;
 }
@@ -194,6 +196,19 @@ const formatDate = (dateString) => {
     return `${year}/${month}/${day}`;
 };
 
+function storeChildTaskGpt(taskId) {
+    try {
+        // isLoading.value = true; // ローディング開始
+        router.post(`/projects/${props.project.id}/tasks/${taskId}/child-tasks/store-gpt`);
+        // 成功時の処理
+    } catch (error) {
+        // エラー処理
+        console.error('エラーが発生しました:', error);
+    } finally {
+        // isLoading.value = false; // ローディング終了
+    }
+}
+
 function storeBranchGpt(taskId) {
     try {
         // isLoading.value = true; // ローディング開始
@@ -207,6 +222,7 @@ function storeBranchGpt(taskId) {
         fetchTasks(props.project, filters);
     }
 }
+
 
 function deleteTask(taskId) {
     router.delete(`/projects/${props.project.id}/tasks/${taskId}`)
@@ -358,7 +374,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
                                                 <div v-if="element.type">
                                                     <div v-if="element.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
@@ -399,7 +415,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-green-300 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
@@ -445,7 +461,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.type">
                                                     <div v-if="element.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
@@ -486,7 +502,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-indigo-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
@@ -532,7 +548,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
                                                 <div v-if="element.type">
                                                     <div v-if="element.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.type.name
@@ -573,7 +589,7 @@ function deleteTask(taskId) {
                                         draggable="true">
                                         <button class="text-left" @click="openModalWithTask(element)">
                                             <div class="flex items-center text-center text-white text-xs my-1">
-                                                <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
+                                                <div class="rounded-full bg-slate-300 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
                                                         class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
@@ -692,7 +708,7 @@ function deleteTask(taskId) {
                                 <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
                                 <td class="border-b border-gray-300">
                                     <span class="">{{ selectedTask.branch_name }}</span>
-                                    <button v-if="!selectedTask.branch_name" @click="storeBranchGpt"
+                                    <button v-if="!selectedTask.branch_name" @click="storeBranchGpt(selectedTask.id)"
                                         class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                         GPTでブランチ名を自動作成
                                     </button>
@@ -725,7 +741,7 @@ function deleteTask(taskId) {
                             class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
                             子課題を追加
                         </button>
-                        <button v-if="!child_tasks || child_tasks.length === 0" @click="storeChildTaskGpt"
+                        <button v-if="!props.child_tasks || selectedTask.child_tasks.length === 0" @click="storeChildTaskGpt(selectedTask.id)"
                             class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 my-5">
                             GPTで子課題を自動作成
                         </button>
@@ -751,7 +767,7 @@ function deleteTask(taskId) {
                                     登録日</th>
                             </tr>
                         </thead>
-                        <tbody v-for="childTask in props.child_tasks" :key="childTask.id">
+                        <tbody v-for="childTask in selectedTask.child_tasks" :key="childTask.id">
                             <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderChildTaskShow(childTask)">
                                 <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
                                 <td class="px-4 py-3 text-center">{{ childTask.user.name }}</td>

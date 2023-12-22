@@ -17,9 +17,9 @@ class ChildTaskParams
     private string $title;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $contents;
+    private ?string $contents;
 
     /**
      * @var string
@@ -27,9 +27,14 @@ class ChildTaskParams
     private string $status;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $priority;
+    private ?string $priority;
+
+    /**
+     * @var string|null
+     */
+    private ?string $branchName;
 
     /**
      * @var string|null
@@ -44,18 +49,20 @@ class ChildTaskParams
     /**
      * @param integer $userId
      * @param string $title
-     * @param string $contents
+     * @param string|null $contents
      * @param string $status
-     * @param string $priority
+     * @param string|null $priority
+     * @param string|null $branchName
      * @param string|null $startDate
      * @param string|null $endDate
      */
     public function __construct(
         int $userId,
         string $title,
-        string $contents,
+        ?string $contents,
         string $status,
-        string $priority,
+        ?string $priority,
+        ?string $branchName,
         ?string $startDate,
         ?string $endDate
     ) {
@@ -64,6 +71,7 @@ class ChildTaskParams
         $this->contents = $contents;
         $this->status = $status;
         $this->priority = $priority;
+        $this->branchName = $branchName;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
@@ -81,6 +89,7 @@ class ChildTaskParams
             'content'=> $this->contents,
             'status'=> $this->status,
             'priority'=> $this->priority,
+            'branch_name' => $this->branchName,
             'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
             'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
         ];
@@ -109,9 +118,9 @@ class ChildTaskParams
     /**
      * 内容取得
      *
-     * @return string
+     * @return string|null
      */
-    public function getContents(): string
+    public function getContents(): ?string
     {
         return $this->contents;
     }
@@ -129,11 +138,21 @@ class ChildTaskParams
     /**
      * 優先度取得
      *
-     * @return string
+     * @return string|null
      */
-    public function getPriority(): string
+    public function getPriority(): ?string
     {
         return $this->priority;
+    }
+
+    /**
+     * ブランチ名取得
+     *
+     * @return string|null
+     */
+    public function getBranchName(): ?string
+    {
+        return $this->branchName;
     }
 
     /**

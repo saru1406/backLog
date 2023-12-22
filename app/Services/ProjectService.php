@@ -107,7 +107,7 @@ class ProjectService implements ProjectServiceInterface
         $user = Auth::user();
         $companyId = $user->company_id;
         if (!$companyId) {
-            return collect([$user]);
+            return collect([]);
         }
         $projectUserIds = $projectUsers->pluck('id');
 

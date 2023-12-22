@@ -25,6 +25,6 @@ class GoogleController extends Controller
     {
         $this->googleService->loginGoogleOauth();
 
-        return to_route('companies.create');  // エラーが発生した場合のリダイレクト先
+        return to_route('companies.create');
     }
 }

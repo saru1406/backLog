@@ -55,7 +55,7 @@ class TaskService implements TaskServiceInterface
      */
     public function fetchViewDataShow(int $projectId, int $taskId): Collection
     {
-        $project = $this->projectRepository->findOrFail($projectId, ['users']);
+        $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
         $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user', 'type', 'creator']);
 
         return collect(['project' => $project, 'task'=> $task]);

@@ -53,6 +53,7 @@ const form = reactive({
     content: null,
     status: null,
     priority: null,
+    branch_name: null,
     start_date: null,
     end_date: null,
 })
@@ -65,6 +66,7 @@ function storeChildTask() {
     form.content = null;
     form.status = null;
     form.priority = null;
+    form.branch_name = null;
     form.start_date = null;
     form.end_date = null;
 }
@@ -109,7 +111,7 @@ function deleteTask() {
                                 <p class="font-semibold pl-5">タイトル</p>
                                 <p class="ml-auto">
                                     登録者： {{ props.task.creator.name }}<br>
-                                    登録日時： {{ formatDate(props.task.creator.created_at) }}
+                                    登録日時： {{ formatDate(props.task.created_at) }}
                                 </p>
                             </div>
                             <p class="font-semibold px-5 pt-8 pb-5 text-sm">{{ props.task.title }}</p>
@@ -285,44 +287,70 @@ function deleteTask() {
                     <div class="card">
                         <Editor v-model="form.content" editorStyle="height: 320px" />
                     </div>
-                    <div>
-                        <label>状態</label>
-                        <select v-model="form.status"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="未対応">未対応</option>
-                            <option value="処理中">処理中</option>
-                            <option value="処理済み">処理済み</option>
-                            <option value="完了">完了</option>
-                        </select>
-                        <label>担当者</label>
-                        <select v-model="form.user_id"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option v-for="projectUser in props.project.users" :key="projectUser.id"
-                                :value="projectUser.id">
-                                {{ projectUser.name }}
-                            </option>
-                        </select>
-                        <label>優先度</label>
-                        <select v-model="form.priority"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="低">低</option>
-                            <option value="中">中</option>
-                            <option value="高">高</option>
-                        </select>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr>
+                                <td class="border-b border-gray-300 py-16 pl-8 text-left">状態<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.status"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="未対応">未対応</option>
+                                        <option value="処理中">処理中</option>
+                                        <option value="処理済み">処理済み</option>
+                                        <option value="完了">完了</option>
+                                    </select>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.user_id"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option v-for="projectUser in props.project.users" :key="projectUser.id"
+                                            :value="projectUser.id">
+                                            {{ projectUser.name }}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">優先度</td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.priority"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="低">低</option>
+                                        <option value="中">中</option>
+                                        <option value="高">高</option>
+                                    </select>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
+                                <td class="border-b border-gray-300">
+                                    <TextInput type="text" v-model="form.branch_name" class="m-5 w-4/5"
+                                        placeholder="ブランチ名" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-6 pl-8 text-left border-b border-gray-300 py-16">開始日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.start_date"
+                                        :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd"
+                                        :enable-time-picker="false" class="m-5" />
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-6 pl-8 text-left border-b border-gray-300">終了日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.end_date" :disabled-week-days="[6, 0]"
+                                        locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false"
+                                        class="m-5" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-10">
+                        <PrimaryButton>追加</PrimaryButton>
                     </div>
-                    <div class="w-1/2 m-5">
-                        <label>開始日</label>
-                        <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp"
-                            format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false" />
-                    </div>
-                    <div class="w-1/2 m-5">
-                        <label>終了日</label>
-                        <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"
-                            model-type="yyyy-MM-dd" :enable-time-picker="false" />
-                    </div>
-                </div>
-                <div class="text-center">
-                    <PrimaryButton>追加</PrimaryButton>
                 </div>
             </form>
         </div>
