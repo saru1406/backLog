@@ -30,8 +30,8 @@ const form = reactive({
     end_date: null,
 })
 
-function storeChildTask() {
-    router.post(`/projects/${props.project.id}/tasks/${selectedTask.value.id}/child-tasks`, form)
+function storeChildTask(TaskId) {
+    router.post(`/projects/${props.project.id}/tasks/${TaskId}/child-tasks`, form)
     // 保存が成功した後にフォームをリセット
     form.user_id = null;
     form.title = null;
@@ -157,6 +157,7 @@ onMounted(() => {
 
     if (savedUserId === "null" && savedStatus === "null" && savedPriority === "null") {
         fetchTasks(props.project, filters);
+        fetchChildTasks(props.project, filters);
     }
 });
 
@@ -314,7 +315,8 @@ function deleteTask(taskId) {
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                     <div v-if="element.task.type.name === '実装'"
@@ -400,7 +402,8 @@ function deleteTask(taskId) {
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                     <div v-if="element.task.type.name === '実装'"
@@ -486,7 +489,8 @@ function deleteTask(taskId) {
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                     <div v-if="element.task.type.name === '実装'"
@@ -572,7 +576,8 @@ function deleteTask(taskId) {
                                                 <div class="rounded-full bg-orange-200 w-5 h-5 m-1"></div>
                                                 <div v-if="element.task.type">
                                                     <div v-if="element.task.type.name === 'バグ'"
-                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{ element.task.type.name
+                                                        class="rounded-full px-3 py-1 bg-red-600 ml-5">{{
+                                                            element.task.type.name
                                                         }}
                                                     </div>
                                                     <div v-if="element.task.type.name === '実装'"
@@ -658,6 +663,8 @@ function deleteTask(taskId) {
                                     class="text-lg text-blue-500 border-b border-gray-300">
                                     {{ selectedTask.priority }}
                                 </td>
+                                <td v-if="!selectedTask.priority" class="text-lg text-red-600 border-b border-gray-300">
+                                </td>
                                 <td class="w-1/12"></td>
                                 <td class="py-3 pl-8 text-left border-b border-gray-300">種別</td>
                                 <td v-if="selectedTask.type" class="border-b border-gray-300">
@@ -679,6 +686,7 @@ function deleteTask(taskId) {
                                         {{ selectedTask.type.name }}
                                     </span>
                                 </td>
+                                <td v-if="!selectedTask.type" class="border-b border-gray-300"></td>
                             </tr>
                             <tr>
                                 <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
@@ -767,7 +775,7 @@ function deleteTask(taskId) {
     </Modal>
     <Modal :show="showChildModal" @close="showChildModal = false" :maxWidth="'xl'">
         <div class="p-6 text-gray-900 w-full">
-            <form @submit.prevent="storeChildTask">
+            <form @submit.prevent="storeChildTask(selectedTask.id)">
                 <div class="m-5">
                     <p>子課題の追加</p>
                     <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
@@ -776,42 +784,70 @@ function deleteTask(taskId) {
                     <div class="card">
                         <Editor v-model="form.content" editorStyle="height: 320px" />
                     </div>
-                    <div>
-                        <label>状態</label>
-                        <select v-model="form.status"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="未対応">未対応</option>
-                            <option value="処理中">処理中</option>
-                            <option value="処理済み">処理済み</option>
-                            <option value="完了">完了</option>
-                        </select>
-                        <label>担当者</label>
-                        <select v-model="form.user_id"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option v-for="projectUser in props.project.users" :key="projectUser.id"
-                                :value="projectUser.id">
-                                {{ projectUser.name }}
-                            </option>
-                        </select>
-                        <label>優先度</label>
-                        <select v-model="form.priority"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                            <option value="低">低</option>
-                            <option value="中">中</option>
-                            <option value="高">高</option>
-                        </select>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr>
+                                <td class="border-b border-gray-300 py-16 pl-8 text-left">状態<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.status"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="未対応">未対応</option>
+                                        <option value="処理中">処理中</option>
+                                        <option value="処理済み">処理済み</option>
+                                        <option value="完了">完了</option>
+                                    </select>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.user_id"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option v-for="projectUser in props.project.users" :key="projectUser.id"
+                                            :value="projectUser.id">
+                                            {{ projectUser.name }}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">優先度</td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.priority"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="低">低</option>
+                                        <option value="中">中</option>
+                                        <option value="高">高</option>
+                                    </select>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
+                                <td class="border-b border-gray-300">
+                                    <TextInput type="text" v-model="form.branch_name" class="m-5 w-4/5"
+                                        placeholder="ブランチ名" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-6 pl-8 text-left border-b border-gray-300 py-16">開始日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.start_date"
+                                        :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd"
+                                        :enable-time-picker="false" class="m-5" />
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-6 pl-8 text-left border-b border-gray-300">終了日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.end_date" :disabled-week-days="[6, 0]"
+                                        locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false"
+                                        class="m-5" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-10">
+                        <PrimaryButton>追加</PrimaryButton>
                     </div>
-                    <div class="w-1/2 m-5">
-                        <label>開始日</label>
-                        <VueDatePicker v-model="form.start_date" :disabled-week-days="[6, 0]" locale="jp" />
-                    </div>
-                    <div class="w-1/2 m-5">
-                        <label>終了日</label>
-                        <VueDatePicker v-model="form.end_date" :disabled-week-days="[6, 0]" locale="jp" />
-                    </div>
-                </div>
-                <div class="text-center">
-                    <PrimaryButton>追加</PrimaryButton>
                 </div>
             </form>
         </div>

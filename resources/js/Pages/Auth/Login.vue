@@ -80,6 +80,8 @@ const submit = () => {
                 </label>
             </div>
 
+            <a :href="route('login.google')">Googleアカウントでログイン</a>
+
             <div class="flex items-center justify-end mt-4">
                 <Link
                     v-if="canResetPassword"

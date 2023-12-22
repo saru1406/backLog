@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
 use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
@@ -23,4 +24,20 @@ interface UserRepositoryInterface
      * @return void
      */
     public function patchUserByCompanyId(int $userId, int $companyId): void;
+
+    /**
+     * ユーザ作成
+     *
+     * @param array $params
+     * @return User
+     */
+    public function store(array $params = []): User;
+
+    /**
+     * メールアドレスからユーザー取得
+     *
+     * @param string $email
+     * @return User|null
+     */
+    public function firstByEmail(string $email): ?User;
 }

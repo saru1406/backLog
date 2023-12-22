@@ -6,6 +6,8 @@ use App\Repositories\ChildTaskRepository;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\CompanyRepository;
 use App\Repositories\CompanyRepositoryInterface;
+use App\Repositories\GoogleRepository;
+use App\Repositories\GoogleRepositoryInterface;
 use App\Repositories\GptRepository;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepository;
@@ -20,6 +22,8 @@ use App\Services\ChildTaskService;
 use App\Services\ChildTaskServiceInterface;
 use App\Services\CompanyService;
 use App\Services\CompanyServiceInterface;
+use App\Services\GoogleService;
+use App\Services\GoogleServiceInterface;
 use App\Services\ProjectService;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskService;
@@ -56,6 +60,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(TypeRepositoryInterface::class, TypeRepository::class);
         $this->app->bind(TypeServiceInterface::class, TypeService::class);
+
+        $this->app->bind(GoogleRepositoryInterface::class, GoogleRepository::class);
+        $this->app->bind(GoogleServiceInterface::class, GoogleService::class);
     }
 
     /**

@@ -69,7 +69,6 @@ class TaskRepository implements TaskRepositoryInterface
             Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
             return $query->with(['user', 'childTasks', 'childTasks.user', 'type'])->paginate(20);
         }
-        Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
         return $query->with(['user', 'childTasks', 'childTasks.user' , 'type'])->get();
     }
 

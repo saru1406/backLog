@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChildTaskController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -30,11 +31,14 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('login/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
-    
+
     Route::middleware(['project'])->group(function () {
         Route::resource('projects', ProjectController::class)->except(['index', 'store']);
         Route::delete('projects/{project}/user/{user}', [ProjectController::class, 'destroyUser']);

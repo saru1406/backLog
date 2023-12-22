@@ -24,4 +24,20 @@ class UserRepository implements UserRepositoryInterface
             'company_id' => $companyId
         ]);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(array $params = []): User
+    {
+        return User::create($params);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function firstByEmail(string $email): ?User
+    {
+        return User::where('email', $email)->first();
+    }
 }
