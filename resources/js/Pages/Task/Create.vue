@@ -47,13 +47,13 @@ function storeTask() {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="props.project" class="h-screen" />
             <!-- 左側のコンテナ -->
-            <div class="p-6 text-gray-900 w-full">
+            <div class="p-6 text-gray-900 w-full ml-72">
                 <form @submit.prevent="storeTask">
                     <div class="m-5">
                         <p>課題の追加</p>
@@ -89,7 +89,7 @@ function storeTask() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">優先度</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-16">優先度</td>
                                     <td class="border-b border-gray-300">
                                         <select v-model="form.priority"
                                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
@@ -111,14 +111,14 @@ function storeTask() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
                                     <td class="border-b border-gray-300">
                                         <TextInput type="text" v-model="form.branch_name" class="m-5 w-4/5"
                                             placeholder="ブランチ名" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="py-6 pl-8 text-left border-b border-gray-300 py-16">開始日</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-16">開始日</td>
                                     <td class="border-b border-gray-300">
                                         <VueDatePicker style="width: 80%;" v-model="form.start_date"
                                             :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd"

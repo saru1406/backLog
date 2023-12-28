@@ -106,7 +106,7 @@ const formatDate = (dateString) => {
 function createBarsArray(item) {
     return [{
         myBeginDate: item.start_date + " 00:00",
-        myEndDate: item.end_date + " 00:00",
+        myEndDate: item.end_date + " 23:59",
         ganttBarConfig: {
             id: item.id,
             hasHandles: true,
@@ -129,14 +129,14 @@ function createBarsArray(item) {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
 
-            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-2">
+            <div class="flex flex-col w-full sm:px-6 lg:px-8 py-2 ml-72">
                 <div class="px-6 pt-6 text-gray-900">
                     <p>ガントチャート</p>
                     <div class="flex flex-wrap m-2 items-center">
@@ -184,7 +184,7 @@ function createBarsArray(item) {
                                 <g-gantt-chart :chart-start="`${task.start_date} 00:00`"
                                     :chart-end="`${task.end_date} 23:59`" precision="day" bar-start="myBeginDate"
                                     bar-end="myEndDate" class="gantt-chart">
-                                    <div v-for="item in task.tasks">
+                                    <div v-for="item in task.tasks" :key="item.id">
                                         <g-gantt-row label="" :bars="createBarsArray(item)">
                                         </g-gantt-row>
                                     </div>
@@ -216,7 +216,7 @@ function createBarsArray(item) {
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody v-for="item in task.tasks">
+                                        <tbody v-for="item in task.tasks" :key="item.id">
                                             <tr class="border-b border-gray-300 hover:bg-blue-200 text-center"
                                                 @click="renderTaskShow(task)">
                                                 <td class="px-4 py-3 w-1/5 text-sm text-left">{{ item.title }}</td>

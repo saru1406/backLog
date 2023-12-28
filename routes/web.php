@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChildTaskController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::resource('contacts', ContactController::class)->only(['create', 'store']);
 
     Route::middleware(['project'])->group(function () {
         Route::resource('projects', ProjectController::class)->except(['index', 'store']);

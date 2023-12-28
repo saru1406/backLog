@@ -140,14 +140,14 @@ const isPastDate = (dateString) => {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
 
-            <div class="flex flex-col w-full sm:px-6 lg:px-8 px-12">
+            <div class="flex flex-col w-full sm:px-6 lg:px-8 px-12 ml-72">
                 <div class="p-6 text-gray-900">
                     <p>課題一覧</p>
                     <div class="my-5">
@@ -156,7 +156,7 @@ const isPastDate = (dateString) => {
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">全て</option>
-                            <option v-for="projectUser in props.project.users" :value="projectUser.id">
+                            <option v-for="projectUser in props.project.users" :value="projectUser.id" :key="projectUser.id">
                                 {{ projectUser.name }}
                             </option>
                         </select>

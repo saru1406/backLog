@@ -97,13 +97,13 @@ function deleteTask() {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
-            <div class="p-6 text-gray-900 w-full">
+            <div class="p-6 text-gray-900 w-full ml-72">
                 <div class="p-5">
                     <div class="h-auto bg-white p-10 rounded border border-gray-200">
                         <div>
@@ -148,7 +148,7 @@ function deleteTask() {
                                     <td class="border-b border-gray-300 w-80">{{ props.task.user.name }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
                                     <td v-if="task.priority === '高'" class="text-lg text-red-600 border-b border-gray-300">
                                         {{ task.priority }}
                                     </td>
@@ -184,11 +184,11 @@ function deleteTask() {
                                     <td v-if="!props.task.type" class="border-b border-gray-300"></td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
                                     <td class="border-b border-gray-300">
                                         <span class="">{{ props.task.branch_name }}</span>
                                         <button v-if="!props.task.branch_name" @click="storeBranchGpt"
-                                            class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                             GPTでブランチ名を自動作成
                                         </button>
                                     </td>
@@ -315,7 +315,7 @@ function deleteTask() {
                                 </td>
                             </tr>
                             <tr>
-                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">優先度</td>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">優先度</td>
                                 <td class="border-b border-gray-300">
                                     <select v-model="form.priority"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
@@ -325,14 +325,14 @@ function deleteTask() {
                                     </select>
                                 </td>
                                 <td class="w-1/12"></td>
-                                <td class="py-3 pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
                                 <td class="border-b border-gray-300">
                                     <TextInput type="text" v-model="form.branch_name" class="m-5 w-4/5"
                                         placeholder="ブランチ名" />
                                 </td>
                             </tr>
                             <tr>
-                                <td class="py-6 pl-8 text-left border-b border-gray-300 py-16">開始日</td>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">開始日</td>
                                 <td class="border-b border-gray-300">
                                     <VueDatePicker style="width: 80%;" v-model="form.start_date"
                                         :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd"

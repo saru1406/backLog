@@ -44,13 +44,13 @@ function deleteUser(userId) {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
-            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8 py-12 ml-72">
                 <p>プロジェクトに追加するユーザー</p>
                 <form @submit.prevent="store_project_user">
                     <select v-model="user"
@@ -75,7 +75,7 @@ function deleteUser(userId) {
                                         削除</th>
                                 </tr>
                             </thead>
-                            <tbody v-for="projectUser in props.project.users">
+                            <tbody v-for="projectUser in props.project.users" :key="projectUser.id">
                                 <tr class="border-b border-gray-300 text-sm">
                                     <td class="px-4 py-3 text-center">{{ projectUser.name }}</td>
                                     <td style="cursor: pointer;" @click="deleteUser(projectUser.id)" class="text-center font-semibold text-red-500">x
@@ -109,7 +109,7 @@ function deleteUser(userId) {
                                         削除</th>
                                 </tr>
                             </thead>
-                            <tbody v-for="projectType in props.project.types">
+                            <tbody v-for="projectType in props.project.types" :key="projectType.id">
                                 <tr class="border-b border-gray-300 text-sm">
                                     <td class="px-4 py-3 text-center">{{ projectType.name }}</td>
                                     <td style="cursor: pointer;" @click="deleteType(projectType.id)" class="text-center font-semibold text-red-500">x

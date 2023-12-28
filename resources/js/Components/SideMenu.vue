@@ -6,14 +6,14 @@ defineProps({
 </script>
 
 <template>
-    <div class="sidebar-container">
+    <div class="sidebar-container fixed z-20 border">
         <!-- <h1 class="text-xl">Sidebar.vue</h1> -->
         <div>
             <nav class="nav-list-wrapper">
                 <ul class="nav-list">
                     <li class="nav-list-item"><Link :href="route('projects.index')">ホーム</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.tasks.create', {project: project})">課題の追加</Link></li>
-                    <li class="nav-list-item"><Link :href="route('projects.tasks.index', {project: project})">課題</Link></li>
+                    <li class="nav-list-item"><Link :href="route('projects.tasks.index', {project: project})">課題一覧</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.board', {project: project})">ボード</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.gant', {project: project})">ガントチャート</Link></li>
                     <li class="nav-list-item"><Link :href="route('projects.edit', {project: project})">プロジェクト設定</Link></li>
@@ -24,8 +24,8 @@ defineProps({
 </template>
 <style>
 .sidebar-container {
-    max-width: 280px;
-    min-width: 280px;
+    max-width: 15%;
+    min-width: 15%;
     background:  #ffffff;
 }
 .sidebar-container h1 {

@@ -48,13 +48,13 @@ onMounted(() => {
 
     <AuthenticatedLayout>
         <!-- <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト名：{{ props.project.name }}</h2>
         </template> -->
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
             <!-- 左側のコンテナ -->
-            <div class="flex flex-col w-3/5 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col w-3/5 sm:px-6 lg:px-8 py-12 ml-72">
                 <div class="p-6 text-gray-900">
                     <p class="font-semibold text-lg my-5">プロジェクトのホーム　: 　最近追加した課題一覧</p>
                     <div class="bg-white overflow-hidden shadow-sm border border-gray-200 rounded">
