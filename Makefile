@@ -1,6 +1,11 @@
 setup:
 	cp .env.example .env
-	composer install
+	docker run --rm \
+		-u "$$(id -u):$$(id -g)" \
+		-v $$(pwd):/var/www/html \
+		-w /var/www/html \
+		laravelsail/php81-composer:latest \
+		composer install --ignore-platform-reqs
 	@make install
 	@make npm-install
 up:
@@ -11,7 +16,7 @@ install:
 	./vendor/bin/sail up -d --build
 	./vendor/bin/sail composer install
 	./vendor/bin/sail php artisan key:generate
-	./vendor/bin/sail php artisan migrate:fresh --seed
+	./vendor/bin/sail php artisan migrate --seed
 stop:
 	./vendor/bin/sail stop
 restart:
