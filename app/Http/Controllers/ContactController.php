@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConfirmContactRequest;
+use App\Services\ContactServiceInterface;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
+    public function __construct(
+        private ContactServiceInterface $contactService
+    ) {
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -17,7 +23,12 @@ class ContactController extends Controller
 
     public function confirm(ConfirmContactRequest $request)
     {
-        return Inertia::render('Contact/Confirm');
+        $this->contactService->confirm($request->getParams());
+
+        return Inertia::render('Contact/Confirm', [
+            'category' => session()->get('category'),
+            'content' => session()->get('content'),
+        ]);
     }
 
     /**
@@ -27,6 +38,4 @@ class ContactController extends Controller
     {
         //
     }
-
-
 }

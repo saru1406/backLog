@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\ContactParams;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ConfirmContactRequest extends FormRequest
@@ -22,7 +23,16 @@ class ConfirmContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'category' => ['required', 'string'],
+            'content' => ['required', 'string'],
         ];
+    }
+
+    public function getParams()
+    {
+        return new ContactParams(
+            category: $this->input('category'),
+            content: $this->input('content'),
+        );
     }
 }
