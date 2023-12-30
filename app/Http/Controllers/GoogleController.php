@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Services\GoogleServiceInterface;
-use Google_Client;
-use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
@@ -16,9 +14,7 @@ class GoogleController extends Controller
 
     public function redirectToGoogle()
     {
-        $loginUrl = $this->googleService->createRedirectUri();
-
-        return redirect($loginUrl);
+        return Socialite::driver('google')->redirect();
     }
 
     public function handleGoogleCallback()
