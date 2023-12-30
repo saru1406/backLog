@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Repositories\ContactParams;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ConfirmContactRequest extends FormRequest
+class StoreContactRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

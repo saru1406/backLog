@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConfirmContactRequest;
+use App\Http\Requests\StoreContactRequest;
 use App\Services\ContactServiceInterface;
 use Inertia\Inertia;
 
@@ -21,10 +22,15 @@ class ContactController extends Controller
         return Inertia::render('Contact/Create');
     }
 
-    public function confirm(ConfirmContactRequest $request)
+    public function Postconfirm(ConfirmContactRequest $request)
     {
         $this->contactService->confirm($request->getParams());
 
+        return to_route('contacts.confirm');
+    }
+
+    public function confirm()
+    {
         return Inertia::render('Contact/Confirm', [
             'category' => session()->get('category'),
             'content' => session()->get('content'),
@@ -34,8 +40,10 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function store(StoreContactRequest $request)
     {
-        //
+        $this->contactService->store($request->getParams());
+
+        return to_route('projects.index');
     }
 }

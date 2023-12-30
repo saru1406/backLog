@@ -35,6 +35,14 @@ class StoreTaskRequest extends FormRequest
         ];
     }
 
+    // public function messages(): array
+    // {
+    //     return [
+    //         'title.required' => 'タイトルは必須です。',
+    //         'title.max' => 'タイトルは255文字以内で入力してください。',
+    //     ];
+    // }
+
     /**
      * @return TaskParams
      */

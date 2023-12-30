@@ -31,7 +31,7 @@ function confirmContact() {
                 <form @submit.prevent="confirmContact">
                     <div class="p-6 text-gray-900">カテゴリー
                         <select v-model="form.category"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5 w-2/5">
                             <option value="" disabled selected>選択してください</option>
                             <optgroup label="アカウント関連">
                                 <option value="パスワードのリセット">パスワードのリセット</option>
@@ -75,7 +75,7 @@ function confirmContact() {
                             class="w-full h-96 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
                     </div>
                     <div class="text-center">
-                    <PrimaryButton>追加</PrimaryButton>
+                    <PrimaryButton>確認画面へ</PrimaryButton>
                 </div>
                 </form>
             </div>

@@ -12,6 +12,7 @@ import Editor from 'primevue/editor';
 const props = defineProps({
     'project': Object,
     'currentUser': Object,
+    'errors': Object
 })
 
 const form = reactive({

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\ContactParams;
 use App\Repositories\ContactRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class ContactService implements ContactServiceInterface
 {
@@ -21,5 +22,14 @@ class ContactService implements ContactServiceInterface
             'category' => $params->getCategory(),
             'content' => $params->getContent(),
         ]);
+    }
+
+    public function store(ContactParams $params): void
+    {
+        session()->forget(['category', 'content']);
+
+        $paramsArray = $params->toArray();
+        $paramsArray['user_id'] = Auth::id();
+        $this->contactRepository->store($paramsArray);
     }
 }

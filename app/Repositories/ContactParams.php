@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 class ContactParams
 {
-
     public function __construct(
         private string $category,
         private string $content,

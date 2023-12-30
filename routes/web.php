@@ -40,6 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::resource('contacts', ContactController::class)->only(['create', 'store']);
+    Route::get('contacts/confirm', [ContactController::class, 'confirm'])->name('contacts.confirm');
+    Route::post('contacts/confirm', [ContactController::class, 'postConfirm'])->name('contacts.confirm.post');
 
     Route::middleware(['project'])->group(function () {
         Route::resource('projects', ProjectController::class)->except(['index', 'store']);
