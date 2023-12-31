@@ -47,6 +47,8 @@ class TaskController extends Controller
     public function store(int $projectId, StoreTaskRequest $request)
     {
         $this->taskService->store($projectId, $request->getParams());
+
+        return to_route('projects.tasks.create', $projectId);
     }
 
     /**

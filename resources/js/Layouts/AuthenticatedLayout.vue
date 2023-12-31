@@ -28,7 +28,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('projects.index')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    プロジェクト一覧
                                 </NavLink>
                             </div>
                         </div>
@@ -89,7 +89,7 @@ const showingNavigationDropdown = ref(false);
                 <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('projects.index')" :active="route().current('dashboard')">
-                            Dashboard
+                            ダッシュボード
                         </ResponsiveNavLink>
                     </div>
 
@@ -103,9 +103,9 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')"> プロフィール </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                ログアウト
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')"> お問い合わせ </ResponsiveNavLink>
                         </div>
