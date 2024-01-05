@@ -16,7 +16,7 @@ install:
 	./vendor/bin/sail up -d --build
 	./vendor/bin/sail composer install
 	./vendor/bin/sail php artisan key:generate
-	./vendor/bin/sail php artisan migrate --seed
+	./vendor/bin/sail php artisan migrate
 stop:
 	./vendor/bin/sail stop
 restart:
