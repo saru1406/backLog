@@ -27,7 +27,7 @@ function storeProject() {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">プロジェクト一覧</h2>
         </template>
 
         <div class="flex w-full">
@@ -53,7 +53,7 @@ function storeProject() {
                     </Modal>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                         <div v-for="project in projects" :key="project.id" class="p-6 text-gray-900 text-center">
-                            <Link class="text-blue-500" :href="route('projects.show',{project: project})">{{ project.name }}</Link>
+                            <Link class="text-blue-500" :href="route('projects.tasks.index',{project: project})">{{ project.name }}</Link>
                             <hr>
                         </div>
                     </div>

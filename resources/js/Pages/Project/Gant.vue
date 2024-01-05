@@ -189,7 +189,7 @@ function createBarsArray(item) {
                                         </g-gantt-row>
                                     </div>
                                 </g-gantt-chart>
-                                <div>
+                                <!-- <div>
                                     <table class="table-auto w-full text-left whitespace-no-wrap">
                                         <thead>
                                             <tr>
@@ -220,7 +220,6 @@ function createBarsArray(item) {
                                             <tr class="border-b border-gray-300 hover:bg-blue-200 text-center"
                                                 @click="renderTaskShow(task)">
                                                 <td class="px-4 py-3 w-1/5 text-sm text-left">{{ item.title }}</td>
-                                                <!-- <td class="px-4 py-3">{{ task.user.name }}</td> -->
                                                 <td class="px-4 py-3">{{ item.status }}</td>
                                                 <td class="px-4 py-3 text-lg">{{ item.priority }}</td>
                                                 <td class="px-4 py-3">
@@ -235,7 +234,7 @@ function createBarsArray(item) {
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
