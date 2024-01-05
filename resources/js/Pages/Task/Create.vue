@@ -57,7 +57,7 @@ function storeTask() {
             <div class="p-6 text-gray-900 w-full ml-72">
                 <form @submit.prevent="storeTask">
                     <div class="m-5">
-                        <p>課題の追加</p>
+                        <p>課題の追加<span class="text-red-500 text-lg">*</span></p>
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                         <div v-if="errors.title" class="text-red-500">
                             {{ errors.title }}
@@ -80,13 +80,15 @@ function storeTask() {
                                             <option value="処理済み">処理済み</option>
                                             <option value="完了">完了</option>
                                         </select>
-                                        <div v-if="errors.status" class="text-red-500">
+                                        <div v-if="errors.status" class="text-red-500 ml-5">
                                             {{ errors.status }}
                                         </div>
                                     </td>
                                     <td class="w-1/12"></td>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span
-                                            class="text-red-500 text-lg">*</span></td>
+                                    <td class="py-3 pl-8 text-left border-b border-gray-300">
+                                        担当者
+                                        <span class="text-red-500 text-lg">*</span>
+                                    </td>
                                     <td class="border-b border-gray-300">
                                         <select v-model="form.user_id"
                                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
@@ -95,7 +97,7 @@ function storeTask() {
                                                 {{ projectUser.name }}
                                             </option>
                                         </select>
-                                        <div v-if="errors.user_id" class="text-red-500">
+                                        <div v-if="errors.user_id" class="text-red-500 ml-5">
                                             {{ errors.user_id }}
                                         </div>
                                     </td>

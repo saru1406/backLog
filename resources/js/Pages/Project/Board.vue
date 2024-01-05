@@ -639,7 +639,7 @@ function deleteTask(taskId) {
                     </div>
                     <div>
                         <p class="font-semibold p-5">詳細</p>
-                        <p class="p-5">{{ selectedTask.content }}</p>
+                            <div v-html="selectedTask.content" class="p-5 text-sm"></div>
                         <hr>
                     </div>
                     <table class="w-full text-sm">

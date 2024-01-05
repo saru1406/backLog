@@ -119,7 +119,7 @@ function deleteTask() {
                         </div>
                         <div>
                             <p class="font-semibold p-5">詳細</p>
-                            <p class="p-5 text-sm">{{ props.task.content }}</p>
+                                <div v-html="props.task.content" class="px-5 pt-8 pb-5 text-sm"></div>
                             <hr>
                         </div>
                         <table class="w-full text-sm">

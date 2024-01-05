@@ -59,7 +59,7 @@ const formatDate = (dateString) => {
                         </div>
                         <div>
                             <p class="font-semibold p-5">詳細</p>
-                            <p class="p-5">{{ props.childTask.content }}</p>
+                            <div v-html="props.childTask.content" class="p-5 text-sm"></div>
                             <hr>
                         </div>
                         <table class="w-full text-sm">
@@ -67,7 +67,8 @@ const formatDate = (dateString) => {
                                 <tr>
                                     <td class="border-b border-gray-300 py-8 pl-8 text-left w-1/6">状態</td>
                                     <td class="border-b border-gray-300 w-80">
-                                        <span v-if="props.childTask.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
+                                        <span v-if="props.childTask.status === '完了'"
+                                            class="rounded-full py-2 px-6 bg-slate-300">
                                             {{ props.childTask.status }}
                                         </span>
                                         <span v-if="props.task.status === '処理済み'"
@@ -88,18 +89,21 @@ const formatDate = (dateString) => {
                                     <td class="border-b border-gray-300 w-80">{{ props.childTask.user.name }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
-                                    <td v-if="props.childTask.priority === '高'" class="text-lg text-red-600 border-b border-gray-300">
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8 w-1/6">優先度</td>
+                                    <td v-if="props.childTask.priority === '高'"
+                                        class="text-lg text-red-600 border-b border-gray-300">
                                         {{ props.childTask.priority }}
                                     </td>
                                     <td v-if="props.childTask.priority === '中'"
                                         class="text-lg text-green-500 border-b border-gray-300">
                                         {{ props.childTask.priority }}
                                     </td>
-                                    <td v-if="props.childTask.priority === '低'" class="text-lg text-blue-500 border-b border-gray-300">
+                                    <td v-if="props.childTask.priority === '低'"
+                                        class="text-lg text-blue-500 border-b border-gray-300">
                                         {{ props.childTask.priority }}
                                     </td>
-                                    <td v-if="!props.childTask.priority" class="text-lg text-red-600 border-b border-gray-300"></td>
+                                    <td v-if="!props.childTask.priority"
+                                        class="text-lg text-red-600 border-b border-gray-300"></td>
                                     <td class="w-1/12"></td>
                                     <td class="py-3 pl-8 text-left border-b border-gray-300">種別</td>
                                     <td v-if="props.childTask.type" class="border-b border-gray-300">
@@ -124,22 +128,24 @@ const formatDate = (dateString) => {
                                     <td v-if="!props.childTask.type" class="border-b border-gray-300"></td>
                                 </tr>
                                 <tr>
-                                    <td class="py-3 pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
+                                    <td class="pl-8 text-left border-b border-gray-300 py-8">ブランチ名</td>
                                     <td class="border-b border-gray-300">
                                         <span class="">{{ props.childTask.branch_name }}</span>
                                         <button v-if="!props.childTask.branch_name" @click="storeBranchGpt"
-                                            class="text-sm inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                            class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                             GPTでブランチ名を自動作成
                                         </button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="pl-8 text-left border-b border-gray-300 py-8">開始日</td>
-                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.childTask.start_date) }}
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.childTask.start_date)
+                                    }}
                                     </td>
                                     <td class="w-1/12"></td>
                                     <td class="pl-8 text-left border-b border-gray-300">終了日</td>
-                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.childTask.end_date) }}
+                                    <td class="border-b border-gray-300 text-base">{{ formatDate(props.childTask.end_date)
+                                    }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -147,7 +153,7 @@ const formatDate = (dateString) => {
                     </div>
                     <div class="flex justify-end my-5">
                         <Link
-                        :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: childTask })"
+                            :href="route('projects.tasks.child-tasks.edit', { project: project, task: task, child_task: childTask })"
                             class="mx-6 inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         編集</Link>
                         <div @click="deleteChildTask" style="cursor: pointer;"
@@ -206,7 +212,9 @@ const formatDate = (dateString) => {
                                         {{ formatDate(props.task.created_at) }}
                                     </td>
                                 </tr>
-                                <tr v-for="childTask in props.task.child_tasks" :key="childTask.id" class="border-b border-gray-300 hover:bg-blue-200" :class="{ 'bg-blue-200': props.childTask.id === childTask.id }"
+                                <tr v-for="childTask in props.task.child_tasks" :key="childTask.id"
+                                    class="border-b border-gray-300 hover:bg-blue-200"
+                                    :class="{ 'bg-blue-200': props.childTask.id === childTask.id }"
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="pl-16 py-6 w-1/5">{{ childTask.title }}</td>
                                     <td class="px-2 py-6 text-center">{{ childTask.user.name }}</td>
@@ -228,4 +236,5 @@ const formatDate = (dateString) => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout></template>
+    </AuthenticatedLayout>
+</template>
