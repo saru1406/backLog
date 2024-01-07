@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('cascade')->comment('親課題ID');
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->comment('ユーザーID');
+            $table->foreignId('creator_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('project_id')->constrained()->onDelete('cascade')->comment('プロジェクトID');
             $table->string('title');
             $table->string('content');

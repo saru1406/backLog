@@ -121,7 +121,7 @@ const showingNavigationDropdown = ref(false);
             </header>
 
             <!-- Page Content -->
-            <main class="pt-16">
+            <main class="pt-16 bg-gray-50 max-h-full min-h-screen">
                 <slot />
             </main>
         </div>

@@ -629,7 +629,7 @@ function deleteTask(taskId) {
         </div>
     </AuthenticatedLayout>
     <Modal :show="showModal" @close="showModal = false" :maxWidth="'3xl'">
-        <div class="bg-gray-100">
+        <div class="bg-gray-50">
             <div class="p-10">
                 <div class="h-auto bg-white p-4 rounded border border-gray-200">
                     <div>
@@ -639,7 +639,7 @@ function deleteTask(taskId) {
                     </div>
                     <div>
                         <p class="font-semibold p-5">詳細</p>
-                            <div v-html="selectedTask.content" class="p-5 text-sm"></div>
+                        <div v-html="selectedTask.content" class="p-5 text-sm"></div>
                         <hr>
                     </div>
                     <table class="w-full text-sm">
@@ -741,7 +741,8 @@ function deleteTask(taskId) {
                             class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
                             子課題を追加
                         </button>
-                        <button v-if="!props.child_tasks || selectedTask.child_tasks.length === 0" @click="storeChildTaskGpt(selectedTask.id)"
+                        <button v-if="!props.child_tasks || selectedTask.child_tasks.length === 0"
+                            @click="storeChildTaskGpt(selectedTask.id)"
                             class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 my-5">
                             GPTで子課題を自動作成
                         </button>
@@ -872,4 +873,5 @@ function deleteTask(taskId) {
 <style>
 .dragClass {
     opacity: 1 !important;
-}</style>
+}
+</style>

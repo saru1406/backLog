@@ -14,6 +14,7 @@ const props = defineProps({
     'project': Object,
     'task': Object,
     'childTasks': Array,
+    'errors': Object
 })
 
 const showModal = ref(false);
@@ -119,7 +120,7 @@ function deleteTask() {
                         </div>
                         <div>
                             <p class="font-semibold p-5">詳細</p>
-                                <div v-html="props.task.content" class="px-5 pt-8 pb-5 text-sm"></div>
+                            <div v-html="props.task.content" class="px-5 pt-8 pb-5 text-sm"></div>
                             <hr>
                         </div>
                         <table class="w-full text-sm">
@@ -283,8 +284,11 @@ function deleteTask() {
             <form @submit.prevent="storeChildTask">
                 <div class="bg-white p-5 m-5">
                     <p>子課題の追加</p>
-                    <TextInput type="text" v-model="form.title" class="w-full mb-5" placeholder="件名"></TextInput>
-                    <div class="card">
+                    <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
+                    <div v-if="errors.title" class="text-red-500">
+                        {{ errors.title }}
+                    </div>
+                    <div class="card mt-5">
                         <Editor v-model="form.content" editorStyle="height: 320px" />
                     </div>
                     <table class="w-full text-sm">
@@ -300,6 +304,9 @@ function deleteTask() {
                                         <option value="処理済み">処理済み</option>
                                         <option value="完了">完了</option>
                                     </select>
+                                    <div v-if="errors.status" class="text-red-500 ml-5">
+                                        {{ errors.status }}
+                                    </div>
                                 </td>
                                 <td class="w-1/12"></td>
                                 <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span
@@ -312,6 +319,9 @@ function deleteTask() {
                                             {{ projectUser.name }}
                                         </option>
                                     </select>
+                                    <div v-if="errors.user_id" class="text-red-500 ml-5">
+                                        {{ errors.user_id }}
+                                    </div>
                                 </td>
                             </tr>
                             <tr>

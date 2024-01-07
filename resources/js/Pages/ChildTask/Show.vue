@@ -2,12 +2,46 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
+import { reactive, ref } from 'vue';
+import Modal from '@/Components/Modal.vue';
+import TextInput from '@/Components/TextInput.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import Editor from 'primevue/editor';
 
 const props = defineProps({
     'project': Object,
     'task': Object,
     'childTask': Object,
+    'errors': Object
 })
+
+const showModal = ref(false);
+
+const form = reactive({
+    user_id: null,
+    title: null,
+    content: null,
+    status: null,
+    priority: null,
+    branch_name: null,
+    start_date: null,
+    end_date: null,
+})
+
+function storeChildTask() {
+    router.post(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks`, form)
+    // 保存が成功した後にフォームをリセット
+    form.user_id = null;
+    form.title = null;
+    form.content = null;
+    form.status = null;
+    form.priority = null;
+    form.branch_name = null;
+    form.start_date = null;
+    form.end_date = null;
+}
 
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
@@ -43,14 +77,14 @@ const formatDate = (dateString) => {
 
         <div class="flex w-full">
             <SideMenu :project="project" class="h-screen" />
-            <div class="p-6 text-gray-900 w-full">
+            <div class="p-6 text-gray-900 w-full ml-72">
                 <div class="p-10">
                     <div class="h-auto bg-white p-10 rounded border border-gray-200">
                         <div>
                             <div class="flex">
                                 <p class="font-semibold pl-5">タイトル</p>
                                 <p class="ml-auto">
-                                    <!-- 登録者： {{ props.childTask.creator.name }}<br> -->
+                                    登録者： {{ props.childTask.creator.name }}<br>
                                     登録日時： {{ formatDate(props.childTask.created_at) }}
                                 </p>
                             </div>
@@ -214,7 +248,7 @@ const formatDate = (dateString) => {
                                 </tr>
                                 <tr v-for="childTask in props.task.child_tasks" :key="childTask.id"
                                     class="border-b border-gray-300 hover:bg-blue-200"
-                                    :class="{ 'bg-blue-200': props.childTask.id === childTask.id }"
+                                    :class="{ 'bg-gray-100': props.childTask.id === childTask.id }"
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="pl-16 py-6 w-1/5">{{ childTask.title }}</td>
                                     <td class="px-2 py-6 text-center">{{ childTask.user.name }}</td>
@@ -237,4 +271,90 @@ const formatDate = (dateString) => {
             </div>
         </div>
     </AuthenticatedLayout>
+    <Modal :show="showModal" @close="showModal = false" :maxWidth="'3xl'">
+        <div class="p-6 text-gray-900 w-full">
+            <form @submit.prevent="storeChildTask">
+                <div class="bg-white p-5 m-5">
+                    <p>子課題の追加</p>
+                    <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
+                    <div v-if="errors.title" class="text-red-500">
+                        {{ errors.title }}
+                    </div>
+                    <div class="card mt-5">
+                        <Editor v-model="form.content" editorStyle="height: 320px" />
+                    </div>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr>
+                                <td class="border-b border-gray-300 py-16 pl-8 text-left">状態<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.status"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="未対応">未対応</option>
+                                        <option value="処理中">処理中</option>
+                                        <option value="処理済み">処理済み</option>
+                                        <option value="完了">完了</option>
+                                    </select>
+                                    <div v-if="errors.status" class="text-red-500 ml-5">
+                                        {{ errors.status }}
+                                    </div>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-3 pl-8 text-left border-b border-gray-300">担当者<span
+                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.user_id"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option v-for="projectUser in props.project.users" :key="projectUser.id"
+                                            :value="projectUser.id">
+                                            {{ projectUser.name }}
+                                        </option>
+                                    </select>
+                                    <div v-if="errors.user_id" class="text-red-500 ml-5">
+                                        {{ errors.user_id }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">優先度</td>
+                                <td class="border-b border-gray-300">
+                                    <select v-model="form.priority"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                        <option value="低">低</option>
+                                        <option value="中">中</option>
+                                        <option value="高">高</option>
+                                    </select>
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">ブランチ名</td>
+                                <td class="border-b border-gray-300">
+                                    <TextInput type="text" v-model="form.branch_name" class="m-5 w-4/5"
+                                        placeholder="ブランチ名" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pl-8 text-left border-b border-gray-300 py-16">開始日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.start_date"
+                                        :disabled-week-days="[6, 0]" locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd"
+                                        :enable-time-picker="false" class="m-5" />
+                                </td>
+                                <td class="w-1/12"></td>
+                                <td class="py-6 pl-8 text-left border-b border-gray-300">終了日</td>
+                                <td class="border-b border-gray-300">
+                                    <VueDatePicker style="width: 80%;" v-model="form.end_date" :disabled-week-days="[6, 0]"
+                                        locale="jp" format="yyyy/MM/dd" model-type="yyyy-MM-dd" :enable-time-picker="false"
+                                        class="m-5" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-10">
+                        <PrimaryButton>追加</PrimaryButton>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </Modal>
 </template>

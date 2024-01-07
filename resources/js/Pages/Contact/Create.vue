@@ -4,6 +4,10 @@ import { Head, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import { ref, reactive } from 'vue';
 
+defineProps({
+    'errors': Object
+})
+
 const form = reactive({
     category: '',
     content: '',
@@ -24,9 +28,6 @@ function confirmContact() {
         </template>
 
         <div class="container mx-auto">
-            <div v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
-            </div>
             <div class="w-full">
                 <form @submit.prevent="confirmContact">
                     <div class="p-6 text-gray-900">カテゴリー
@@ -69,14 +70,20 @@ function confirmContact() {
                                 <option value="企業情報やパートナーシップに関する質問">企業情報やパートナーシップに関する質問</option>
                             </optgroup>
                         </select>
+                        <div v-if="errors.category" class="text-red-500">
+                            {{ errors.category }}
+                        </div>
                     </div>
                     <div class="p-6 text-gray-900">お問い合わせ内容
+                        <div v-if="errors.content" class="text-red-500">
+                            {{ errors.content }}
+                        </div>
                         <textarea v-model="form.content"
                             class="w-full h-96 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
                     </div>
                     <div class="text-center">
-                    <PrimaryButton>確認画面へ</PrimaryButton>
-                </div>
+                        <PrimaryButton>確認画面へ</PrimaryButton>
+                    </div>
                 </form>
             </div>
         </div>

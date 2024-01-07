@@ -12,6 +12,7 @@ class ChildTask extends Model
 
     protected $fillable = [
         'user_id',
+        'creator_id',
         'project_id',
         'task_id',
         'title',
@@ -50,5 +51,15 @@ class ChildTask extends Model
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);
+    }
+
+    /**
+     * ユーザーに紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->BelongsTo(User::class);
     }
 }

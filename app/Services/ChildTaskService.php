@@ -36,9 +36,11 @@ class ChildTaskService implements ChildTaskServiceInterface
      */
     public function store(int $projectId, int $taskId, ChildTaskParams $params): void
     {
-        $paramsArray = $params->toArray();
-        $paramsArray['project_id'] = $projectId;
-        $paramsArray['task_id'] = $taskId;
+        $paramsArray = array_merge($params->toArray(), [
+            'project_id' => $projectId,
+            'task_id' => $taskId,
+            'creator_id' => Auth::id()
+        ]);
 
         $this->childTaskRepository->store($paramsArray);
     }
@@ -50,7 +52,7 @@ class ChildTaskService implements ChildTaskServiceInterface
     {
         $project = $this->projectRepository->findOrFail($projectId);
         $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user']);
-        $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user']);
+        $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user', 'creator']);
 
         return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask]);
     }

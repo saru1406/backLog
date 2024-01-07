@@ -35,10 +35,10 @@ function storeProject() {
                     {{ errorMessage }}
                 </div>
             <!-- 左側のコンテナ -->
-            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8">
+            <div class="flex flex-col w-full sm:px-6 lg:px-8">
                 <div class="p-6 text-gray-900">
-                    <p>プロジェクト一覧</p>
                     <button @click="showModal = true" class="text-blue-500">プロジェクト作成</button>
+                    <p>プロジェクト一覧</p>
                     <Modal :show="showModal" @close="showModal = false" :maxWidth="'xl'">
                         <h2 class="m-10 text-xl">プロジェクト追加</h2>
                         <form @submit.prevent="storeProject">
@@ -52,27 +52,27 @@ function storeProject() {
                         </form>
                     </Modal>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
-                        <div v-for="project in projects" :key="project.id" class="p-6 text-gray-900 text-center">
+                        <div v-for="project in projects" :key="project.id" class="p-6 text-gray-900 text-left">
                             <Link class="text-blue-500" :href="route('projects.tasks.index',{project: project})">{{ project.name }}</Link>
                             <hr>
                         </div>
                     </div>
                 </div>
-                <div class="p-6 text-gray-900">自分の課題
+                <!-- <div class="p-6 text-gray-900">自分の課題
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                         <div class="p-6 text-gray-900 text-center">自分の課題一覧中身</div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- 右側のコンテナ -->
-            <div class="flex flex-col w-1/2 sm:px-6 lg:px-8">
+            <!-- <div class="flex flex-col w-1/2 sm:px-6 lg:px-8">
                 <div class="p-6 text-gray-900">最近の更新
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                         <div class="p-6 text-gray-900 text-center">最近の更新中身</div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </AuthenticatedLayout>
 </template>

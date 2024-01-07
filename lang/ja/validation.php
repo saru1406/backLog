@@ -151,6 +151,8 @@ return [
     'attributes' => [
         'title' => 'タイトル',
         'status' => '状態',
-        'user_id' => '担当者'
+        'user_id' => '担当者',
+        'category' => 'カテゴリー',
+        'content' => 'お問い合わせ内容'
     ],
 ];

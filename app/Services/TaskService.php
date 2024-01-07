@@ -44,9 +44,11 @@ class TaskService implements TaskServiceInterface
      */
     public function store(int $projectId, TaskParams $params): void
     {
-        $paramsArray = $params->toArray();
-        $paramsArray['project_id'] = $projectId;
-        $paramsArray['creator_id'] = Auth::id();
+        $paramsArray = array_merge($params->toArray(), [
+            'project_id' => $projectId,
+            'creator_id' => Auth::id(),
+        ]);
+
         $this->taskRepository->store($paramsArray);
     }
 
