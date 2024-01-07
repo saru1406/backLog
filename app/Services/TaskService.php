@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Project;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
+use App\Repositories\ProjectTaskNumberRepositoryInterface;
 use App\Repositories\TaskParams;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -17,6 +18,7 @@ class TaskService implements TaskServiceInterface
         private GptRepositoryInterface $gptRepository,
         private ProjectServiceInterface $projectService,
         private ProjectRepositoryInterface $projectRepository,
+        private ProjectTaskNumberRepositoryInterface $projectTaskNumberRepository,
     ) {
     }
 
@@ -49,7 +51,26 @@ class TaskService implements TaskServiceInterface
             'creator_id' => Auth::id(),
         ]);
 
-        $this->taskRepository->store($paramsArray);
+        $task = $this->taskRepository->store($paramsArray);
+
+        $taskNumber = $this->projectTaskNumberRepository->fetchTaskNumberbyProjectId($projectId);
+        if ($taskNumber) {
+            $projectTaskNumberParams = [
+                'project_id' => $projectId,
+                'task_number' => $taskNumber->task_number + 1,
+                'taskable_id' => $task->id,
+                'taskable_type' => 'task',
+            ];
+        } else {
+            $projectTaskNumberParams = [
+                'project_id' => $projectId,
+                'task_number' => 1,
+                'taskable_id' => $task->id,
+                'taskable_type' => 'task',
+            ];
+        }
+
+        $this->projectTaskNumberRepository->store($projectTaskNumberParams);
     }
 
     /**
@@ -60,7 +81,7 @@ class TaskService implements TaskServiceInterface
         $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
         $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user', 'type', 'creator']);
 
-        return collect(['project' => $project, 'task'=> $task]);
+        return collect(['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -71,7 +92,7 @@ class TaskService implements TaskServiceInterface
         $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
         $task = $this->taskRepository->findOrFail($taskId, ['user']);
 
-        return collect(['project'=> $project, 'task'=> $task]);
+        return collect(['project' => $project, 'task' => $task]);
     }
 
     /**

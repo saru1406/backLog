@@ -6,6 +6,9 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Services\ProjectServiceInterface;
 use App\Services\TaskServiceInterface;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TaskController extends Controller
@@ -46,7 +49,13 @@ class TaskController extends Controller
      */
     public function store(int $projectId, StoreTaskRequest $request)
     {
-        $this->taskService->store($projectId, $request->getParams());
+        try {
+            DB::transaction(function () use ($projectId, $request) {
+                $this->taskService->store($projectId, $request->getParams());
+            });
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
 
         return to_route('projects.tasks.create', $projectId);
     }

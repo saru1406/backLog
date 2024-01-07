@@ -149,7 +149,7 @@ return [
     'uuid'                 => ':Attributeは、有効なUUIDである必要があります。',
 
     'attributes' => [
-        'title' => 'タイトル',
+        'title' => '件名',
         'status' => '状態',
         'user_id' => '担当者',
         'category' => 'カテゴリー',

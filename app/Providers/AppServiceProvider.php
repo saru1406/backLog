@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ProjectTaskNumber;
 use App\Repositories\ChildTaskRepository;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\CompanyRepository;
@@ -14,6 +15,8 @@ use App\Repositories\GptRepository;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectRepositoryInterface;
+use App\Repositories\ProjectTaskNumberRepository;
+use App\Repositories\ProjectTaskNumberRepositoryInterface;
 use App\Repositories\TaskRepository;
 use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\TypeRepository;
@@ -70,6 +73,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
         $this->app->bind(ContactServiceInterface::class, ContactService::class);
+
+        $this->app->bind(ProjectTaskNumberRepositoryInterface::class, ProjectTaskNumberRepository::class);
     }
 
     /**
