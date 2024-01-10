@@ -67,14 +67,4 @@ class Project extends Model
     {
         return $this->hasMany(Type::class);
     }
-
-    /**
-     * プロジェクトに紐づくタスクの番号
-     *
-     * @return HasMany
-     */
-    public function ProjectTaskNumbers(): HasMany
-    {
-        return $this->hasMany(ProjectTaskNumber::class);
-    }
 }

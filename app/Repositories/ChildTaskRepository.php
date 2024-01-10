@@ -13,9 +13,9 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function store(array $params): ChildTask
+    public function store(array $params): void
     {
-        return ChildTask::create($params);
+        ChildTask::create($params);
     }
 
     /**
@@ -40,6 +40,24 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
     public function update(int $childTaskId, array $params): void
     {
         ChildTask::findOrFail($childTaskId)->update($params);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeChildTaskByGpt(int $projectId, int $taskId, int $userId, array $childTask): void
+    {
+        ChildTask::create([
+            'user_id' => $userId,
+            'project_id' => $projectId,
+            'task_id' => $taskId,
+            'title' => $childTask['title'],
+            'content' => $childTask['content'],
+            'status' => '未対応',
+            'priority' => '中',
+            'start_date' => null,
+            'end_date' => null
+        ]);
     }
 
     /**

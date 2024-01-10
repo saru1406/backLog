@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\ChildTask;
 use App\Repositories\ChildTaskParams;
 use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
-use App\Repositories\ProjectTaskNumberRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +17,6 @@ class ChildTaskService implements ChildTaskServiceInterface
         private GptRepositoryInterface $gptRepository,
         private TaskRepositoryInterface $taskRepository,
         private ProjectRepositoryInterface $projectRepository,
-        private ProjectTaskNumberRepositoryInterface $projectTaskNumberRepository,
     ) {
     }
 
@@ -45,9 +42,7 @@ class ChildTaskService implements ChildTaskServiceInterface
             'creator_id' => Auth::id()
         ]);
 
-        $childTask = $this->childTaskRepository->store($paramsArray);
-
-        $this->storeProjectTaskNumber($projectId, $childTask);
+        $this->childTaskRepository->store($paramsArray);
     }
 
     /**
@@ -107,23 +102,10 @@ class ChildTaskService implements ChildTaskServiceInterface
                 - ログイン状態を管理し、お気に入り情報にアクセスできるユーザーを制限する';
 
         $childTasksGptText = $this->gptRepository->createChildTasks($message);
-        $childTaskArray = $this->parseTasks($childTasksGptText);
+        $childTasks = $this->parseTasks($childTasksGptText);
 
-        foreach ($childTaskArray as $childTaskParams) {
-            $params = [
-                'user_id' => $userId,
-                'creator_id' => $userId,
-                'project_id' => $projectId,
-                'task_id' => $taskId,
-                'title' => $childTaskParams['title'],
-                'content' => $childTaskParams['content'],
-                'status' => '未対応',
-                'priority' => '中',
-                'start_date' => null,
-                'end_date' => null
-            ];
-            $childTask = $this->childTaskRepository->store($params);
-            $this->storeProjectTaskNumber($projectId, $childTask);
+        foreach ($childTasks as $childTask) {
+            $this->childTaskRepository->storeChildTaskByGpt($projectId, $taskId, $userId, $childTask);
         }
     }
 
@@ -163,26 +145,6 @@ class ChildTaskService implements ChildTaskServiceInterface
         }
 
         return $childTasks;
-    }
-
-    /**
-     * ProjectTaskNumberに子タスクを保存
-     *
-     * @param int $projectId
-     * @param ChildTask $childTask
-     * @return void
-     */
-    private function storeProjectTaskNumber(int $projectId, ChildTask $childTask): void
-    {
-        $taskNumber = $this->projectTaskNumberRepository->fetchTaskNumberbyProjectId($projectId);
-        $projectTaskNumberParams = [
-            'project_id' => $projectId,
-            'task_number' => $taskNumber->task_number + 1,
-            'taskable_id' => $childTask->id,
-            'taskable_type' => 'child_task',
-        ];
-
-        $this->projectTaskNumberRepository->store($projectTaskNumberParams);
     }
 
     /**

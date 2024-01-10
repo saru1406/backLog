@@ -6,9 +6,6 @@ use App\Http\Requests\StoreChildTaskRequest;
 use App\Http\Requests\UpdateChildTaskRequest;
 use App\Models\ChildTask;
 use App\Services\ChildTaskServiceInterface;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ChildTaskController extends Controller
@@ -43,13 +40,7 @@ class ChildTaskController extends Controller
      */
     public function store(StoreChildTaskRequest $request, int $projectId, int $taskId)
     {
-        try {
-            DB::transaction(function () use ($request, $projectId, $taskId) {
-                $this->childTaskService->store($projectId, $taskId, $request->getParams());
-            });
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
-        }
+        $this->childTaskService->store($projectId, $taskId, $request->getParams());
     }
 
     /**
@@ -100,12 +91,6 @@ class ChildTaskController extends Controller
 
     public function storeChildTaskGpt(int $projecId, int $taskId)
     {
-        try {
-            DB::transaction(function () use ($projecId, $taskId) {
-                $this->childTaskService->storeChildTaskByGpt($projecId, $taskId);
-            });
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
-        }
+        $this->childTaskService->storeChildTaskByGpt($projecId, $taskId);
     }
 }

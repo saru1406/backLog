@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ChildTask extends Model
 {
@@ -62,15 +61,5 @@ class ChildTask extends Model
     public function creator(): BelongsTo
     {
         return $this->BelongsTo(User::class);
-    }
-
-    /**
-     * タスクに関連するプロジェクトタスク番号を取得
-     *
-     * @return MorphMany
-     */
-    public function projectTaskNumber(): MorphMany
-    {
-        return $this->morphMany(ProjectTaskNumber::class, 'taskable');
     }
 }

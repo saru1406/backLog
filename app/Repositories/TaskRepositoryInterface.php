@@ -32,9 +32,9 @@ interface TaskRepositoryInterface
      * タスク保存
      *
      * @param array $params
-     * @return Task
+     * @return void
      */
-    public function store(array $params): Task;
+    public function store(array $params): void;
 
     /**
      * タスク検索
