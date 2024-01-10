@@ -77,4 +77,12 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
 
         return $query->with(['user', 'task.type'])->get();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchByTaskId(int $taskId, array $option = []): Collection
+    {
+        return ChildTask::with($option)->where('task_id', $taskId)->get();
+    }
 }

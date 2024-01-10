@@ -40,4 +40,14 @@ class Type extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+        /**
+     * タスクに紐づけ
+     *
+     * @return HasMany
+     */
+    public function childTasks(): HasMany
+    {
+        return $this->hasMany(ChildTask::class);
+    }
 }

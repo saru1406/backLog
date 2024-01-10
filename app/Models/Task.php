@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Task extends Model
 {
@@ -79,10 +80,10 @@ class Task extends Model
     /**
      * タスクに関連するプロジェクトタスク番号を取得
      *
-     * @return MorphMany
+     * @return MorphOne
      */
-    public function projectTaskNumbers(): MorphMany
+    public function projectTaskNumbers(): MorphOne
     {
-        return $this->morphMany(ProjectTaskNumber::class, 'taskable');
+        return $this->morphOne(ProjectTaskNumber::class, 'taskable');
     }
 }

@@ -99,7 +99,7 @@ const updateChildTask = async (childTaskId, status) => {
 
 const fetchTasks = async (project, filters) => {
     try {
-        let url = `/api/projects/${project.id}/tasks`;
+        let url = `/api/projects/${project.id}/tasks-board`;
         const params = new URLSearchParams();
 
         if (filters.user_id !== null) params.append('user_id', filters.user_id);
