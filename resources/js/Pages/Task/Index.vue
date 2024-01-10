@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
@@ -156,7 +156,8 @@ const isPastDate = (dateString) => {
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-5">
                             <option value="" disabled selected>選択してください</option>
                             <option :value="null">全て</option>
-                            <option v-for="projectUser in props.project.users" :value="projectUser.id" :key="projectUser.id">
+                            <option v-for="projectUser in props.project.users" :value="projectUser.id"
+                                :key="projectUser.id">
                                 {{ projectUser.name }}
                             </option>
                         </select>

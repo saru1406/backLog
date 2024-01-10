@@ -55,20 +55,24 @@ function updateChildTask() {
                             placeholder="課題の詳細"></textarea>
                         <div>
                             <label>状態</label>
-                            <select v-model="form.status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <select v-model="form.status"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                                 <option value="未対応">未対応</option>
                                 <option value="処理中">処理中</option>
                                 <option value="処理済み">処理済み</option>
                                 <option value="完了">完了</option>
                             </select>
                             <label>担当者</label>
-                            <select v-model="form.user_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
-                                <option v-for="projectUser in props.project_users" :key="projectUser.id" :value="projectUser.id">
+                            <select v-model="form.user_id"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                                <option v-for="projectUser in props.project_users" :key="projectUser.id"
+                                    :value="projectUser.id">
                                     {{ projectUser.name }}
                                 </option>
                             </select>
                             <label>優先度</label>
-                            <select v-model="form.priority" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
+                            <select v-model="form.priority"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5">
                                 <option value="低">低</option>
                                 <option value="中">中</option>
                                 <option value="高">高</option>
@@ -95,5 +99,4 @@ function updateChildTask() {
 <style>
 .input-class::placeholder {
     opacity: 0.5;
-}
-</style>
+}</style>

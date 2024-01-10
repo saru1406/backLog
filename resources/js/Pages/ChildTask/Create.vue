@@ -106,4 +106,5 @@ function storeChildTask() {
 <style>
 .input-class::placeholder {
     opacity: 0.5;
-}</style>
+}
+</style>

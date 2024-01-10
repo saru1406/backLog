@@ -47,6 +47,7 @@ function storeChildTask(TaskId) {
 
 const tasks = ref([]);
 const selectedTask = ref(null);
+const parentTask = ref(null);
 const childTasks = ref([]);
 
 const filters = reactive({
@@ -174,8 +175,9 @@ watch(filters, () => {
 }, { deep: true });
 
 
-const openModalWithTask = (task) => {
+const openModalWithTask = (task, oldTask) => {
     selectedTask.value = task;
+    parentTask.value = oldTask;
     showModal.value = true;
 };
 
@@ -736,7 +738,7 @@ function deleteTask(taskId) {
                     </div>
                 </div>
                 <div class="h-auto mt-10 bg-white p-4 rounded border border-gray-200">
-                    <div class="flex">
+                    <div v-if="selectedTask.child_tasks" class="flex">
                         <button @click="showChildModal = true"
                             class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-10 my-5">
                             子課題を追加
@@ -747,7 +749,10 @@ function deleteTask(taskId) {
                             GPTで子課題を自動作成
                         </button>
                     </div>
-                    <div class="bg-gray-100 inline-flex px-4 pb-2 pt-4 rounded-t-lg text-sm font-medium">子課題一覧</div>
+                    <div v-if="selectedTask.child_tasks"
+                        class="bg-gray-100 inline-flex px-4 pb-2 pt-4 rounded-t-lg text-sm font-medium">子課題一覧</div>
+                    <div v-if="selectedTask.task"
+                        class="bg-gray-100 inline-flex px-4 pb-2 pt-4 rounded-t-lg text-sm font-medium">親タスク</div>
                     <table class="table-auto w-full text-left whitespace-no-wrap text-sm shadow-lg">
                         <thead class="text-green-700">
                             <tr>
@@ -768,8 +773,10 @@ function deleteTask(taskId) {
                                     登録日</th>
                             </tr>
                         </thead>
-                        <tbody v-for="childTask in selectedTask.child_tasks" :key="childTask.id">
-                            <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderChildTaskShow(childTask)">
+                        <tbody v-if="selectedTask.child_tasks" v-for="childTask in selectedTask.child_tasks"
+                            :key="childTask.id">
+                            <tr class="border-b border-gray-300 hover:bg-blue-200"
+                                @click="openModalWithTask(childTask, selectedTask)">
                                 <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
                                 <td class="px-4 py-3 text-center">{{ childTask.user.name }}</td>
                                 <td class="px-4 py-3 text-center">{{ childTask.status }}</td>
@@ -782,6 +789,41 @@ function deleteTask(taskId) {
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     {{ formatDate(childTask.created_at) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-if="selectedTask.task">
+                            <tr class="border-b border-gray-300 hover:bg-blue-200"
+                                @click="openModalWithTask(selectedTask.task)">
+                                <td class="px-4 py-3 w-1/5">{{ selectedTask.task.title }}</td>
+                                <td class="px-4 py-3 text-center">{{ selectedTask.task.user.name }}</td>
+                                <td class="px-4 py-3 text-center">{{ selectedTask.task.status }}</td>
+                                <td class="px-4 py-3 text-lg text-center">{{ selectedTask.task.priority }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(selectedTask.task.start_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(selectedTask.task.end_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(selectedTask.task.created_at) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-if="parentTask">
+                            <tr class="border-b border-gray-300 hover:bg-blue-200" @click="openModalWithTask(parentTask)">
+                                <td class="px-4 py-3 w-1/5">{{ parentTask.title }}</td>
+                                <td class="px-4 py-3 text-center">{{ parentTask.user.name }}</td>
+                                <td class="px-4 py-3 text-center">{{ parentTask.status }}</td>
+                                <td class="px-4 py-3 text-lg text-center">{{ parentTask.priority }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(parentTask.start_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(parentTask.end_date) }}
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    {{ formatDate(parentTask.created_at) }}
                                 </td>
                             </tr>
                         </tbody>
@@ -870,8 +912,6 @@ function deleteTask(taskId) {
         </div>
     </Modal>
 </template>
-<style>
-.dragClass {
+<style>.dragClass {
     opacity: 1 !important;
-}
-</style>
+}</style>

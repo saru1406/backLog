@@ -127,6 +127,10 @@ class ProjectService implements ProjectServiceInterface
      */
     public function destroyUser(int $projectId, int $userId): void
     {
+        $currentUser = Auth::user();
+        if (!$currentUser->company_id) {
+            return;
+        }
         $project = $this->projectRepository->findOrFail($projectId);
         $this->projectRepository->destroyUser($project, $userId);
     }

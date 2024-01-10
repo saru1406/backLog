@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
-import { reactive, ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 
 
 const props = defineProps({

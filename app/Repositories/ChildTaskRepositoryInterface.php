@@ -44,17 +44,6 @@ interface ChildTaskRepositoryInterface
     public function update(int $childTaskId, array $params): void;
 
     /**
-     * GPT生成データを保存
-     *
-     * @param int $projectId
-     * @param int $taskId
-     * @param int $userId
-     * @param array $childTask
-     * @return void
-     */
-    public function storeChildTaskByGpt(int $projectId, int $taskId, int $userId, array $childTask): void;
-
-    /**
      * 子タスク削除
      *
      * @param integer $childTaskId

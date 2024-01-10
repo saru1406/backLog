@@ -105,7 +105,19 @@ class ChildTaskService implements ChildTaskServiceInterface
         $childTasks = $this->parseTasks($childTasksGptText);
 
         foreach ($childTasks as $childTask) {
-            $this->childTaskRepository->storeChildTaskByGpt($projectId, $taskId, $userId, $childTask);
+            $params = [
+                'user_id' => $userId,
+                'project_id' => $projectId,
+                'task_id' => $taskId,
+                'creator_id' => $userId,
+                'title' => $childTask['title'],
+                'content' => $childTask['content'],
+                'status' => '未対応',
+                'priority' => '中',
+                'start_date' => null,
+                'end_date' => null
+            ];
+            $this->childTaskRepository->store($params);
         }
     }
 

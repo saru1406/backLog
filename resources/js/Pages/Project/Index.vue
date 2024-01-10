@@ -32,8 +32,8 @@ function storeProject() {
 
         <div class="flex w-full">
             <div v-if="errorMessage" class="error-message">
-                    {{ errorMessage }}
-                </div>
+                {{ errorMessage }}
+            </div>
             <!-- 左側のコンテナ -->
             <div class="flex flex-col w-full sm:px-6 lg:px-8">
                 <div class="p-6 text-gray-900">
@@ -47,13 +47,16 @@ function storeProject() {
                                 <TextInput type="text" class="w-full" v-model="form.name"></TextInput>
                             </div>
                             <div class="m-5">
-                                <button class="flex mx-auto text-white bg-indigo-400 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-400 rounded text-lg">登録する</button>
+                                <button
+                                    class="flex mx-auto text-white bg-indigo-400 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-400 rounded text-lg">登録する</button>
                             </div>
                         </form>
                     </Modal>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                         <div v-for="project in projects" :key="project.id" class="p-6 text-gray-900 text-left">
-                            <Link class="text-blue-500" :href="route('projects.tasks.index',{project: project})">{{ project.name }}</Link>
+                            <Link class="text-blue-500" :href="route('projects.tasks.index', { project: project })">
+                            {{ project.name }}
+                            </Link>
                             <hr>
                         </div>
                     </div>

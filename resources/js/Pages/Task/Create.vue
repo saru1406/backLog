@@ -90,13 +90,16 @@ function storeTask() {
                                         <span class="text-red-500 text-lg">*</span>
                                     </td>
                                     <td class="border-b border-gray-300">
-                                        <select v-model="form.user_id"
-                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
-                                            <option v-for="projectUser in props.project.users" :key="projectUser.id"
-                                                :value="projectUser.id">
-                                                {{ projectUser.name }}
-                                            </option>
-                                        </select>
+                                        <div class="w-4/5">
+                                            <select v-model="form.user_id"
+                                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">
+                                                <option v-for="projectUser in props.project.users" :key="projectUser.id"
+                                                    :value="projectUser.id">
+                                                    {{ projectUser.name }}
+                                                </option>
+                                            </select>
+                                            <span>私が担当</span>
+                                        </div>
                                         <div v-if="errors.user_id" class="text-red-500 ml-5">
                                             {{ errors.user_id }}
                                         </div>

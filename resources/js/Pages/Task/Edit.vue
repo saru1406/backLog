@@ -1,12 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import SideMenu from '@/Components/SideMenu.vue'
 import TextInput from '@/Components/TextInput.vue'
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import Editor from 'primevue/editor';
 
 const props = defineProps({
     'project': Object,
@@ -20,7 +21,7 @@ const form = reactive({
     content: props.task ? props.task.content : null,
     status: props.task ? props.task.status : null,
     priority: props.task ? props.task.priority : null,
-    branch_name: props.task ? props.task.branch_name: null,
+    branch_name: props.task ? props.task.branch_name : null,
     start_date: props.task ? props.task.start_date : null,
     end_date: props.task ? props.task.end_date : null,
 })
@@ -50,9 +51,8 @@ function updateTask() {
                         <TextInput type="text" v-model="form.title" class="w-full" placeholder="件名"></TextInput>
                     </div>
                     <div class="bg-white p-5 m-5 rounded">
-                        <textarea v-model="form.content" rows="12" class="w-full sm:rounded-lg border-gray-300"
-                            placeholder="課題の詳細"></textarea>
-                            <table class="w-full text-sm">
+                        <Editor v-model="form.content" editorStyle="height: 320px" />
+                        <table class="w-full text-sm">
                             <tbody>
                                 <tr>
                                     <td class="border-b border-gray-300 py-16 pl-8 text-left">状態</td>
@@ -126,7 +126,7 @@ function updateTask() {
                         <div class="text-right mr-24 mt-10">
                             <PrimaryButton>更新</PrimaryButton>
                         </div>
-                        </div>
+                    </div>
                 </form>
             </div>
         </div>

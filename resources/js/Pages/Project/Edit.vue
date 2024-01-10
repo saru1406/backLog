@@ -63,7 +63,7 @@ function deleteUser(userId) {
                 </form>
                 <div class="p-6 text-gray-900">
                     <p>参加ユーザー</p>
-                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md">
+                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md border">
                         <table class="w-full">
                             <thead class="text-green-700">
                                 <tr>
@@ -78,7 +78,8 @@ function deleteUser(userId) {
                             <tbody v-for="projectUser in props.project.users" :key="projectUser.id">
                                 <tr class="border-b border-gray-300 text-sm">
                                     <td class="px-4 py-3 text-center">{{ projectUser.name }}</td>
-                                    <td style="cursor: pointer;" @click="deleteUser(projectUser.id)" class="text-center font-semibold text-red-500">x
+                                    <td style="cursor: pointer;" @click="deleteUser(projectUser.id)"
+                                        class="text-center font-semibold text-red-500">x
                                     </td>
                                 </tr>
                             </tbody>
@@ -97,7 +98,7 @@ function deleteUser(userId) {
                         </form>
                     </div>
                     <div class="mt-10">種別一覧</div>
-                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md">
+                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md border">
                         <table class="w-full">
                             <thead class="text-green-700">
                                 <tr>
@@ -112,7 +113,8 @@ function deleteUser(userId) {
                             <tbody v-for="projectType in props.project.types" :key="projectType.id">
                                 <tr class="border-b border-gray-300 text-sm">
                                     <td class="px-4 py-3 text-center">{{ projectType.name }}</td>
-                                    <td style="cursor: pointer;" @click="deleteType(projectType.id)" class="text-center font-semibold text-red-500">x
+                                    <td style="cursor: pointer;" @click="deleteType(projectType.id)"
+                                        class="text-center font-semibold text-red-500">x
                                     </td>
                                 </tr>
                             </tbody>

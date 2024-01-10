@@ -45,24 +45,6 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function storeChildTaskByGpt(int $projectId, int $taskId, int $userId, array $childTask): void
-    {
-        ChildTask::create([
-            'user_id' => $userId,
-            'project_id' => $projectId,
-            'task_id' => $taskId,
-            'title' => $childTask['title'],
-            'content' => $childTask['content'],
-            'status' => '未対応',
-            'priority' => '中',
-            'start_date' => null,
-            'end_date' => null
-        ]);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function destroy(int $childTaskId): void
     {
         ChildTask::findOrFail($childTaskId)->delete();
@@ -93,6 +75,6 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             Log::info('優先度', ['priority' => $params->getPriority()]);
         }
 
-        return $query->with(['user', 'task.type'])->get();
+        return $query->with(['user', 'task.type', 'task.user', 'task.childTasks', 'task.childTasks.user'])->get();
     }
 }

@@ -45,8 +45,8 @@ function confirmContact() {
                             class="w-full h-96 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
                     </div>
                     <div class="text-center">
-                    <PrimaryButton>送信</PrimaryButton>
-                </div>
+                        <PrimaryButton>送信</PrimaryButton>
+                    </div>
                 </form>
             </div>
         </div>
