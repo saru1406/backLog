@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FetchApiGantRequest;
 use App\Http\Requests\FetchApiTaskRequest;
 use App\Http\Requests\UpdateApiTaskStatuRequest;
-use App\Repositories\ProjectTaskNumberRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
 use App\UseCase\TaskUseCase;
 use Illuminate\Support\Facades\Log;
@@ -16,19 +15,10 @@ class TaskApiController extends Controller
     public function __construct(
         private TaskRepositoryInterface $taskRepository,
         private TaskUseCase $taskUseCase,
-        private ProjectTaskNumberRepositoryInterface $projectTaskNumberRepository
     ) {
     }
 
     public function fetchTasks(FetchApiTaskRequest $request, int $projectId)
-    {
-        $tasks = $this->projectTaskNumberRepository->searchTasksByParameters($projectId, $request->getParams());
-        Log::info("タスク数" . $tasks->count());
-
-        return response()->json($tasks);
-    }
-
-    public function fetchTasksByBoard(FetchApiTaskRequest $request, int $projectId)
     {
         $tasks = $this->taskRepository->searchTasksByParameters($projectId, $request->getParams());
         Log::info("タスク数" . $tasks->count());

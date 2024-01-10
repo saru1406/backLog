@@ -70,7 +70,7 @@ class TaskController extends Controller
         return Inertia::render('Task/Show', [
             'project' => $data['project'],
             'task' => $data['task'],
-            'childTasks' => $data['childTasks'],
+            'childTasks' => $data['task']['childTasks'],
         ]);
     }
 

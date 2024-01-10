@@ -21,16 +21,4 @@ interface ProjectTaskNumberRepositoryInterface
      * @return void
      */
     public function store(array $params): void;
-
-    /**
-     * ProjectTaskNumber取得
-     *
-     * @param int $projectId
-     * @param int $taskId
-     * @param array $option
-     * @return ProjectTaskNumber
-     */
-    public function findOrFail(int $projectId, int $taskId, array $option = []): ProjectTaskNumber;
-
-    public function searchTasksByParameters(int $projectId, ApiTaskParams $params);
 }

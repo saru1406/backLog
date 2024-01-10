@@ -63,7 +63,7 @@ function deleteUser(userId) {
                 </form>
                 <div class="p-6 text-gray-900">
                     <p>参加ユーザー</p>
-                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md border">
+                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md">
                         <table class="w-full">
                             <thead class="text-green-700">
                                 <tr>
@@ -97,7 +97,7 @@ function deleteUser(userId) {
                         </form>
                     </div>
                     <div class="mt-10">種別一覧</div>
-                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md border">
+                    <div class="bg-white overflow-hidden shadow-sm py-5 px-5 rounded-md">
                         <table class="w-full">
                             <thead class="text-green-700">
                                 <tr>

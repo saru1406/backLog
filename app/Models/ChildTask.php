@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class ChildTask extends Model
 {
@@ -17,7 +16,6 @@ class ChildTask extends Model
         'creator_id',
         'project_id',
         'task_id',
-        'type_id',
         'title',
         'content',
         'status',
@@ -67,22 +65,12 @@ class ChildTask extends Model
     }
 
     /**
-     * 種別に紐づけ
-     *
-     * @return BelongsTo
-     */
-    public function type(): BelongsTo
-    {
-        return $this->belongsTo(Type::class);
-    }
-
-    /**
      * タスクに関連するプロジェクトタスク番号を取得
      *
-     * @return MorphOne
+     * @return MorphMany
      */
-    public function projectTaskNumber(): MorphOne
+    public function projectTaskNumber(): MorphMany
     {
-        return $this->morphOne(ProjectTaskNumber::class, 'taskable');
+        return $this->morphMany(ProjectTaskNumber::class, 'taskable');
     }
 }

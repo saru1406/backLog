@@ -105,8 +105,8 @@ const onPageChange = async (event) => {
     await fetchTasks(props.project, filters);
 };
 
-const renderTaskShow = (taskId) =>
-    router.get(`/projects/${props.project.id}/tasks/${taskId}`)
+const renderTaskShow = (task) =>
+    router.get(`/projects/${props.project.id}/tasks/${task.id}`)
 
 const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -215,66 +215,66 @@ const isPastDate = (dateString) => {
                                 </thead>
                                 <tbody v-for="task in tasks" :key="task.id">
                                     <tr class="border-b border-gray-300 hover:bg-blue-200 text-sm"
-                                        @click="renderTaskShow(task.task_number)">
-                                        <td class="px-1 py-3 text-center">{{ task.task_number }}</td>
-                                        <td class="px-2 py-3 w-1/5 text-left">{{ task.taskable.title }}</td>
-                                        <td class="px-3 py-3 text-center">{{ task.taskable.user.name }}</td>
+                                        @click="renderTaskShow(task)">
+                                        <td class="px-1 py-3 text-center">{{ task.id }}</td>
+                                        <td class="px-2 py-3 w-1/5 text-left">{{ task.title }}</td>
+                                        <td class="px-3 py-3 text-center">{{ task.user.name }}</td>
                                         <td class="px-6 py-3 text-center">
                                             <div v-if="task.status === '完了'" class="rounded-full p-1 bg-slate-300">
-                                                {{ task.taskable.status }}
+                                                {{ task.status }}
                                             </div>
                                             <div v-if="task.status === '処理済み'" class="rounded-full p-1 bg-indigo-200">
-                                                {{ task.taskable.status }}
+                                                {{ task.status }}
                                             </div>
                                             <div v-if="task.status === '未対応'" class="rounded-full p-1 bg-orange-200">
-                                                {{ task.taskable.status }}
+                                                {{ task.status }}
                                             </div>
                                             <div v-if="task.status === '処理中'" class="rounded-full p-1 bg-green-300">
-                                                {{ task.taskable.status }}
+                                                {{ task.status }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-3 text-center text-white">
-                                            <div v-if="task.taskable.type">
-                                                <div v-if="task.taskable.type.name === 'バグ'" class="rounded-full p-1 bg-red-600">
-                                                    {{ task.taskable.type.name }}
+                                            <div v-if="task.type">
+                                                <div v-if="task.type.name === 'バグ'" class="rounded-full p-1 bg-red-600">
+                                                    {{ task.type.name }}
                                                 </div>
-                                                <div v-if="task.taskable.type.name === '実装'" class="rounded-full p-1 bg-blue-600">
-                                                    {{ task.taskable.type.name }}
+                                                <div v-if="task.type.name === '実装'" class="rounded-full p-1 bg-blue-600">
+                                                    {{ task.type.name }}
                                                 </div>
-                                                <div v-if="task.taskable.type.name === '改善'" class="rounded-full p-1 bg-pink-600">
-                                                    {{ task.taskable.type.name }}
+                                                <div v-if="task.type.name === '改善'" class="rounded-full p-1 bg-pink-600">
+                                                    {{ task.type.name }}
                                                 </div>
-                                                <div v-if="task.taskable.type.name !== '改善' && task.taskable.type.name !== '実装' && task.taskable.type.name !== 'バグ'"
+                                                <div v-if="task.type.name !== '改善' && task.type.name !== '実装' && task.type.name !== 'バグ'"
                                                     class="rounded-full p-1 bg-slate-500">
-                                                    {{ task.taskable.type.name }}
+                                                    {{ task.type.name }}
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-4 py-6 text text-center font-semibold">
-                                            <div v-if="task.taskable.priority === '高'" class="text-red-600">
-                                                {{ task.taskable.priority }}
+                                            <div v-if="task.priority === '高'" class="text-red-600">
+                                                {{ task.priority }}
                                             </div>
-                                            <div v-if="task.taskable.priority === '中'" class="text-green-500">
-                                                {{ task.taskable.priority }}
+                                            <div v-if="task.priority === '中'" class="text-green-500">
+                                                {{ task.priority }}
                                             </div>
-                                            <div v-if="task.taskable.priority === '低'" class="text-blue-500">
-                                                {{ task.taskable.priority }}
+                                            <div v-if="task.priority === '低'" class="text-blue-500">
+                                                {{ task.priority }}
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 text-center">{{ task.taskable.branch_name }}</td>
+                                        <td class="px-4 py-3 text-center">{{ task.branch_name }}</td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ formatDate(task.taskable.start_date) }}
+                                            {{ formatDate(task.start_date) }}
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            <div v-if="isPastDate(task.taskable.end_date)" class="text-red-500">
-                                                {{ formatDate(task.taskable.end_date) }}
+                                            <div v-if="isPastDate(task.end_date)" class="text-red-500">
+                                                {{ formatDate(task.end_date) }}
                                             </div>
                                             <div v-else>
-                                                {{ formatDate(task.taskable.end_date) }}
+                                                {{ formatDate(task.end_date) }}
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            {{ formatDate(task.taskable.created_at) }}
+                                            {{ formatDate(task.created_at) }}
                                         </td>
                                     </tr>
                                 </tbody>

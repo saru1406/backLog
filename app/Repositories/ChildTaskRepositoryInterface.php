@@ -52,14 +52,4 @@ interface ChildTaskRepositoryInterface
     public function destroy(int $childTaskId): void;
 
     public function searchChildTasksByParameters(int $projectId, ApiTaskParams $params): Collection;
-
-
-    /**
-     * タスクIDから取得
-     *
-     * @param int $taskId
-     * @param array $option
-     * @return Collection
-     */
-    public function fetchByTaskId(int $taskId, array $option = []): Collection;
 }

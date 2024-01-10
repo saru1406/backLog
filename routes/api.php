@@ -22,7 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/projects/{project}/tasks', [TaskApiController::class, 'fetchTasks']);
-    Route::get('/projects/{project}/tasks-board', [TaskApiController::class, 'fetchTasksByBoard']);
     Route::get('/projects/{project}/child-tasks', [ChildTaskApiController::class, 'fetchChildTasks']);
     Route::get('/projects/{project}/gant', [TaskApiController::class, 'fetchGant']);
     Route::get('/projects/{project}/new-tasks', [ProjectApiController::class, 'newTasks']);

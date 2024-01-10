@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Repositories\ChildTaskRepositoryInterface;
 use App\Repositories\GptRepositoryInterface;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\ProjectTaskNumberRepositoryInterface;
@@ -20,7 +19,6 @@ class TaskService implements TaskServiceInterface
         private ProjectServiceInterface $projectService,
         private ProjectRepositoryInterface $projectRepository,
         private ProjectTaskNumberRepositoryInterface $projectTaskNumberRepository,
-        private ChildTaskRepositoryInterface $childTaskRepository,
     ) {
     }
 
@@ -61,14 +59,14 @@ class TaskService implements TaskServiceInterface
                 'project_id' => $projectId,
                 'task_number' => $taskNumber->task_number + 1,
                 'taskable_id' => $task->id,
-                'taskable_type' => 'App\Models\Task',
+                'taskable_type' => 'task',
             ];
         } else {
             $projectTaskNumberParams = [
                 'project_id' => $projectId,
                 'task_number' => 1,
                 'taskable_id' => $task->id,
-                'taskable_type' => 'App\Models\Task',
+                'taskable_type' => 'task',
             ];
         }
 
@@ -81,15 +79,9 @@ class TaskService implements TaskServiceInterface
     public function fetchViewDataShow(int $projectId, int $taskId): Collection
     {
         $project = $this->projectRepository->findOrFail($projectId, ['users', 'types']);
-        // $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user', 'type', 'creator']);
-        $task = $this->projectTaskNumberRepository->findOrFail($projectId, $taskId, ['taskable', 'taskable.user', 'taskable.type', 'taskable.creator']);
-        if ($task->taskable_type === 'App\Models\Task') {
-            $childTasks = $this->childTaskRepository->fetchByTaskId($task->taskable->id, ['user', 'type', 'creator', 'projectTaskNumber']);
-            return collect(['project' => $project, 'task' => $task, 'childTasks' => $childTasks]);
-        } else {
-            $parentTask = $this->taskRepository->findOrFail($task->taskable->id, ['childTasks']);
-            return collect(['project' => $project, 'task' => $parentTask, 'childTasks' => $task]);
-        }
+        $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user', 'type', 'creator']);
+
+        return collect(['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -116,10 +108,9 @@ class TaskService implements TaskServiceInterface
      */
     public function storeBranchTask(int $taskId): void
     {
-        $task = $this->taskRepository->findOrFail($taskId, ['projectTaskNumbers']);
-        dd($task->projectTaskNumbers->task_number);
+        $task = $this->taskRepository->findOrFail($taskId);
 
-        $message = 'タスクID:' . $task->projectTaskNumbers->task_number . ' タスク名:' . $task->title . ' タスク説明:' . $task->content . '\n
+        $message = 'タスクID:' . $task->id . ' タスク名:' . $task->title . ' タスク説明:' . $task->content . '\n
             タスク名、タスク説明からブランチ名にタスクIDを含めて簡潔に作成してください。\n
             回答に補足説明は不要です。必ずブランチ名のみの回答をしてください。\n
             タスク内容を読み取って、バグタスクであればfix/から始まるブランチの作成、実装タスクであればfeature/から始まるブランチを作成してください。\n
@@ -128,9 +119,9 @@ class TaskService implements TaskServiceInterface
             作業概要はmax15字以内に収めること。\n
             例) \n
             バグタスクの場合\n
-            fix/' . $task->projectTaskNumbers->task_number . '-作業概要\n
+            fix/' . $task->id . '-作業概要\n
             実装タスクの場合\n
-            feature/' . $task->projectTaskNumbers->task_number . '-作業概要';
+            feature/' . $task->id . '-作業概要';
 
         $branchGptText = $this->gptRepository->createChildTasks($message);
 
