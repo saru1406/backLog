@@ -43,6 +43,9 @@ function storeChildTask() {
     form.end_date = null;
 }
 
+const renderTaskShow = () =>
+    router.get(`/projects/${props.project.id}/tasks/${props.task.id}`)
+
 const renderChildTaskShow = (childTask) =>
     router.get(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks/${childTask.id}`)
 
@@ -101,19 +104,18 @@ const formatDate = (dateString) => {
                                 <tr>
                                     <td class="border-b border-gray-300 py-8 pl-8 text-left w-1/6">状態</td>
                                     <td class="border-b border-gray-300 w-80">
-                                        <span v-if="props.childTask.status === '完了'"
-                                            class="rounded-full py-2 px-6 bg-slate-300">
+                                        <span v-if="props.childTask.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
                                             {{ props.childTask.status }}
                                         </span>
-                                        <span v-if="props.task.status === '処理済み'"
+                                        <span v-if="props.childTask.status === '処理済み'"
                                             class="rounded-full py-2 px-6 bg-indigo-200">
                                             {{ props.childTask.status }}
                                         </span>
-                                        <span v-if="props.task.status === '未対応'"
+                                        <span v-if="props.childTask.status === '未対応'"
                                             class="rounded-full py-2 px-6 bg-orange-200">
                                             {{ props.childTask.status }}
                                         </span>
-                                        <span v-if="props.task.status === '処理中'"
+                                        <span v-if="props.childTask.status === '処理中'"
                                             class="rounded-full py-2 px-6 bg-green-300">
                                             {{ props.childTask.status }}
                                         </span>
@@ -231,11 +233,37 @@ const formatDate = (dateString) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b border-gray-300 hover:bg-blue-200">
+                                <tr class="border-b border-gray-300 hover:bg-blue-200" @click="renderTaskShow()">
                                     <td class="pl-9 py-6 w-1/5">{{ props.task.title }}</td>
                                     <td class="px-4 py-6 text-center">{{ props.task.user.name }}</td>
-                                    <td class="px-4 py-6 text-center">{{ props.task.status }}</td>
-                                    <td class="px-4 py-6 text-lg text-center">{{ props.task.priority }}</td>
+                                    <td class="px-2 py-6 text-center text-xs">
+                                        <span v-if="props.task.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '処理済み'"
+                                            class="rounded-full py-2 px-6 bg-indigo-200">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '未対応'"
+                                            class="rounded-full py-2 px-6 bg-orange-200">
+                                            {{ props.task.status }}
+                                        </span>
+                                        <span v-if="props.task.status === '処理中'"
+                                            class="rounded-full py-2 px-6 bg-green-300">
+                                            {{ props.task.status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-6 text-lg text-center">
+                                        <div v-if="props.task.priority === '高'" class=" text-red-600">
+                                            {{ props.task.priority }}
+                                        </div>
+                                        <div v-if="props.task.priority === '中'" class=" text-green-500">
+                                            {{ props.task.priority }}
+                                        </div>
+                                        <div v-if="props.task.priority === '低'" class=" text-blue-500">
+                                            {{ props.task.priority }}
+                                        </div>
+                                    </td>
                                     <td class="px-4 py-6 text-center">
                                         {{ formatDate(props.task.start_date) }}
                                     </td>
@@ -252,8 +280,34 @@ const formatDate = (dateString) => {
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="pl-16 py-6 w-1/5">{{ childTask.title }}</td>
                                     <td class="px-2 py-6 text-center">{{ childTask.user.name }}</td>
-                                    <td class="px-2 py-6 text-center">{{ childTask.status }}</td>
-                                    <td class="px-2 py-6 text-lg text-center">{{ childTask.priority }}</td>
+                                    <td class="px-2 py-6 text-center text-xs">
+                                        <span v-if="childTask.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '処理済み'"
+                                            class="rounded-full py-2 px-6 bg-indigo-200">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '未対応'"
+                                            class="rounded-full py-2 px-6 bg-orange-200">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '処理中'"
+                                            class="rounded-full py-2 px-6 bg-green-300">
+                                            {{ childTask.status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-6 text-lg text-center">
+                                        <div v-if="childTask.priority === '高'" class=" text-red-600">
+                                            {{ childTask.priority }}
+                                        </div>
+                                        <div v-if="childTask.priority === '中'" class=" text-green-500">
+                                            {{ childTask.priority }}
+                                        </div>
+                                        <div v-if="childTask.priority === '低'" class=" text-blue-500">
+                                            {{ childTask.priority }}
+                                        </div>
+                                    </td>
                                     <td class="px-2 py-6 text-center">
                                         {{ formatDate(childTask.start_date) }}
                                     </td>

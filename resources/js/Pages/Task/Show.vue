@@ -260,8 +260,34 @@ function deleteTask() {
                                     @click="renderChildTaskShow(childTask)">
                                     <td class="px-4 py-3 w-1/5">{{ childTask.title }}</td>
                                     <td class="px-4 py-3 text-center">{{ childTask.user.name }}</td>
-                                    <td class="px-4 py-3 text-center">{{ childTask.status }}</td>
-                                    <td class="px-4 py-3 text-lg text-center">{{ childTask.priority }}</td>
+                                    <td class="px-2 py-6 text-center text-xs">
+                                        <span v-if="childTask.status === '完了'" class="rounded-full py-2 px-6 bg-slate-300">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '処理済み'"
+                                            class="rounded-full py-2 px-6 bg-indigo-200">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '未対応'"
+                                            class="rounded-full py-2 px-6 bg-orange-200">
+                                            {{ childTask.status }}
+                                        </span>
+                                        <span v-if="childTask.status === '処理中'"
+                                            class="rounded-full py-2 px-6 bg-green-300">
+                                            {{ childTask.status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-6 text-lg text-center">
+                                        <div v-if="childTask.priority === '高'" class=" text-red-600">
+                                            {{ childTask.priority }}
+                                        </div>
+                                        <div v-if="childTask.priority === '中'" class=" text-green-500">
+                                            {{ childTask.priority }}
+                                        </div>
+                                        <div v-if="childTask.priority === '低'" class=" text-blue-500">
+                                            {{ childTask.priority }}
+                                        </div>
+                                    </td>
                                     <td class="px-4 py-3 text-center">
                                         {{ formatDate(childTask.start_date) }}
                                     </td>
