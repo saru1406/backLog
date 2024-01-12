@@ -2,7 +2,6 @@
 
 namespace App\UseCase;
 
-use App\Models\Project;
 use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -19,13 +18,13 @@ class ProjectUseCase
     /**
      * タスクをページネーションで取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Collection
      */
     public function fetchNewTasks(int $projectId): Paginator
     {
         $project = $this->projectRepository->findOrFail($projectId, ['tasks']);
+
         return $this->taskRepository->findOrFailByPaginate($project, ['user']);
     }
-
 }

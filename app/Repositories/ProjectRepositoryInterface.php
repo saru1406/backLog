@@ -11,7 +11,7 @@ interface ProjectRepositoryInterface
     /**
      * プロジェクト取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @param array $option
      * @return Project
      */
@@ -20,8 +20,8 @@ interface ProjectRepositoryInterface
     /**
      * プロジェクト保存
      *
-     * @param integer|null $companyId
-     * @param integer|null $userId
+     * @param int|null $companyId
+     * @param int|null $userId
      * @param string $name
      * @return Project
      */
@@ -54,7 +54,7 @@ interface ProjectRepositoryInterface
     /**
      * プロジェクトにユーザーを追加
      *
-     * @param integer $userId
+     * @param int $userId
      * @param Project $project
      * @return void
      */
@@ -63,7 +63,7 @@ interface ProjectRepositoryInterface
     /**
      * プロジェクトの削除
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return void
      */
     public function destroy(int $projectId): void;
@@ -72,7 +72,7 @@ interface ProjectRepositoryInterface
      * プロジェクトに紐づくユーザー削除
      *
      * @param Project $project
-     * @param integer $userId
+     * @param int $userId
      * @return void
      */
     public function destroyUser(Project $project, int $userId): void;

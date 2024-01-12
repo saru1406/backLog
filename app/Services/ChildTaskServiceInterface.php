@@ -10,8 +10,8 @@ interface ChildTaskServiceInterface
     /**
      * createに表示するデータを取得
      *
-     * @param integer $projectId
-     * @param integer $taskId
+     * @param int $projectId
+     * @param int $taskId
      * @return Collection
      */
     public function fetchViewDataCreate(int $projectId, int $taskId): Collection;
@@ -19,8 +19,8 @@ interface ChildTaskServiceInterface
     /**
      * 子タスク保存
      *
-     * @param integer $projectId
-     * @param integer $taskId
+     * @param int $projectId
+     * @param int $taskId
      * @param ChildTaskParams $params
      * @return void
      */
@@ -29,9 +29,9 @@ interface ChildTaskServiceInterface
     /**
      * showに表示するデータを取得
      *
-     * @param integer $projectId
-     * @param integer $taskId
-     * @param integer $childTaskId
+     * @param int $projectId
+     * @param int $taskId
+     * @param int $childTaskId
      * @return Collection
      */
     public function fetchViewDataShow(int $projectId, int $taskId, int $childTaskId): Collection;
@@ -39,9 +39,9 @@ interface ChildTaskServiceInterface
     /**
      * editに表示するデータを取得
      *
-     * @param integer $projectId
-     * @param integer $taskId
-     * @param integer $childTaskId
+     * @param int $projectId
+     * @param int $taskId
+     * @param int $childTaskId
      * @return Collection
      */
     public function fetchViewDataEdit(int $projectId, int $taskId, int $childTaskId): Collection;
@@ -49,7 +49,7 @@ interface ChildTaskServiceInterface
     /**
      * 子タスク更新
      *
-     * @param integer $childTaskId
+     * @param int $childTaskId
      * @param ChildTaskParams $params
      * @return void
      */
@@ -57,17 +57,17 @@ interface ChildTaskServiceInterface
 
     /**
      * GPT自動子タスク生成、保存
-      *
-      * @param integer $projectId
-      * @param integer $taskId
-      * @return array
-      */
+     *
+     * @param int $projectId
+     * @param int $taskId
+     * @return array
+     */
     public function storeChildTaskByGpt(int $projectId, int $taskId): void;
 
     /**
      * 子タスク削除
      *
-     * @param integer $childTaskId
+     * @param int $childTaskId
      * @return void
      */
     public function destroy(int $childTaskId): void;

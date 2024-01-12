@@ -5,7 +5,7 @@ namespace App\Repositories;
 class ApiTaskParams
 {
     /**
-     * @var integer|null
+     * @var int|null
      */
     private ?int $userId;
 
@@ -20,15 +20,15 @@ class ApiTaskParams
     private ?string $priority;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private bool $isPagination;
 
     /**
-     * @param integer|null $userId
+     * @param int|null $userId
      * @param string|null $status
      * @param string|null $priority
-     * @param boolean $isPagination
+     * @param bool $isPagination
      */
     public function __construct(
         ?int $userId,
@@ -75,7 +75,7 @@ class ApiTaskParams
     /**
      * ページネーションで取得の有無
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsPagination(): bool
     {

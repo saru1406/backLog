@@ -25,6 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects/{project}/child-tasks', [ChildTaskApiController::class, 'fetchChildTasks']);
     Route::get('/projects/{project}/gant', [TaskApiController::class, 'fetchGant']);
     Route::get('/projects/{project}/new-tasks', [ProjectApiController::class, 'newTasks']);
-    Route::patch('/projects/{project}/tasks/{tasks}/update', [TaskApiController::class,'updateTaskStatus']);
-    Route::patch('/projects/{project}/child-tasks/{childTasks}/update', [ChildTaskApiController::class,'updateChildTaskStatus']);
+    Route::patch('/projects/{project}/tasks/{tasks}/update', [TaskApiController::class, 'updateTaskStatus']);
+    Route::patch('/projects/{project}/child-tasks/{childTasks}/update', [ChildTaskApiController::class, 'updateChildTaskStatus']);
 });

@@ -28,7 +28,7 @@ class ApiGantParams
      * @param string|null $status
      * @param string|null $startDate
      * @param string|null $group
-     * @param integer|null $range
+     * @param int|null $range
      */
     public function __construct(
         ?string $status,

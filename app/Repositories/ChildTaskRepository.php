@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\ChildTask;
 use App\Models\Task;
-use App\Repositories\ChildTaskRepositoryInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -65,7 +64,7 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
             Log::info('ステータス', ['status' => $params->getStatus()]);
         }
 
-        if ($params->getStatus() === "完了以外") {
+        if ($params->getStatus() === '完了以外') {
             $query->where('status', '!=', '完了');
             Log::info('完了以外だよ');
         }

@@ -4,9 +4,6 @@ namespace App\UseCase;
 
 use App\Repositories\ApiTaskParams;
 use App\Repositories\ChildTaskRepositoryInterface;
-use App\Repositories\ProjectRepositoryInterface;
-use App\Repositories\TaskRepositoryInterface;
-use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
 class ChildTaskUseCase
@@ -15,7 +12,6 @@ class ChildTaskUseCase
         private ChildTaskRepositoryInterface $childTaskRepository,
     ) {
     }
-
 
     /**
      * Undocumented function
@@ -32,7 +28,7 @@ class ChildTaskUseCase
     /**
      * 子タスクstatus更新
      *
-     * @param integer $childTaskId
+     * @param int $childTaskId
      * @return void
      */
     public function updateChildTaskStatus(int $childTaskId, string $status): void

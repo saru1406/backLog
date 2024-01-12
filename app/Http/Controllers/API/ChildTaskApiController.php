@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FetchApiTaskRequest;
 use App\Http\Requests\UpdateApiChildTaskStatuRequest;
 use App\UseCase\ChildTaskUseCase;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ChildTaskApiController extends Controller
 {
@@ -23,7 +21,7 @@ class ChildTaskApiController extends Controller
         return response()->json($childTasks);
     }
 
-    public function updateChildTaskStatus(UpdateApiChildTaskStatuRequest $request, int $projectId , int $childTaskId)
+    public function updateChildTaskStatus(UpdateApiChildTaskStatuRequest $request, int $projectId, int $childTaskId)
     {
         $this->childTaskUseCase->updateChildTaskStatus($childTaskId, $request->getStatus());
     }

@@ -28,7 +28,7 @@ interface ChildTaskRepositoryInterface
     /**
      * 子タスク取得
      *
-     * @param integer $childTaskId
+     * @param int $childTaskId
      * @param array $option
      * @return ChildTask
      */
@@ -46,7 +46,7 @@ interface ChildTaskRepositoryInterface
     /**
      * 子タスク削除
      *
-     * @param integer $childTaskId
+     * @param int $childTaskId
      * @return void
      */
     public function destroy(int $childTaskId): void;

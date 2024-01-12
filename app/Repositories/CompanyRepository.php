@@ -21,7 +21,7 @@ class CompanyRepository implements CompanyRepositoryInterface
     {
         return Company::create([
             'company_name' => $companyName,
-            'domain' => $domain
+            'domain' => $domain,
         ]);
     }
 

@@ -92,7 +92,7 @@ class ProjectService implements ProjectServiceInterface
     {
         $user = Auth::user();
         $companyId = $user->company_id;
-        if (!$companyId) {
+        if (! $companyId) {
             return collect([$user]);
         }
 
@@ -106,7 +106,7 @@ class ProjectService implements ProjectServiceInterface
     {
         $user = Auth::user();
         $companyId = $user->company_id;
-        if (!$companyId) {
+        if (! $companyId) {
             return collect([]);
         }
         $projectUserIds = $projectUsers->pluck('id');
@@ -128,7 +128,7 @@ class ProjectService implements ProjectServiceInterface
     public function destroyUser(int $projectId, int $userId): void
     {
         $currentUser = Auth::user();
-        if (!$currentUser->company_id) {
+        if (! $currentUser->company_id) {
             return;
         }
         $project = $this->projectRepository->findOrFail($projectId);

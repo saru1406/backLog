@@ -21,7 +21,7 @@ class TaskApiController extends Controller
     public function fetchTasks(FetchApiTaskRequest $request, int $projectId)
     {
         $tasks = $this->taskRepository->searchTasksByParameters($projectId, $request->getParams());
-        Log::info("タスク数" . $tasks->count());
+        Log::info('タスク数'.$tasks->count());
 
         return response()->json($tasks);
     }
@@ -33,7 +33,7 @@ class TaskApiController extends Controller
         return response()->json($tasks);
     }
 
-    public function updateTaskStatus(UpdateApiTaskStatuRequest $request, int $projectId , int $taskId)
+    public function updateTaskStatus(UpdateApiTaskStatuRequest $request, int $projectId, int $taskId)
     {
         Log::info('来たよ');
         $this->taskUseCase->updateTaskStatus($taskId, $request->getStatus());

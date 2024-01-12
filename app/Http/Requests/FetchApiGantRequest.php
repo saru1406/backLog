@@ -26,7 +26,7 @@ class FetchApiGantRequest extends FormRequest
             'status' => ['nullable', 'string'],
             'start_date' => ['nullable', 'string'],
             'group' => ['nullable', 'string'],
-            'range' => ['nullable', 'int']
+            'range' => ['nullable', 'int'],
         ];
     }
 

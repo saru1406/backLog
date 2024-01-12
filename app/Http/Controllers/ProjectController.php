@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\StoreProjectUserRequest;
+use App\Models\Project;
 use App\Services\ProjectServiceInterface;
 use Inertia\Inertia;
 
@@ -23,7 +23,7 @@ class ProjectController extends Controller
         $project = $this->projectService->fetchViewDataIndex();
 
         return Inertia::render('Project/Index', [
-            'projects' => $project
+            'projects' => $project,
         ]);
     }
 
@@ -43,7 +43,7 @@ class ProjectController extends Controller
         $project = $this->projectService->fetchViewDataShow($projectId);
 
         return Inertia::render('Project/Show', [
-            'project' => $project
+            'project' => $project,
         ]);
     }
 
@@ -56,7 +56,7 @@ class ProjectController extends Controller
 
         return Inertia::render('Project/Edit', [
             'project' => $data['project'],
-            'projectNotUsers'  => $data['project_not_users'],
+            'projectNotUsers' => $data['project_not_users'],
         ]);
     }
 

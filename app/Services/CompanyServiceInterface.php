@@ -13,7 +13,7 @@ interface CompanyServiceInterface
      * @param int $companyId
      * @return void
      */
-    public function patchUserByCompanyId(int $userId, int $companyId) : void;
+    public function patchUserByCompanyId(int $userId, int $companyId): void;
 
     /**
      * 企業情報を登録するべきか判定

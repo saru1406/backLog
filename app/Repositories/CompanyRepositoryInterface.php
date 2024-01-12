@@ -10,7 +10,7 @@ interface CompanyRepositoryInterface
      * ドメインの有無を判定
      *
      * @param string $domain
-     * @return boolean
+     * @return bool
      */
     public function isDomainPresent(string $domain): bool;
 

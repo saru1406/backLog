@@ -26,7 +26,7 @@ interface ProjectServiceInterface
     /**
      * showに表示するデータ取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Project
      */
     public function fetchViewDataShow(int $projectId): Project;
@@ -34,7 +34,7 @@ interface ProjectServiceInterface
     /**
      * editに表示するデータ取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Project
      */
     public function fetchViewDataEdit(int $projectId): Collection;
@@ -42,8 +42,8 @@ interface ProjectServiceInterface
     /**
      * プロジェクトにユーザーを追加
      *
-     * @param integer $userId
-     * @param integer $project
+     * @param int $userId
+     * @param int $project
      * @return void
      */
     public function storeProjectUser(int $userId, int $project): void;
@@ -51,11 +51,10 @@ interface ProjectServiceInterface
     /**
      * ボードに表示するデータ取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Project
      */
     public function fetchViewDataBoardGantt(int $projectId): Project;
-
 
     /**
      * プロジェクトに紐づくユーザーを取得
@@ -76,7 +75,7 @@ interface ProjectServiceInterface
     /**
      * プロジェクトの削除
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return void
      */
     public function destroy(int $projectId): void;
@@ -84,8 +83,8 @@ interface ProjectServiceInterface
     /**
      * プロジェクトに紐づくユーザー削除
      *
-     * @param integer $projectId
-     * @param integer $userId
+     * @param int $projectId
+     * @param int $userId
      * @return void
      */
     public function destroyUser(int $projectId, int $userId): void;

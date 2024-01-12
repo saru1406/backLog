@@ -6,7 +6,6 @@ use App\Models\Company;
 use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class CompanyService implements CompanyServiceInterface
 {
@@ -35,6 +34,7 @@ class CompanyService implements CompanyServiceInterface
         if ($isDomain) {
             $company = $this->companyRepository->fetchCompanyByDomain($domain);
             $this->patchUserByCompanyId(Auth::user()->id, $company->id);
+
             return true;
         }
         if ($isGmailDomain) {

@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-
 interface UserServiceInterface
 {
-
 }

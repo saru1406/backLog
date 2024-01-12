@@ -11,7 +11,7 @@ interface TaskServiceInterface
     /**
      * indexに表示するデータ取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Project
      */
     public function fetchViewDataIndex(int $projectId): Project;
@@ -19,7 +19,7 @@ interface TaskServiceInterface
     /**
      * createに表示するデータ取得
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @return Collection
      */
     public function fetchViewDataCreate(int $projectId): Collection;
@@ -27,7 +27,7 @@ interface TaskServiceInterface
     /**
      * タスク保存
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @param TaskParams $params
      * @return void
      */
@@ -36,8 +36,8 @@ interface TaskServiceInterface
     /**
      * showに表示するデータ取得
      *
-     * @param integer $projectId
-     * @param integer $taskId
+     * @param int $projectId
+     * @param int $taskId
      * @return Collection
      */
     public function fetchViewDataShow(int $projectId, int $taskId): Collection;
@@ -45,8 +45,8 @@ interface TaskServiceInterface
     /**
      * editに表示するデータ取得
      *
-     * @param integer $projectId
-     * @param integer $taskId
+     * @param int $projectId
+     * @param int $taskId
      * @return Collection
      */
     public function fetchViewDataEdit(int $projectId, int $taskId): Collection;
@@ -54,7 +54,7 @@ interface TaskServiceInterface
     /**
      * タスク更新
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @param TaskParams $params
      * @return void
      */
@@ -71,7 +71,7 @@ interface TaskServiceInterface
     /**
      * タスク削除
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @return void
      */
     public function destroy(int $taskId): void;

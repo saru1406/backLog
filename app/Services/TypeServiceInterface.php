@@ -7,7 +7,7 @@ interface TypeServiceInterface
     /**
      * Type名保存
      *
-     * @param integer $projectId
+     * @param int $projectId
      * @param string $typeName
      * @return void
      */
@@ -16,7 +16,7 @@ interface TypeServiceInterface
     /**
      * Type削除
      *
-     * @param integer $typeId
+     * @param int $typeId
      * @return void
      */
     public function destroy(int $typeId): void;

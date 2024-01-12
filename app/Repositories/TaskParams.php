@@ -93,13 +93,13 @@ class TaskParams
     {
         return [
             'user_id' => $this->userId,
-            'type_id'=> $this->typeId,
-            'title'=> $this->title,
-            'content'=> $this->contents,
-            'status'=> $this->status,
-            'priority'=> $this->priority,
+            'type_id' => $this->typeId,
+            'title' => $this->title,
+            'content' => $this->contents,
+            'status' => $this->status,
+            'priority' => $this->priority,
             'branch_name' => $this->branchName,
-            'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
+            'start_date' => Carbon::parse($this->startDate)->format('Y-m-d'),
             'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
         ];
     }

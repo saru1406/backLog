@@ -39,7 +39,7 @@ class ChildTaskService implements ChildTaskServiceInterface
         $paramsArray = array_merge($params->toArray(), [
             'project_id' => $projectId,
             'task_id' => $taskId,
-            'creator_id' => Auth::id()
+            'creator_id' => Auth::id(),
         ]);
 
         $this->childTaskRepository->store($paramsArray);
@@ -54,7 +54,7 @@ class ChildTaskService implements ChildTaskServiceInterface
         $task = $this->taskRepository->findOrFail($taskId, ['user', 'childTasks', 'childTasks.user']);
         $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user', 'creator']);
 
-        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask]);
+        return collect(['project' => $project, 'task' => $task, 'child_task' => $childTask]);
     }
 
     /**
@@ -66,7 +66,7 @@ class ChildTaskService implements ChildTaskServiceInterface
         $task = $this->taskRepository->findOrFail($taskId, ['child_task']);
         $childTask = $this->childTaskRepository->findOrFail($childTaskId, ['user']);
 
-        return collect(['project'=> $project, 'task'=> $task, 'child_task'=> $childTask]);
+        return collect(['project' => $project, 'task' => $task, 'child_task' => $childTask]);
     }
 
     /**
@@ -85,7 +85,7 @@ class ChildTaskService implements ChildTaskServiceInterface
         $task = $this->taskRepository->findOrFail($taskId);
         $userId = Auth::id();
 
-        $message = '親タスク:' . $task->title . ' 親タスク説明:' . $task->content . '子タスクのタイトルと説明を箇条書きで生成してください。\n
+        $message = '親タスク:'.$task->title.' 親タスク説明:'.$task->content.'子タスクのタイトルと説明を箇条書きで生成してください。\n
             Laravelを使用して実装するための子タスクを箇条書きで生成してください。各子タスクには、タスクのタイトルと具体的な実装手順を含めてください。\n
             例）\n
             - 子タスク1: お気に入り機能のUIを作成する\n
@@ -115,7 +115,7 @@ class ChildTaskService implements ChildTaskServiceInterface
                 'status' => '未対応',
                 'priority' => '中',
                 'start_date' => null,
-                'end_date' => null
+                'end_date' => null,
             ];
             $this->childTaskRepository->store($params);
         }
@@ -137,7 +137,7 @@ class ChildTaskService implements ChildTaskServiceInterface
             if (strpos($line, '- 子タスク') === 0) {
                 if ($currentTask) {
                     // 現在のタスクの内容を一つの文字列に結合
-                    $currentTask['content'] = implode(" ", $currentTask['content']);
+                    $currentTask['content'] = implode(' ', $currentTask['content']);
                     // 前のタスクを配列に追加
                     $childTasks[] = $currentTask;
                 }
@@ -152,7 +152,7 @@ class ChildTaskService implements ChildTaskServiceInterface
 
         // 最後のタスクの内容も一つの文字列に結合し、配列に追加
         if ($currentTask) {
-            $currentTask['content'] = implode(" ", $currentTask['content']);
+            $currentTask['content'] = implode(' ', $currentTask['content']);
             $childTasks[] = $currentTask;
         }
 

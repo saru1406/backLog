@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Models\Task;
-use App\Repositories\TaskRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -54,7 +53,7 @@ class TaskRepository implements TaskRepositoryInterface
             Log::info('ステータス', ['status' => $params->getStatus()]);
         }
 
-        if ($params->getStatus() === "完了以外") {
+        if ($params->getStatus() === '完了以外') {
             $query->where('status', '!=', '完了');
             Log::info('完了以外だよ');
         }
@@ -67,9 +66,11 @@ class TaskRepository implements TaskRepositoryInterface
         if ($params->getIsPagination()) {
             $query->orderBy('created_at', 'desc');
             Log::info('ページネーション', ['IsPagination' => $params->getIsPagination()]);
+
             return $query->with(['user', 'childTasks', 'childTasks.user', 'type'])->paginate(20);
         }
-        return $query->with(['user', 'childTasks', 'childTasks.user' , 'type'])->get();
+
+        return $query->with(['user', 'childTasks', 'childTasks.user', 'type'])->get();
     }
 
     /**
@@ -94,7 +95,7 @@ class TaskRepository implements TaskRepositoryInterface
             Log::info('ステータス', ['status' => $params->getStatus()]);
         }
 
-        if ($params->getStatus() === "完了以外") {
+        if ($params->getStatus() === '完了以外') {
             $query->where('status', '!=', '完了');
             Log::info('完了以外だよ');
         }
@@ -116,7 +117,7 @@ class TaskRepository implements TaskRepositoryInterface
                 'user_name' => $tasks->first()->user->name,
                 'tasks' => $tasks,
                 'start_date' => $startDate,
-                'end_date' => $endDate
+                'end_date' => $endDate,
             ];
         });
 

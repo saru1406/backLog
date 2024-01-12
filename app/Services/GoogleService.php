@@ -24,7 +24,7 @@ class GoogleService implements GoogleServiceInterface
 
         // ここでユーザー情報の処理を行います
         $user = $this->userRepository->firstByEmail($socialiteUser->email);
-        if (!$user) {
+        if (! $user) {
             // ユーザーが存在しない場合は新しく作成
             $params = [
                 'name' => $socialiteUser->name,

@@ -21,7 +21,7 @@ class UserRepository implements UserRepositoryInterface
     public function patchUserByCompanyId(int $userId, int $companyId): void
     {
         User::where('id', $userId)->update([
-            'company_id' => $companyId
+            'company_id' => $companyId,
         ]);
     }
 

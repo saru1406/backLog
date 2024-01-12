@@ -12,7 +12,7 @@ interface TaskRepositoryInterface
     /**
      * タスク取得
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @param array $option
      * @return Task
      */
@@ -23,7 +23,7 @@ interface TaskRepositoryInterface
      *
      * @param Project $project
      * @param array $option
-     * @param integer $perPage
+     * @param int $perPage
      * @return Paginator
      */
     public function findOrFailByPaginate(Project $project, array $option = [], int $perPage = 10): Paginator;
@@ -38,7 +38,8 @@ interface TaskRepositoryInterface
 
     /**
      * タスク検索
-     * @param integer $projectId
+     *
+     * @param int $projectId
      * @param ApiTaskParams $params
      * @return Paginator|Collection
      */
@@ -46,7 +47,8 @@ interface TaskRepositoryInterface
 
     /**
      * ガント取得
-     * @param integer $projectId
+     *
+     * @param int $projectId
      * @param ApiGantParams $params
      * @return Collection
      */
@@ -55,7 +57,7 @@ interface TaskRepositoryInterface
     /**
      * 課題を更新
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @param array $params
      * @return void
      */
@@ -68,12 +70,12 @@ interface TaskRepositoryInterface
      * @param string $BranchGptText
      * @return void
      */
-    public function storeBranchTask(int $taskId, string $branchGptText) : void;
+    public function storeBranchTask(int $taskId, string $branchGptText): void;
 
     /**
      * タスク削除
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @return void
      */
     public function destroy(int $taskId): void;

@@ -16,7 +16,7 @@ interface TypeRepositoryInterface
     /**
      * Type削除
      *
-     * @param integer $typeId
+     * @param int $typeId
      * @return void
      */
     public function destroy(int $typeId): void;

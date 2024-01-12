@@ -2,6 +2,6 @@
 
 return [
     'free_email_domains' => [
-       
-    ]
+
+    ],
 ];

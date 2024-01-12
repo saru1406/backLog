@@ -2,11 +2,7 @@
 
 namespace App\UseCase;
 
-use App\Repositories\ProjectRepositoryInterface;
 use App\Repositories\TaskRepositoryInterface;
-use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class TaskUseCase
 {
@@ -18,7 +14,7 @@ class TaskUseCase
     /**
      * タスクstatus更新
      *
-     * @param integer $taskId
+     * @param int $taskId
      * @return void
      */
     public function updateTaskStatus(int $taskId, string $status): void

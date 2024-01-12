@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 class ChildTaskParams
 {
     /**
-     * @var integer
+     * @var int
      */
     private int $userId;
 
@@ -47,7 +47,7 @@ class ChildTaskParams
     private ?string $endDate;
 
     /**
-     * @param integer $userId
+     * @param int $userId
      * @param string $title
      * @param string|null $contents
      * @param string $status
@@ -85,12 +85,12 @@ class ChildTaskParams
     {
         return [
             'user_id' => $this->userId,
-            'title'=> $this->title,
-            'content'=> $this->contents,
-            'status'=> $this->status,
-            'priority'=> $this->priority,
+            'title' => $this->title,
+            'content' => $this->contents,
+            'status' => $this->status,
+            'priority' => $this->priority,
             'branch_name' => $this->branchName,
-            'start_date'=> Carbon::parse($this->startDate)->format('Y-m-d'),
+            'start_date' => Carbon::parse($this->startDate)->format('Y-m-d'),
             'end_date' => Carbon::parse($this->endDate)->format('Y-m-d'),
         ];
     }

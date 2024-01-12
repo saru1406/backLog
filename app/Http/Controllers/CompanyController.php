@@ -16,7 +16,8 @@ class CompanyController extends Controller
 {
     public function __construct(
         private CompanyServiceInterface $companyService,
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the resource.
@@ -32,7 +33,7 @@ class CompanyController extends Controller
     public function create()
     {
         $isDomain = $this->companyService->isCompanyInfoRegistered();
-        Log::info('ドメイン',[$isDomain]);
+        Log::info('ドメイン', [$isDomain]);
         if ($isDomain) {
             return to_route('projects.index');
         }
@@ -50,7 +51,7 @@ class CompanyController extends Controller
                 $company = $this->companyService->storeCompany($request->getCompanyName());
                 $this->companyService->patchUserByCompanyId(Auth::id(), $company->id);
             });
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // TODO: throw追記
             Log::error($e->getMessage());
         }

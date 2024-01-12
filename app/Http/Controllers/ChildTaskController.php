@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChildTaskRequest;
 use App\Http\Requests\UpdateChildTaskRequest;
-use App\Models\ChildTask;
 use App\Services\ChildTaskServiceInterface;
 use Inertia\Inertia;
 

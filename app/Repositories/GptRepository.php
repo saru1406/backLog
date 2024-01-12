@@ -25,6 +25,7 @@ class GptRepository implements GptRepositoryInterface
             ],
         ]);
         Log::info($result->choices[0]->message->content);
+
         return $result->choices[0]->message->content;
     }
 }

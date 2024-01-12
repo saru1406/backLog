@@ -22,7 +22,7 @@ class StoreTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type_name' => ['required','string'],
+            'type_name' => ['required', 'string'],
         ];
     }
 
