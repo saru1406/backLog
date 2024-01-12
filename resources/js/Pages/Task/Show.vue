@@ -59,6 +59,8 @@ const form = reactive({
     end_date: null,
 })
 
+const commentForm = ref('')
+
 function storeChildTask() {
     router.post(`/projects/${props.project.id}/tasks/${props.task.id}/child-tasks`, form)
     // 保存が成功した後にフォームをリセット
@@ -70,6 +72,12 @@ function storeChildTask() {
     form.branch_name = null;
     form.start_date = null;
     form.end_date = null;
+}
+
+function storeTaskComment() {
+    router.post(`/projects/${props.project.id}/tasks/${props.task.id}/comments`, { comment: commentForm.value })
+    // 保存が成功した後にフォームをリセット
+    commentForm.value = null;
 }
 
 const formatDate = (dateString) => {
@@ -272,8 +280,7 @@ function deleteTask() {
                                             class="rounded-full py-2 px-6 bg-orange-200">
                                             {{ childTask.status }}
                                         </span>
-                                        <span v-if="childTask.status === '処理中'"
-                                            class="rounded-full py-2 px-6 bg-green-300">
+                                        <span v-if="childTask.status === '処理中'" class="rounded-full py-2 px-6 bg-green-300">
                                             {{ childTask.status }}
                                         </span>
                                     </td>
@@ -301,6 +308,18 @@ function deleteTask() {
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="w-full bg-white my-10 border rounded">
+                        <h2 class="m-5">コメント</h2>
+                        <form @submit.prevent="storeTaskComment" class="flex w-full items-center">
+                            <!-- アイテムを中央揃えにする -->
+                            <textarea
+                                v-model="commentForm"
+                                class="w-10/12 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5"
+                                rows="2" />
+                            <PrimaryButton>コメント追加</PrimaryButton>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -320,8 +339,10 @@ function deleteTask() {
                     <table class="w-full text-sm">
                         <tbody>
                             <tr>
-                                <td class="border-b border-gray-300 py-16 pl-8 text-left">状態<span
-                                        class="text-red-500 text-lg">*</span></td>
+                                <td class="border-b border-gray-300 py-16 pl-8 text-left">
+                                    状態
+                                    <span class="text-red-500 text-lg">*</span>
+                                </td>
                                 <td class="border-b border-gray-300">
                                     <select v-model="form.status"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5 w-4/5">

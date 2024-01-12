@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChildTaskController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GoogleController;
@@ -58,6 +59,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/projects/{project}/gant', [ProjectController::class, 'gant'])->name('projects.gant');
 
         Route::post('/projects/{project}/user', [ProjectController::class, 'storeProjectUser'])->name('projects.user');
+
+        Route::resource('projects.tasks.comments', CommentController::class)->only(['store', 'update', 'destroy']);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

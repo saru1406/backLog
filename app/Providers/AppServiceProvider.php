@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\ChildTaskRepository;
 use App\Repositories\ChildTaskRepositoryInterface;
+use App\Repositories\CommentRepository;
+use App\Repositories\CommentRepositoryInterface;
 use App\Repositories\CompanyRepository;
 use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\ContactRepository;
@@ -22,6 +24,8 @@ use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryInterface;
 use App\Services\ChildTaskService;
 use App\Services\ChildTaskServiceInterface;
+use App\Services\CommentService;
+use App\Services\CommentServiceInterface;
 use App\Services\CompanyService;
 use App\Services\CompanyServiceInterface;
 use App\Services\ContactService;
@@ -70,6 +74,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
         $this->app->bind(ContactServiceInterface::class, ContactService::class);
+
+        $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
+        $this->app->bind(CommentServiceInterface::class, CommentService::class);
     }
 
     /**
