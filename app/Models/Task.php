@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Task extends Model
 {
@@ -75,5 +76,15 @@ class Task extends Model
     public function creator(): BelongsTo
     {
         return $this->BelongsTo(User::class);
+    }
+
+    /**
+     * コメントに紐づけ
+     *
+     * @return MorphMany
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Task::class, 'commentable');
     }
 }
