@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Repositories\ChildTaskParams;
@@ -28,6 +30,7 @@ class UpdateChildTaskRequest extends FormRequest
             'content' => ['required', 'max:255', 'string'],
             'status' => ['required', 'max:255', 'string'],
             'priority' => ['required', 'max:255', 'string'],
+            'branch_name' => ['nullable', 'max:255', 'string'],
             'start_date' => ['nullable', 'max:255', 'string'],
             'end_date' => ['nullable', 'max:255', 'string'],
         ];
@@ -44,6 +47,7 @@ class UpdateChildTaskRequest extends FormRequest
             contents: $this->input('content'),
             status: $this->input('status'),
             priority: $this->input('priority'),
+            branchName: $this->input('branch_name'),
             startDate: $this->input('start_date'),
             endDate: $this->input('end_date'),
         );
