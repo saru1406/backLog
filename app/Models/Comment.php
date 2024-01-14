@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
@@ -14,8 +15,18 @@ class Comment extends Model
         'commentable_type',
         'commentable_id',
         'user_id',
-        'comment',
+        'body',
     ];
+
+    /**
+     * ユーザーに紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * ポリモーフィズム紐づけ

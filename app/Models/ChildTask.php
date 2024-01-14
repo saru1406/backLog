@@ -73,6 +73,6 @@ class ChildTask extends Model
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(ChildTask::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

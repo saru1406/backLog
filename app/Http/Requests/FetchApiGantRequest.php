@@ -28,7 +28,7 @@ class FetchApiGantRequest extends FormRequest
             'status' => ['nullable', 'string'],
             'start_date' => ['nullable', 'string'],
             'group' => ['nullable', 'string'],
-            'range' => ['nullable', 'int'],
+            'range' => ['nullable', 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class FetchApiGantRequest extends FormRequest
             status: $this->input('status'),
             startDate: $this->input('start_date'),
             group: $this->input('group'),
-            range: $this->input('range'),
+            range: (int) $this->input('range'),
         );
     }
 }

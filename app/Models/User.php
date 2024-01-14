@@ -98,4 +98,14 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return $this->hasMany(Task::class);
     }
+
+    /**
+     * コメントに紐づけ
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

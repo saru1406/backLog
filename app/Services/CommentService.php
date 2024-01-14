@@ -24,7 +24,7 @@ class CommentService implements CommentServiceInterface
             'commentable_type' => 'App\Models\Task',
             'commentable_id' => $taskId,
             'user_id' => $userId,
-            'comment' => $comment,
+            'body' => $comment,
         ];
         $this->commentRepository->store($params);
     }

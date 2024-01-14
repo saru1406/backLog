@@ -311,12 +311,21 @@ function deleteTask() {
 
                     <div class="w-full bg-white my-10 border rounded">
                         <h2 class="m-5">コメント</h2>
+                        <hr>
+                        <div v-for="comment in props.task.comments">
+                            <div class="w-11/12 mx-auto my-5">
+                                投稿者：{{ comment.user.name }}<br>
+                                投稿日：{{ formatDate(comment.created_at) }}<br>
+                                <div class="my-5 mx-10">
+                                    {{ comment.body }}
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
                         <form @submit.prevent="storeTaskComment" class="flex w-full items-center">
-                            <!-- アイテムを中央揃えにする -->
-                            <textarea
-                                v-model="commentForm"
+                            <textarea v-model="commentForm"
                                 class="w-10/12 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-5"
-                                rows="2" />
+                                rows="3" placeholder="コメント" />
                             <PrimaryButton>コメント追加</PrimaryButton>
                         </form>
                     </div>

@@ -25,6 +25,7 @@ class TaskApiController extends Controller
         $tasks = $this->taskRepository->searchTasksByParameters($projectId, $request->getParams());
         Log::info('タスク数'.$tasks->count());
 
+
         return response()->json($tasks);
     }
 

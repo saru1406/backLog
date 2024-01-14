@@ -19,6 +19,11 @@ class CommentController extends Controller
     public function store(StoreCommentRequest $request, int $projectId, int $taskId)
     {
         $this->commentService->storeByTask($taskId, $request->getComment());
+
+        return to_route('projects.tasks.show', [
+            'project' => $projectId,
+            'task' => $taskId
+        ]);
     }
 
     /**
