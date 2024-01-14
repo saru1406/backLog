@@ -60,7 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/projects/{project}/user', [ProjectController::class, 'storeProjectUser'])->name('projects.user');
 
-        Route::resource('projects.tasks.comments', CommentController::class)->only(['store', 'update', 'destroy']);
+        Route::resource('projects.tasks.comments', CommentController::class)->only(['update', 'destroy']);
+        Route::post('/projects/{project}/tasks/{task}/comments', [CommentController::class, 'storeByTask'])->name('projects.tasks.comments');
+        Route::post('/projects/{project}/tasks/{task}/child-tasks/{child_task}/comments', [CommentController::class, 'storeByChildTask']);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

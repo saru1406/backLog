@@ -28,4 +28,19 @@ class CommentService implements CommentServiceInterface
         ];
         $this->commentRepository->store($params);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function storeByChildTask(int $childTaskId, string $comment): void
+    {
+        $userId = Auth::id();
+        $params = [
+            'commentable_type' => 'App\Models\ChildTask',
+            'commentable_id' => $childTaskId,
+            'user_id' => $userId,
+            'body' => $comment,
+        ];
+        $this->commentRepository->store($params);
+    }
 }

@@ -16,7 +16,7 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request, int $projectId, int $taskId)
+    public function storeByTask(StoreCommentRequest $request, int $projectId, int $taskId)
     {
         $this->commentService->storeByTask($taskId, $request->getComment());
 
@@ -25,6 +25,18 @@ class CommentController extends Controller
             'task' => $taskId
         ]);
     }
+
+    public function storeByChildTask(StoreCommentRequest $request, int $projectId, int $taskId, int $childTaskId)
+    {
+        $this->commentService->storeByChildTask($childTaskId, $request->getComment());
+
+        return to_route('projects.tasks.child-tasks.show', [
+            'project' => $projectId,
+            'task' => $taskId,
+            'child_task' => $childTaskId
+        ]);
+    }
+
 
     /**
      * Update the specified resource in storage.
