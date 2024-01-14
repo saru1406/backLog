@@ -56,7 +56,7 @@ class ChildTaskRepository implements ChildTaskRepositoryInterface
         $query = ChildTask::query();
         $query->where('project_id', $projectId);
 
-        if ($params->getUserId() !== null) {
+        if ($params->getUserId() !== 0) {
             $query->where('user_id', $params->getUserId());
             Log::info('ユーザID', ['user_id' => $params->getUserId()]);
         }
