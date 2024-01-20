@@ -174,11 +174,8 @@ function createBarsArray(item) {
               v-model="filters.group"
               class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ml-1 mr-3"
             >
-              <option value="" disabled selected>選択してください</option>
-              <option :value="null">全て</option>
+              <option value="" disabled selected>担当者</option>
               <option value="担当者">担当者</option>
-              <option value="カテゴリー">カテゴリー</option>
-              <option value="親課題">親課題</option>
             </select>
             <label>状態</label>
             <select

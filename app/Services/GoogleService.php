@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\GoogleRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -12,7 +11,6 @@ use Laravel\Socialite\Facades\Socialite;
 class GoogleService implements GoogleServiceInterface
 {
     public function __construct(
-        private GoogleRepositoryInterface $googleRepository,
         private UserRepositoryInterface $userRepository,
     ) {
     }
